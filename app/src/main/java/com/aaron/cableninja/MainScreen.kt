@@ -17,6 +17,7 @@ fun MainScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = 20.dp)
     ) {
         var tempValue = 1000    // default 1000MHz
         var freqValue = 68      // all cable manufacturers give temp specs @ 68F
@@ -30,6 +31,11 @@ fun MainScreen(navController: NavController) {
         // Create List
         CreateList(navController)
 
+        //items(  10_000) {
+        //    Text(text = "fubar $it")
+        //}
+
+
         // Create Clear Button
 
         // Show Total Attenuation
@@ -41,20 +47,13 @@ fun MainScreen(navController: NavController) {
 }
 
 @Composable
-private fun CreateList(navController: NavController) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+fun CreateList(navController: NavController) {
+    Text(
         modifier = Modifier
-            .padding(50.dp)
-            .fillMaxSize()
-    ) {
-        Text(
-            modifier = Modifier.clickable {
-                navController.navigate(route = Screen.Add.route)
-            },
-            text = "fubar"
-        )
-    }
+            // on click, navigate to AddScreen
+            .clickable { navController.navigate(route = Screen.Add.route) },
+            text = "Add Attenuator"
+    )
 }
 
 @Composable

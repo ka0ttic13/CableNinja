@@ -27,6 +27,8 @@ import com.aaron.cableninja.ui.theme.CableNinjaTheme
 
 @Composable
 fun AddScreen(navController: NavController) {
+
+    // Add Label with Close Icon "X"
     Row(
         modifier = Modifier
             .padding(20.dp)
@@ -34,18 +36,22 @@ fun AddScreen(navController: NavController) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ){
+        // Add Label
         Text(text = "Add attenuator")
 
+        // Close Icon - exits back to MainScreen
         Icon(
             painterResource(id = R.drawable.baseline_close_24),
             contentDescription = "Close",
             modifier = Modifier
             .clickable {
+                // on click, go back to MainSCreen()
                 navController.popBackStack()
             }
         )
     }
 
+    // Show attenuator types that can be added
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -53,14 +59,17 @@ fun AddScreen(navController: NavController) {
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
-        AttenuatorCard(name = "RG6")
-        AttenuatorCard(name = "RG59")
-        AttenuatorCard(name = "RG11")
-        AttenuatorCard(name = "2 Way", "-3.5dB")
-        AttenuatorCard(name = "3 Way low", "-3.5dB")
-        AttenuatorCard(name = "3 Way high", "-7dB")
-        AttenuatorCard(name = "500P3")
-        AttenuatorCard(name = "625P3")
+        // TODO make new AttenuatorCard() that takes 1 string, for example
+        // TODO AttenuatorCard("Drop/Coax/RG6")
+
+        AttenuatorCard(name = "RG6", "Drop/Coax")
+        AttenuatorCard(name = "RG59", "Drop/Coax")
+        AttenuatorCard(name = "RG11", "Drop/Coax")
+        AttenuatorCard(name = "2 Way", "Drop/Passive")
+        AttenuatorCard(name = "3 Way low", "Drop/Passive")
+        AttenuatorCard(name = "3 Way high", "Drop/Passive")
+        AttenuatorCard(name = "500P3", "Hardline/Coax")
+        AttenuatorCard(name = "625P3", "Hardline/Coax")
     }
 }
 
@@ -80,11 +89,6 @@ private fun AttenuatorCard(name: String, desc: String = "") {
         )
         Text(text = desc)
     }
-}
-
-@Composable
-private fun OnClickAttenuatorCard() {
-
 }
 
 @Preview(showBackground = true)

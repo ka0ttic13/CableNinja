@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CableNinjaTheme {
 
+                // Start navigation controller and show MainScreen
                 navController = rememberNavController()
                 SetupNavGraph(navController = navController)
 
