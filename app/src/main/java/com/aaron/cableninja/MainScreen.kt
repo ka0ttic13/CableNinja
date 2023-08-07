@@ -1,5 +1,6 @@
 package com.aaron.cableninja
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -8,9 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -26,7 +28,7 @@ fun MainScreen() {
         // temp only has a significant impact on coax attenuators
 
         // Create List
-        CreateList()
+        CreateList(navController)
 
         // Create Clear Button
 
@@ -39,12 +41,19 @@ fun MainScreen() {
 }
 
 @Composable
-private fun CreateList() {
-    LazyColumn(
+private fun CreateList(navController: NavController) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(10.dp)
+            .padding(50.dp)
+            .fillMaxSize()
     ) {
-        //Text(text = "List Entry")
+        Text(
+            modifier = Modifier.clickable {
+                navController.navigate(route = Screen.Add.route)
+            },
+            text = "fubar"
+        )
     }
 }
 
