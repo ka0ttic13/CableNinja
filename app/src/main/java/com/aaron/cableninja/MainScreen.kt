@@ -10,9 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aaron.cableninja.MainActivity.Companion.navController
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -29,7 +30,7 @@ fun MainScreen(navController: NavController) {
         // temp only has a significant impact on coax attenuators
 
         // Create List
-        CreateList(navController)
+        CreateList()
 
         //items(  10_000) {
         //    Text(text = "fubar $it")
@@ -47,7 +48,7 @@ fun MainScreen(navController: NavController) {
 }
 
 @Composable
-fun CreateList(navController: NavController) {
+fun CreateList() {
     Text(
         modifier = Modifier
             // on click, navigate to AddScreen
