@@ -1,19 +1,16 @@
-package com.aaron.cableninja
+package com.aaron.cableninja.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,17 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorList
-import com.aaron.cableninja.MainActivity.Companion.navController
-import com.aaron.cableninja.ui.theme.CableNinjaTheme
+import com.aaron.cableninja.R
 
 
 @Composable
-fun AddScreen() {
-
+fun AddScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel
+) {
     // Add Label with Close Icon "X"
     Row(
         modifier = Modifier
@@ -48,9 +45,8 @@ fun AddScreen() {
         Icon(
             painterResource(id = R.drawable.baseline_close_24),
             contentDescription = "Close",
-            modifier = Modifier
-            .clickable {
-                // on click, go back to MainSCreen()
+            modifier = Modifier.clickable {
+                // on click, go back to MainScreen()
                 navController.popBackStack()
             }
         )
@@ -64,21 +60,28 @@ fun AddScreen() {
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
-        // iterate over attenuatorList and create an AttenuatorCard for
+        // iterate over attenuatorList and create an AttenuatorAddCard for
         // each Attenuator in the list
         attenuatorList.forEach() {
-            AttenuatorCard(it.id(), it.desc())
+            AttenuatorAddCard(it.id(), it.desc(), navController, sharedViewModel)
         }
     }
 }
 
 @Composable
-private fun AttenuatorCard(id: String, desc: String) {
+private fun AttenuatorAddCard(
+    id: String,
+    desc: String,
+    navController: NavController,
+    sharedViewModel: SharedViewModel
+) {
     val addClick = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
-            .clickable { addClick.value = true }
+            .clickable {
+                addClick.value = true
+            }
             .padding(36.dp)
             .fillMaxWidth()
     ) {
@@ -89,23 +92,17 @@ private fun AttenuatorCard(id: String, desc: String) {
         Text(text = desc)
     }
 
+    // Add type selected
     if (addClick.value) {
-        AddAttenuator(id)
-        navController.popBackStack()
-    }
-}
+        val footage: Int = 0
 
-@Composable
-private fun AddAttenuator(id: String) {
-    Column() {
-        Text(text = "Adding $id...")
-    }
-}
+        // TODO dialog box to enter footage
 
-@Preview(showBackground = true)
-@Composable
-private fun AttenuatorCardPreview() {
-    CableNinjaTheme {
-        AttenuatorCard("RG6", "Coax")
+        //sharedViewModel.card = AttenuatorCard(id, desc, footage)
+
+        // TODO need to do Nav back to MainScreen but this BUGS out
+        //navController.navigate(route = Screen.Main.route)
+
+        Log.d("AttenuatorAddCard()", "Adding $id/$desc/$footage")
     }
 }

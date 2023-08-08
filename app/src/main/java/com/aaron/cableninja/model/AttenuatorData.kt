@@ -1,6 +1,6 @@
-package com.aaron.cableninja
+package com.aaron.cableninja.model
 
-data class Attenuator(val id: String, val desc: String) {
+data class AttenuatorData(val id: String, val desc: String) {
     private val _id = id
     private val _desc = desc
 

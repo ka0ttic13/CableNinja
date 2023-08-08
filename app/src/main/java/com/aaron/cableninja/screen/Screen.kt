@@ -1,4 +1,4 @@
-package com.aaron.cableninja
+package com.aaron.cableninja.screen
 
 sealed class Screen(val route: String) {
     object Main : Screen("main_screen")
