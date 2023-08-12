@@ -26,14 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
+import kotlin.math.round
 import com.aaron.cableninja.R
-import java.lang.Math.round
 
 @Composable
 fun MainScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
+    //var total by remember { mutableStateOf(0.0) }                 // total attenuation
     var freqSliderPosition by remember { mutableStateOf(1219f) }  // default to 1219MHz
     var tempSliderPosition by remember { mutableStateOf(70f) }    // default to 70F
 
@@ -116,7 +117,13 @@ fun MainScreen(
             // IF there is an existing list, show it
             if (attenuatorCardList.size > 0 &&
                 !sharedViewModel.clearAttenuatorList) {
+                var total = 0.0
+
+                // iterate over list and create Card for each item
                 attenuatorCardList.forEach() {
+                    // add attenuation of each item to total
+                    total += it.getLoss()
+
                     Card(
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier
@@ -156,7 +163,7 @@ fun MainScreen(
                             }
                             // show attenuation on right
                             Text(
-                                text = it.loss().toString() + "dB",
+                                text = it.getLoss().toString() + "dB",
                                 modifier = Modifier.padding(
                                     top = 5.dp,
                                     bottom = 5.dp,
@@ -166,6 +173,8 @@ fun MainScreen(
                         }
                     }
                 }
+
+                sharedViewModel.setTotalAtten(total)
             }
             else // if no attenuators, show a message
                 Text(text = "Click Add to add an attenuator",
@@ -188,8 +197,7 @@ fun MainScreen(
             ) {
                 Text(text = "Total Attenuation: ",
                     modifier = Modifier.weight(3f))
-                Text(text = sharedViewModel.totalAttenuation.toString() + " dB",
-                    )
+                Text(text = sharedViewModel.totalAttenuation.toString() + " dB")
             }
 
             Row(

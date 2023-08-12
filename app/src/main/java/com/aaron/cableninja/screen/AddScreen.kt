@@ -37,6 +37,8 @@ import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.attenuatorDataList
 import com.aaron.cableninja.R
+import com.aaron.cableninja.model.AttenuatorCard
+import com.aaron.cableninja.model.getLoss
 
 /*
  *
@@ -87,7 +89,7 @@ fun AddScreen(
         // each Attenuator in the list
         attenuatorDataList.forEach() {
             AttenuatorAddCard(
-                AttenuatorData(
+                AttenuatorCard(
                     it.id(), it.desc(),
                     0, it.iscoax()
                 ), navController, sharedViewModel
@@ -162,9 +164,28 @@ fun AddScreen(
                                     sharedViewModel.onFootageAddClick()
 
                                     if (isNumeric(footage) &&
-                                        sharedViewModel.card != null) {
+                                        sharedViewModel.data != null) {
+                                            val freq = 55
+
                                             // Save length to current AttenuatorCard to add to MainScreen list
                                             sharedViewModel.addAttenuatorLength(footage.toInt())
+
+                                            // Find loss
+                                            attenuatorDataList.forEach() {
+                                                if (it.id() == sharedViewModel.data!!.id()) {
+                                                    sharedViewModel.data!!.setLoss(
+                                                        it.getLoss(freq)?.let { it1 ->
+                                                            getLoss(
+                                                                it1,
+                                                                freq,
+                                                                footage.toInt(),
+                                                                temp = 68
+                                                            )
+                                                        }!!
+                                                    )
+                                                }
+                                            }
+
                                             // Nav back to MainScreen
                                             navController.navigate(Screen.Main.route)
                                     }
@@ -204,13 +225,13 @@ fun AddScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AttenuatorAddCard(
-    card: AttenuatorData,
+    card: AttenuatorCard,
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
 
-    Log.d("DEBUG", "Entering AttenuatorAddCard() with id = " + card.id)
-    Log.d("DEBUG", "Entering AttenuatorAddCard() with desc = " + card.desc)
+    Log.d("DEBUG", "Entering AttenuatorAddCard() with id = " + card.id())
+    Log.d("DEBUG", "Entering AttenuatorAddCard() with desc = " + card.desc())
     Log.d("DEBUG", "=================================================")
 
     Card(
@@ -222,25 +243,34 @@ private fun AttenuatorAddCard(
                     if (sharedViewModel.clearAttenuatorList)
                         sharedViewModel.setClearListFalse()
 
-                    sharedViewModel.addAttenuatorCard(card)
+                    sharedViewModel.addAttenuatorData(card)
 
-                    attenuatorCardList.add(AttenuatorCard(card))
+                    attenuatorCardList.add(card)
 
                     // only show footage dialog if we are adding a coax attenuator
-                    if (card.iscoax)
+                    if (card.iscoax()) {
                         sharedViewModel.onFootageAddClick()
-                    else
+                    }
+                    else {
+                        // Find loss
+                        attenuatorDataList.forEach() {
+                            if (it.id() == sharedViewModel.data!!.id()) {
+                                sharedViewModel.data!!.setLoss(it.getLoss(55)!!)
+                            }
+                        }
+
                         navController.navigate(Screen.Main.route)
+                    }
                 }
                 .padding(36.dp)
                 .fillMaxWidth()
         ) {
             // TODO add image of coax or splitter
             Text(
-                text = card.id,
+                text = card.id(),
                 fontWeight = FontWeight.Bold
             )
-            Text(text = card.desc)
+            Text(text = card.desc())
         }
     }
 }

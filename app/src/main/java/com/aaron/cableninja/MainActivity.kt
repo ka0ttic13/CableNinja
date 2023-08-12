@@ -5,16 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.aaron.cableninja.model.RFData
+import com.aaron.cableninja.model.AttenuatorData
 import com.aaron.cableninja.navigation.SetupNavGraph
-import com.aaron.cableninja.screen.AttenuatorCard
+import com.aaron.cableninja.model.AttenuatorCard
 import com.aaron.cableninja.ui.theme.CableNinjaTheme
 
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
     companion object {
-        var attenuatorDataList = mutableListOf<RFData>()
+        var attenuatorDataList = mutableListOf<AttenuatorData>()
         var attenuatorCardList = mutableListOf<AttenuatorCard>()
     }
 
@@ -34,18 +34,19 @@ class MainActivity : ComponentActivity() {
 
     // TODO load data from XML?
     private fun _loadRFdata() {
-        val RG6 = RFData("RG6", "Drop/Coax", true)
+        val RG6 = AttenuatorData("RG6", "Drop/Coax", true)
         RG6.dataMap[5] = 0.58
         RG6.dataMap[55] = 1.6
         attenuatorDataList.add(RG6)
 
-        val RG11 = RFData("RG11", "Drop/Coax", true)
+        val RG11 = AttenuatorData("RG11", "Drop/Coax", true)
         RG11.dataMap[5] = .38
         RG11.dataMap[55] = 0.96
         attenuatorDataList.add(RG11)
 
-        val TwoWay = RFData("2 Way", "Passive/Drop", false)
+        val TwoWay = AttenuatorData("2 Way", "Passive/Drop", false)
         TwoWay.dataMap[5] = 3.5
+        TwoWay.dataMap[55] = 3.6
         attenuatorDataList.add(TwoWay)
     }
 }
