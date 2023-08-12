@@ -45,7 +45,9 @@ fun MainScreen(
     ) {
         // Frequency slider
         // TODO: when slider changes, we need to update attenuation List and total attenuation
-        Column {
+        Column(
+            modifier = Modifier.weight(.75f)
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,7 +74,9 @@ fun MainScreen(
 
         // Temp slider
         // temp only has a significant impact on coax attenuators
-        Column {
+        Column(
+            modifier = Modifier.weight(.75f)
+        ) {
             Row(
 
             ) {
@@ -105,6 +109,7 @@ fun MainScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(5.dp),
             modifier = Modifier
+                .weight(5f)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -172,9 +177,10 @@ fun MainScreen(
         // TODO updates any time an attenuator is added or removed from the List
 
         Column(
-//            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier
+                .padding(20.dp)
+                .weight(2f)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
