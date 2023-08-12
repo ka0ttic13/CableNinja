@@ -41,7 +41,7 @@ fun MainScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         // Frequency slider
         // TODO: when slider changes, we need to update attenuation List and total attenuation
@@ -73,7 +73,7 @@ fun MainScreen(
         }
 
         // Temp slider
-        // temp only has a significant impact on coax attenuators
+        // TODO: when slider changes, we need to update attenuation List and total attenuation
         Column(
             modifier = Modifier.weight(.75f)
         ) {
@@ -133,7 +133,7 @@ fun MainScreen(
                                 .fillMaxWidth()
                                 .padding(10.dp)
                         ) {
-                            // show attenuator ID
+                            // show attenuator ID on left
                             Text(
                                 text = it.id(),
                                 fontWeight = FontWeight.Bold,
@@ -143,7 +143,7 @@ fun MainScreen(
                                     bottom = 5.dp
                                 )
                             )
-                            // if coax, show footage
+                            // if coax, show footage in middle
                             if (it.iscoax()) {
                                 Text(
                                     text = it.footage().toString() + "'",
@@ -154,7 +154,7 @@ fun MainScreen(
                                     )
                                 )
                             }
-                            // show attenuation
+                            // show attenuation on right
                             Text(
                                 text = it.loss().toString() + "dB",
                                 modifier = Modifier.padding(
@@ -167,15 +167,15 @@ fun MainScreen(
                     }
                 }
             }
-            else
-                Text(text = "Click Add to add an attenuator")
+            else // if no attenuators, show a message
+                Text(text = "Click Add to add an attenuator",
+                    modifier = Modifier.padding(top = 140.dp))
         }
 
         Divider(modifier = Modifier.padding(10.dp))
 
-        // TODO Show Total Attenuation
+        // Show Total Attenuation
         // TODO updates any time an attenuator is added or removed from the List
-
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
@@ -184,26 +184,28 @@ fun MainScreen(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(80.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                Text(text = "Total Attenuation: ")
-                Text(text = sharedViewModel.totalAttenuation.toString() + " dB")
+                Text(text = "Total Attenuation: ",
+                    modifier = Modifier.weight(3f))
+                Text(text = sharedViewModel.totalAttenuation.toString() + " dB",
+                    )
             }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(40.dp),
-                modifier = Modifier
-                    .padding(20.dp)
+                horizontalArrangement = Arrangement.spacedBy(30.dp),
             ) {
                 // Clear Button
                 //  Clear attenuator list
                 Button(
                     onClick = {
                         attenuatorCardList.clear()
+                        sharedViewModel.setTotalAtten(0.0)
                         sharedViewModel.setClearListTrue()
                     },
-                    shape = MaterialTheme.shapes.large
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier.weight(2f)
                 ) {
                     Icon(
                         painterResource(id = R.drawable.baseline_delete_forever_24),
@@ -223,7 +225,8 @@ fun MainScreen(
                         sharedViewModel.onFootageDismissDialog()
                         navController.navigate(route = Screen.Add.route)
                     },
-                    shape = MaterialTheme.shapes.large
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier.weight(2f)
                 ) {
                     Icon(
                         painterResource(id = R.drawable.baseline_add_circle_24),

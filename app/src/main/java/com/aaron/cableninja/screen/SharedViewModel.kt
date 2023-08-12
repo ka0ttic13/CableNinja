@@ -21,15 +21,15 @@ class SharedViewModel : ViewModel() {
     var totalAttenuation by mutableStateOf(0.0)
         private set
 
-    fun setTotal(total: Double) {
+    fun setTotalAtten(total: Double) {
         totalAttenuation = total
     }
 
     // AttenuatorCard we can use to pass from AddScreen to MainScreen
-    var card by mutableStateOf<AttenuatorCardData?>(null)
+    var card by mutableStateOf<AttenuatorData?>(null)
         private set
     // set AttenuatorCard
-    fun addAttenuatorCard(newCard: AttenuatorCardData) {
+    fun addAttenuatorCard(newCard: AttenuatorData) {
         card = newCard
     }
 

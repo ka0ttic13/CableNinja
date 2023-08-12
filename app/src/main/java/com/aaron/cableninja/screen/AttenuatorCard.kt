@@ -1,6 +1,6 @@
 package com.aaron.cableninja.screen
 
-data class AttenuatorCardData(
+data class AttenuatorData(
         val title: String,
         val subtitle: String,
         val feet: Int = 0,
@@ -13,7 +13,7 @@ data class AttenuatorCardData(
         var footage = feet
 }
 
-class AttenuatorCard(data: AttenuatorCardData) {
+class AttenuatorCard(data: AttenuatorData) {
         private val _card = data
         private val _loss: Double = 0.0
 

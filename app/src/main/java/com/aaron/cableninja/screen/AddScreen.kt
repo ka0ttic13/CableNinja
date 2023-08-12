@@ -35,7 +35,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.attenuatorList
+import com.aaron.cableninja.MainActivity.Companion.attenuatorDataList
 import com.aaron.cableninja.R
 
 /*
@@ -85,9 +85,9 @@ fun AddScreen(
 
         // iterate over attenuatorList and create an AttenuatorAddCard for
         // each Attenuator in the list
-        attenuatorList.forEach() {
+        attenuatorDataList.forEach() {
             AttenuatorAddCard(
-                AttenuatorCardData(
+                AttenuatorData(
                     it.id(), it.desc(),
                     0, it.iscoax()
                 ), navController, sharedViewModel
@@ -204,7 +204,7 @@ fun AddScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AttenuatorAddCard(
-    card: AttenuatorCardData,
+    card: AttenuatorData,
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
