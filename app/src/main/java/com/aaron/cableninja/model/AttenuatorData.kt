@@ -3,7 +3,11 @@ package com.aaron.cableninja.model
 import android.util.Log
 
 // TODO - load from XML?
-class AttenuatorData(id: String, desc: String, iscoax: Boolean) {
+class AttenuatorData(
+    id: String,
+    desc: String,
+    iscoax: Boolean
+) {
     private val _iscoax = iscoax
     private val _id = id
     private val _desc = desc
