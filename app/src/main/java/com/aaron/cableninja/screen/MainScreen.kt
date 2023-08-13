@@ -181,8 +181,13 @@ fun MainScreen(
                 sharedViewModel.setTotalAtten(total)
             }
             else // if no attenuators, show a message
-                Text(text = "Click Add to add an attenuator",
-                    modifier = Modifier.padding(top = 140.dp))
+                Text(text = "Tap to add an attenuator",
+                    modifier = Modifier
+                        .padding(top = 140.dp)
+                        .clickable {
+                            navController.navigate(route = Screen.Add.route)
+                        }
+                    )
         }
 
         Divider(modifier = Modifier.padding(10.dp))

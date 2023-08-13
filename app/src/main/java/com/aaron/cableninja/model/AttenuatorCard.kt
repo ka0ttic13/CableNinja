@@ -1,5 +1,9 @@
 package com.aaron.cableninja.model
 
+/********************************************
+ * class AttnuatorData
+ *      encapsulates all attenuator data
+ ********************************************/
 class AttenuatorCard(
         id: String,
         desc: String,
@@ -13,15 +17,11 @@ class AttenuatorCard(
         private val _iscoax = iscoax
         private var _loss = loss
 
-        //val rfSpecs = mutableMapOf<Int, Double>()
-
         fun id(): String { return _id }
         fun desc(): String { return _desc }
         fun footage(): Int { return _footage }
         fun setFootage(footage: Int) { _footage = footage }
-
         fun iscoax(): Boolean { return _iscoax }
-
         fun setLoss(loss: Double) { _loss = loss }
         fun getLoss(): Double { return _loss }
 }

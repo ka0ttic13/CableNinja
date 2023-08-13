@@ -165,29 +165,39 @@ fun AddScreen(
 
                                     if (isNumeric(footage) &&
                                         sharedViewModel.data != null) {
-                                            val freq = 55
 
-                                            // Save length to current AttenuatorCard to add to MainScreen list
-                                            sharedViewModel.addAttenuatorLength(footage.toInt())
+                                        val freq = 55
 
-                                            // Find loss
-                                            attenuatorDataList.forEach() {
-                                                if (it.id() == sharedViewModel.data!!.id()) {
-                                                    sharedViewModel.data!!.setLoss(
-                                                        it.getLoss(freq)?.let { it1 ->
-                                                            getLoss(
-                                                                it1,
-                                                                freq,
-                                                                footage.toInt(),
-                                                                temp = 68
-                                                            )
-                                                        }!!
-                                                    )
-                                                }
+                                        attenuatorCardList.add(
+                                            AttenuatorCard(
+                                                sharedViewModel.data!!.id(),
+                                                sharedViewModel.data!!.desc(),
+                                                sharedViewModel.data!!.footage(),
+                                                sharedViewModel.data!!.iscoax(),
+                                                sharedViewModel.data!!.getLoss())
+                                        )
+
+                                        // Save length to current AttenuatorCard to add to MainScreen list
+                                        sharedViewModel.addAttenuatorLength(footage.toInt())
+
+                                        // Find loss
+                                        attenuatorDataList.forEach() {
+                                            if (it.id() == sharedViewModel.data!!.id()) {
+                                                sharedViewModel.data!!.setLoss(
+                                                    it.getLoss(freq)?.let { it1 ->
+                                                        getLoss(
+                                                            it1,
+                                                            freq,
+                                                            footage.toInt(),
+                                                            temp = 68
+                                                        )
+                                                    }!!
+                                                )
                                             }
+                                        }
 
-                                            // Nav back to MainScreen
-                                            navController.navigate(Screen.Main.route)
+                                        // Nav back to MainScreen
+                                        navController.navigate(Screen.Main.route)
                                     }
                                     else
                                         openFootageAlert = true
@@ -245,7 +255,6 @@ private fun AttenuatorAddCard(
 
                     sharedViewModel.addAttenuatorData(card)
 
-                    attenuatorCardList.add(card)
 
                     // only show footage dialog if we are adding a coax attenuator
                     if (card.iscoax()) {
@@ -259,6 +268,7 @@ private fun AttenuatorAddCard(
                             }
                         }
 
+                        attenuatorCardList.add(card)
                         navController.navigate(Screen.Main.route)
                     }
                 }
