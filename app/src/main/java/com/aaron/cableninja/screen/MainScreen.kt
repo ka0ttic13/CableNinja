@@ -161,9 +161,13 @@ fun MainScreen(
                                     )
                                 )
                             }
+
+                            // round loss to nearest hundred
+                            val loss = round(it.getLoss() * 100) / 100
+
                             // show attenuation on right
                             Text(
-                                text = it.getLoss().toString() + "dB",
+                                text = loss.toString() + "dB",
                                 modifier = Modifier.padding(
                                     top = 5.dp,
                                     bottom = 5.dp,
@@ -195,9 +199,12 @@ fun MainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
+                // round loss to nearest 100th
+                val loss = round(sharedViewModel.totalAttenuation * 100) / 100
+
                 Text(text = "Total Attenuation: ",
                     modifier = Modifier.weight(3f))
-                Text(text = sharedViewModel.totalAttenuation.toString() + " dB")
+                Text(text = loss.toString() + " dB")
             }
 
             Row(
