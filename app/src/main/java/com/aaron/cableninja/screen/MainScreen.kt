@@ -1,15 +1,13 @@
 package com.aaron.cableninja.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -35,8 +33,8 @@ fun MainScreen(
     sharedViewModel: SharedViewModel
 ) {
     //var total by remember { mutableStateOf(0.0) }                 // total attenuation
-    var freqSliderPosition by remember { mutableStateOf(1219f) }  // default to 1219MHz
-    var tempSliderPosition by remember { mutableStateOf(70f) }    // default to 70F
+    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}  // default to 1219MHz
+    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}    // default to 70F
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,6 +48,8 @@ fun MainScreen(
             modifier = Modifier.weight(.75f)
         ) {
             Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
@@ -57,7 +57,7 @@ fun MainScreen(
                     text = "Frequency: ",
                     fontWeight = FontWeight.Bold
                 )
-                Text(round(freqSliderPosition).toString() + " MHz")
+                Text(round(freqSliderPosition).toInt().toString() + " MHz")
             }
             Slider(
                 value = freqSliderPosition,
@@ -67,7 +67,8 @@ fun MainScreen(
                 valueRange = 5f..1219f,
                 steps = 24,
                 onValueChangeFinished = {
-                    // TODO: save to ViewModel
+                    Log.d("DEBUG", "MainScreen() freqSliderPosition = $freqSliderPosition")
+                    sharedViewModel.setFreq(freqSliderPosition)
                 }
 
             )
@@ -79,14 +80,17 @@ fun MainScreen(
             modifier = Modifier.weight(.75f)
         ) {
             Row(
-
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = "Temperature: ",
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = round(tempSliderPosition).toString() + " F"
+                    text = round(tempSliderPosition).toInt().toString() + " F"
                 )
             }
             Slider(
@@ -97,7 +101,8 @@ fun MainScreen(
                 valueRange = -40f..120f,
                 steps = 15,
                 onValueChangeFinished = {
-                    // TODO: save to ViewModel
+                    Log.d("DEBUG", "MainScreen() tempSliderPosition = $tempSliderPosition")
+                    sharedViewModel.setTemp(tempSliderPosition)
                 }
 
             )
@@ -193,7 +198,6 @@ fun MainScreen(
         Divider(modifier = Modifier.padding(10.dp))
 
         // Show Total Attenuation
-        // TODO updates any time an attenuator is added or removed from the List
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier

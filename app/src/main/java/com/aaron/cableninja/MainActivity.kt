@@ -14,7 +14,9 @@ class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
     companion object {
+        // master list of RF data that can be added
         var attenuatorDataList = mutableListOf<AttenuatorData>()
+        // master list of RF data that has been added
         var attenuatorCardList = mutableListOf<AttenuatorCard>()
     }
 
@@ -32,7 +34,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // TODO load data from XML?
     private fun _loadRFdata() {
         val RG6 = AttenuatorData("RG6",
             "Drop/Coax", true)

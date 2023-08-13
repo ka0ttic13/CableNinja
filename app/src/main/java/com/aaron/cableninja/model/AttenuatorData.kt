@@ -2,7 +2,6 @@ package com.aaron.cableninja.model
 
 import android.util.Log
 
-// TODO - load from XML?
 class AttenuatorData(
     id: String,
     desc: String,
@@ -48,13 +47,3 @@ class AttenuatorDataList {
     }
 }
 
-fun getLoss(lossPer100: Double, freq: Int, distance: Int, temp: Int): Double? {
-    Log.d("DEBUG", "RFData:getLoss() - lossper100: $lossPer100")
-    Log.d("DEBUG", "RFData:getLoss() - distance: $distance")
-    Log.d("DEBUG", "RFData:getLoss() - temp: $temp")
-
-    val result = (distance * adjustRFTemp(lossPer100, temp)) / 100
-    Log.d("DEBUG", "RFData:getLoss() - result = ${result.toString()}")
-
-    return result
-}

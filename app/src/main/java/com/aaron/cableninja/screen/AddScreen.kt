@@ -38,7 +38,7 @@ import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.attenuatorDataList
 import com.aaron.cableninja.R
 import com.aaron.cableninja.model.AttenuatorCard
-import com.aaron.cableninja.model.getLoss
+import com.aaron.cableninja.model.getCableLoss
 
 /*
  *
@@ -52,176 +52,184 @@ fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
-    // Add Label with Close Icon "X"
-    Row(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        // Add Label
-        Text(text = "Add attenuator")
-
-        // Close Icon - exits back to MainScreen
-        Icon(
-            painterResource(id = R.drawable.baseline_close_24),
-            contentDescription = "Close",
-            modifier = Modifier.clickable {
-                // on click, go back to MainScreen()
-                navController.popBackStack()
-            }
-        )
-    }
-
-    // Show attenuator types that can be added
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = Modifier
-            .padding(top = 60.dp)
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-    ) {
-        var openFootageAlert by remember { mutableStateOf(false) }
 
-        // iterate over attenuatorList and create an AttenuatorAddCard for
-        // each Attenuator in the list
-        attenuatorDataList.forEach() {
-            AttenuatorAddCard(
-                AttenuatorCard(
-                    it.id(), it.desc(),
-                    0, it.iscoax()
-                ), navController, sharedViewModel
+    ) {
+
+        // Add Label with Close Icon "X"
+        Row(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Add Label
+            Text(text = "Add attenuator")
+
+            // Close Icon - exits back to MainScreen
+            Icon(
+                painterResource(id = R.drawable.baseline_close_24),
+                contentDescription = "Close",
+                modifier = Modifier.clickable {
+                    // on click, go back to MainScreen()
+                    navController.popBackStack()
+                }
             )
         }
 
-        // Show footage dialog when adding coax attenuators
-        if (sharedViewModel.isFootageDialogShown) {
-            Dialog(
-                onDismissRequest = {
-                    sharedViewModel.onFootageDismissDialog()
-                },
-                properties = DialogProperties(
-                    usePlatformDefaultWidth = false
-                )
-            ) {
-                Card(
-                    shape = RoundedCornerShape(15.dp),
-                    modifier = Modifier.fillMaxWidth(0.95f)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(15.dp)
-                    ) {
-                        var footage by remember { mutableStateOf("") }
+        // Show attenuator types that can be added
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            modifier = Modifier
+                .padding(10.dp)
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
+            var openFootageAlert by remember { mutableStateOf(false) }
 
-                        Row(
+            // iterate over attenuatorList and create an AttenuatorAddCard for
+            // each Attenuator in the list
+            attenuatorDataList.forEach() {
+                AttenuatorAddCard(
+                    AttenuatorCard(
+                        it.id(), it.desc(),
+                        0, it.iscoax()
+                    ), navController, sharedViewModel
+                )
+            }
+
+            // Show footage dialog when adding coax attenuators
+            if (sharedViewModel.isFootageDialogShown) {
+                Dialog(
+                    onDismissRequest = {
+                        sharedViewModel.onFootageDismissDialog()
+                    },
+                    properties = DialogProperties(
+                        usePlatformDefaultWidth = false
+                    )
+                ) {
+                    Card(
+                        shape = RoundedCornerShape(15.dp),
+                        modifier = Modifier.fillMaxWidth(0.95f)
+                    ) {
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(30.dp),
-                            verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.SpaceEvenly
+                                .padding(15.dp)
                         ) {
-                            TextField(
-                                value = footage,
-                                onValueChange = {
-                                    footage = it
-                                },
-                                label = { Text(text = "Enter footage") },
+                            var footage by remember { mutableStateOf("") }
 
-                                singleLine = true
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(30.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Cancel Button
-                            Button(
-                                onClick = {
-                                    sharedViewModel.onFootageDismissDialog()
-                                },
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .weight(1f),
-                                shape = CircleShape
+                                    .padding(30.dp),
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                Text(
-                                    text = "Cancel",
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center
+                                TextField(
+                                    value = footage,
+                                    onValueChange = {
+                                        footage = it
+                                    },
+                                    label = { Text(text = "Enter footage") },
+
+                                    singleLine = true
                                 )
                             }
 
-                            // Add Button
-                            Button(
-                                onClick = {
-                                    sharedViewModel.onFootageAddClick()
-
-                                    if (isNumeric(footage) &&
-                                        sharedViewModel.data != null) {
-
-                                        val freq = 55
-
-                                        attenuatorCardList.add(
-                                            AttenuatorCard(
-                                                sharedViewModel.data!!.id(),
-                                                sharedViewModel.data!!.desc(),
-                                                sharedViewModel.data!!.footage(),
-                                                sharedViewModel.data!!.iscoax(),
-                                                sharedViewModel.data!!.getLoss())
-                                        )
-
-                                        // Save length to current AttenuatorCard to add to MainScreen list
-                                        sharedViewModel.addAttenuatorLength(footage.toInt())
-
-                                        // Find loss
-                                        attenuatorDataList.forEach() {
-                                            if (it.id() == sharedViewModel.data!!.id()) {
-                                                sharedViewModel.data!!.setLoss(
-                                                    it.getLoss(freq)?.let { it1 ->
-                                                        getLoss(
-                                                            it1,
-                                                            freq,
-                                                            footage.toInt(),
-                                                            temp = 68
-                                                        )
-                                                    }!!
-                                                )
-                                            }
-                                        }
-
-                                        // Nav back to MainScreen
-                                        navController.navigate(Screen.Main.route)
-                                    }
-                                    else
-                                        openFootageAlert = true
-                                },
+                            Row(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                shape = CircleShape
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(30.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "Add",
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center
-                                )
+                                // Cancel Button
+                                Button(
+                                    onClick = {
+                                        sharedViewModel.onFootageDismissDialog()
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f),
+                                    shape = CircleShape
+                                ) {
+                                    Text(
+                                        text = "Cancel",
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                // Add Button
+                                Button(
+                                    onClick = {
+                                        if (isNumeric(footage) &&
+                                            sharedViewModel.card != null
+                                        ) {
+                                            Log.d("DEBUG", "Footage dialog: Adding " + sharedViewModel.card!!.id())
+                                            Log.d("DEBUG", "with footage = $footage")
+
+                                            // Save length to current AttenuatorCard to add to MainScreen list
+                                            sharedViewModel.addAttenuatorLength(footage.toInt())
+
+                                            // Find loss
+                                            for (data in attenuatorDataList.iterator()) {
+                                                if (data.id() == sharedViewModel.card!!.id()) {
+                                                    Log.d("DEBUG", "Footage dialog: Found attenuator ${data.id()}")
+                                                    Log.d("DEBUG", "Footage dialog: current freq " + sharedViewModel.currentFreq.toString())
+                                                    Log.d("DEBUG", "Footage dialog: current temp " + sharedViewModel.currentTemp.toString())
+
+                                                    sharedViewModel.card!!.setLoss(
+                                                        getCableLoss(
+                                                            data,
+                                                            sharedViewModel.currentFreq.toInt(),
+                                                            footage.toInt(),
+                                                            sharedViewModel.currentTemp.toInt()
+                                                        )
+                                                    )
+
+                                                    break
+                                                }
+                                            }
+
+                                            attenuatorCardList.add(
+                                                AttenuatorCard(
+                                                    sharedViewModel.card!!.id(),
+                                                    sharedViewModel.card!!.desc(),
+                                                    sharedViewModel.card!!.footage(),
+                                                    sharedViewModel.card!!.iscoax(),
+                                                    sharedViewModel.card!!.getLoss()
+                                                )
+                                            )
+
+                                            // Nav back to MainScreen
+                                            navController.navigate(Screen.Main.route)
+                                        } else
+                                            openFootageAlert = true
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f),
+                                    shape = CircleShape
+                                ) {
+                                    Text(
+                                        text = "Add",
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        // Show AlertDialog if footage entered is not a number
-        if (openFootageAlert)
-            FootageAlertDialog()
+            // Show AlertDialog if footage entered is not a number
+            if (openFootageAlert)
+                FootageAlertDialog()
+        }
     }
 }
 
@@ -239,13 +247,8 @@ private fun AttenuatorAddCard(
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
-
-    Log.d("DEBUG", "Entering AttenuatorAddCard() with id = " + card.id())
-    Log.d("DEBUG", "Entering AttenuatorAddCard() with desc = " + card.desc())
-    Log.d("DEBUG", "=================================================")
-
     Card(
-        shape = RoundedCornerShape(32.dp)
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
             modifier = Modifier
@@ -253,26 +256,36 @@ private fun AttenuatorAddCard(
                     if (sharedViewModel.clearAttenuatorList)
                         sharedViewModel.setClearListFalse()
 
-                    sharedViewModel.addAttenuatorData(card)
-
+                    sharedViewModel.setAttenuatorCard(card)
 
                     // only show footage dialog if we are adding a coax attenuator
                     if (card.iscoax()) {
+                        // logic for coax is in AddScreen under footage dialog state
                         sharedViewModel.onFootageAddClick()
                     }
                     else {
                         // Find loss
-                        attenuatorDataList.forEach() {
-                            if (it.id() == sharedViewModel.data!!.id()) {
-                                sharedViewModel.data!!.setLoss(it.getLoss(55)!!)
+                        for (data in attenuatorDataList.iterator()) {
+                            if (data.id() == sharedViewModel.card!!.id()) {
+                                sharedViewModel.card!!.setLoss(
+                                    getCableLoss(
+                                        data,
+                                        sharedViewModel.currentFreq.toInt(),
+                                        0,
+                                        sharedViewModel.currentTemp.toInt()
+                                    )
+                                )
+
+                                break
                             }
                         }
 
+                        // nav back to MainScreen
                         attenuatorCardList.add(card)
                         navController.navigate(Screen.Main.route)
                     }
                 }
-                .padding(36.dp)
+                .padding(12.dp)
                 .fillMaxWidth()
         ) {
             // TODO add image of coax or splitter
@@ -299,7 +312,7 @@ private fun FootageAlertDialog() {
                     Text(text = "Ok")
                 }
             },
-            text = { Text(text = "Footage must be a number") }
+            text = { Text(text = "Footage must be a positive number") }
         )
     }
 }
