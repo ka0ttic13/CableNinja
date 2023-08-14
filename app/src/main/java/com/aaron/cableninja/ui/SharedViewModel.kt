@@ -42,6 +42,7 @@ class SharedViewModel : ViewModel() {
         if (card != null)
             card!!.setFootage(footage)
     }
+
     // get attenuator length
     fun getAttenuatorLength() : Int {
         return card!!.footage()
@@ -60,4 +61,8 @@ class SharedViewModel : ViewModel() {
     var hasLoadedAddList by mutableStateOf(false)
         private set
     fun setHasLoadedAddList() { hasLoadedAddList = true }
+
+    var hasListChanged by mutableStateOf(false)
+        private set
+    fun setHasListChanged() { hasListChanged = true}
 }

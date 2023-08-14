@@ -1,8 +1,9 @@
 package com.aaron.cableninja.model
 
 /********************************************
- * class AttnuatorData
+ * class AttenuatorCard
  *      encapsulates all attenuator data
+ *      for the UI to use
  ********************************************/
 class AttenuatorCard(
         id: String,

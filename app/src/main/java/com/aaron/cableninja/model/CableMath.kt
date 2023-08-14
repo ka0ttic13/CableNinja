@@ -50,12 +50,17 @@ fun getApproxLoss(
  *
  ***/
 fun getCableLoss(
-    data: AttenuatorData,
+    data: AttenuatorData?,
     freq: Int,
     distance: Int,
     temp: Int
 ): Double {
     var result = 0.0
+
+    if (data == null) {
+        Log.d("DEBUG", "getCableLoss() - AttenuatorData == NULL!")
+        return -1.0
+    }
 
     Log.d("DEBUG", "getCableLoss() - distance: $distance")
     Log.d("DEBUG", "getCableLoss() - temp: $temp")

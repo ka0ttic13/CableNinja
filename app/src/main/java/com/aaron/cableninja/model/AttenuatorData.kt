@@ -2,6 +2,13 @@ package com.aaron.cableninja.model
 
 import android.util.Log
 
+/********************************************
+ * class AttenuatorData
+ *      encapsulates all attenuator data
+ *      including a map of manufacturer specs
+ *          key = frequency
+ *          value = loss @ 100'
+ ********************************************/
 class AttenuatorData(
     id: String,
     desc: String,

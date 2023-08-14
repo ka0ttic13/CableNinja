@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,7 +37,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.attenuatorDataList
+import com.aaron.cableninja.MainActivity.Companion.attenuatorDataMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.model.AttenuatorCard
 import com.aaron.cableninja.model.getCableLoss
@@ -55,7 +54,8 @@ fun AddScreen(
     var showLengthDialog by remember { mutableStateOf(false) }
 
     Column {
-        // Add Label with Close Icon "X"
+        // Add Header with Close Icon "X" on right side
+        //      cancels Add operation
         Row(
             modifier = Modifier
                 .padding(20.dp)
@@ -86,111 +86,109 @@ fun AddScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            if (!sharedViewModel.hasLoadedAddList) {
-                sharedViewModel.setHasLoadedAddList()
+            Log.d("DEBUG", "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}")
 
-                // iterate over attenuatorList and create an AttenuatorAddCard for
-                // each Attenuator in the list
-                attenuatorDataList.forEach() {
-                    val card = AttenuatorCard(it.id(), it.desc(), 0, it.iscoax())
-                    AttenuatorAddCard(
-                        card,
-                        onClick = {
-                            if (sharedViewModel.clearAttenuatorList)
-                                sharedViewModel.setClearListFalse()
+            // iterate over attenuatorList and create an AttenuatorAddCard for
+            // each Attenuator in the list
+            for (type in attenuatorDataMap.values) {
+                val card = AttenuatorCard(type.id(), type.desc(), 0, type.iscoax())
+                AttenuatorAddCard(
+                    card,
+                    onClick = {
+                        if (sharedViewModel.clearAttenuatorList)
+                            sharedViewModel.setClearListFalse()
 
-                            sharedViewModel.setAttenuatorCard(card)
+                        sharedViewModel.setAttenuatorCard(card)
 
-                            // only show footage dialog if we are adding a coax attenuator
-                            if (card.iscoax()) {
-                                // logic for coax is in AddScreen under footage dialog state
-                                showLengthDialog = true
-                            } else {
-                                // Find loss
-                                for (data in attenuatorDataList.iterator()) {
-                                    if (data.id() == card.id()) {
-                                        sharedViewModel.card!!.setLoss(
-                                            getCableLoss(
-                                                data,
-                                                sharedViewModel.currentFreq.toInt(),
-                                                0,
-                                                sharedViewModel.currentTemp.toInt()
-                                            )
+                        // only show footage dialog if we are adding a coax attenuator
+                        if (card.iscoax()) {
+                            // logic for coax is in AddScreen under footage dialog state
+                            showLengthDialog = true
+                        } else {
+                            // Find loss
+                            for (data in attenuatorDataMap.values) {
+                                if (data.id() == card.id()) {
+                                    sharedViewModel.card!!.setLoss(
+                                        getCableLoss(
+                                            data,
+                                            sharedViewModel.currentFreq.toInt(),
+                                            0,
+                                            sharedViewModel.currentTemp.toInt()
                                         )
+                                    )
 
-                                        break
-                                    }
+                                    break
                                 }
-
-                                // nav back to MainScreen
-                                attenuatorCardList.add(card)
-                                navController.navigate(Screen.Main.route)
                             }
-                        }
-                    )
-                }
-            }
-        }
 
-        // Show footage dialog when adding coax attenuators
-        if (showLengthDialog) {
-            Log.d("DEBUG", "Entering showFootageDialog")
-            LengthDialog(
-                onCancel = { showLengthDialog = false },
-                onAdd = {
-                    Log.d(
-                        "DEBUG",
-                        "Footage dialog: Adding " + sharedViewModel.card!!.id()
-                    )
-                    Log.d("DEBUG", "with footage = ${sharedViewModel.getAttenuatorLength()}")
-
-                    // Save length to current AttenuatorCard to add to MainScreen list
-                    sharedViewModel.addAttenuatorLength(it.toInt())
-
-                    // Find loss
-                    for (data in attenuatorDataList.iterator()) {
-                        if (data.id() == sharedViewModel.card!!.id()) {
-                            Log.d(
-                                "DEBUG",
-                                "Footage dialog: Found attenuator ${data.id()}"
-                            )
-                            Log.d(
-                                "DEBUG",
-                                "Footage dialog: current freq " + sharedViewModel.currentFreq.toString()
-                            )
-                            Log.d(
-                                "DEBUG",
-                                "Footage dialog: current temp " + sharedViewModel.currentTemp.toString()
-                            )
-
-                            sharedViewModel.card!!.setLoss(
-                                getCableLoss(
-                                    data,
-                                    sharedViewModel.currentFreq.toInt(),
-                                    sharedViewModel.getAttenuatorLength(),
-                                    sharedViewModel.currentTemp.toInt()
-                                )
-                            )
-
-                            break
+                            // nav back to MainScreen
+                            attenuatorCardList.add(card)
+                            navController.navigate(Screen.Main.route)
                         }
                     }
-
-                    attenuatorCardList.add(
-                        AttenuatorCard(
-                            sharedViewModel.card!!.id(),
-                            sharedViewModel.card!!.desc(),
-                            sharedViewModel.card!!.footage(),
-                            sharedViewModel.card!!.iscoax(),
-                            sharedViewModel.card!!.getLoss()
-                        )
-                    )
-
-                    // Nav back to MainScreen
-                    navController.navigate(Screen.Main.route)
-                }
-            )
+                )
+            }
         }
+    }
+
+    // Show footage dialog when adding coax attenuators
+    if (showLengthDialog) {
+        Log.d("DEBUG", "Entering showFootageDialog")
+        LengthDialog(
+            onCancel = { showLengthDialog = false },
+            onAdd = {
+                Log.d(
+                    "DEBUG",
+                    "Footage dialog: Adding " + sharedViewModel.card!!.id()
+                )
+                Log.d("DEBUG", "with footage = ${sharedViewModel.getAttenuatorLength()}")
+
+                // Save length to current AttenuatorCard to add to MainScreen list
+                sharedViewModel.addAttenuatorLength(it.toInt())
+
+                // Find loss
+                for (data in attenuatorDataMap.values) {
+                    if (data.id() == sharedViewModel.card!!.id()) {
+                        Log.d(
+                            "DEBUG",
+                            "Footage dialog: Found attenuator ${data.id()}"
+                        )
+                        Log.d(
+                            "DEBUG",
+                            "Footage dialog: current freq " + sharedViewModel.currentFreq.toString()
+                        )
+                        Log.d(
+                            "DEBUG",
+                            "Footage dialog: current temp " + sharedViewModel.currentTemp.toString()
+                        )
+
+                        sharedViewModel.card!!.setLoss(
+                            getCableLoss(
+                                data,
+                                sharedViewModel.currentFreq.toInt(),
+                                sharedViewModel.getAttenuatorLength(),
+                                sharedViewModel.currentTemp.toInt()
+                            )
+                        )
+
+                        break
+                    }
+                }
+
+                attenuatorCardList.add(
+                    AttenuatorCard(
+                        sharedViewModel.card!!.id(),
+                        sharedViewModel.card!!.desc(),
+                        sharedViewModel.card!!.footage(),
+                        sharedViewModel.card!!.iscoax(),
+                        sharedViewModel.card!!.getLoss()
+                    )
+                )
+
+                // Nav back to MainScreen
+                navController.navigate(Screen.Main.route)
+            }
+        )
     }
 }
 

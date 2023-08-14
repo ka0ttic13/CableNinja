@@ -24,8 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
+import com.aaron.cableninja.MainActivity.Companion.attenuatorDataMap
 import kotlin.math.round
 import com.aaron.cableninja.R
+import com.aaron.cableninja.model.AttenuatorCard
+import com.aaron.cableninja.model.getCableLoss
 
 @Composable
 fun MainScreen(
@@ -67,10 +70,12 @@ fun MainScreen(
                 valueRange = 5f..1219f,
                 steps = 24,
                 onValueChangeFinished = {
-                    Log.d("DEBUG", "MainScreen() freqSliderPosition = $freqSliderPosition")
+                    Log.d("DEBUG", "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition")
                     sharedViewModel.setFreq(freqSliderPosition)
+                    // if there is something in our list, we need to update it for new frequency
+                    if (attenuatorCardList.size > 0)
+                        sharedViewModel.setHasListChanged()
                 }
-
             )
         }
 
@@ -103,6 +108,10 @@ fun MainScreen(
                 onValueChangeFinished = {
                     Log.d("DEBUG", "MainScreen() tempSliderPosition = $tempSliderPosition")
                     sharedViewModel.setTemp(tempSliderPosition)
+
+                    // if there is something in our list, we need to update it for new temperature
+                    if (attenuatorCardList.size > 0)
+                        sharedViewModel.setHasListChanged()
                 }
 
             )
@@ -119,6 +128,27 @@ fun MainScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
+            // if the list has changed (frequency or temperature slider changed)
+            // then redraw the list with current attenuation
+            if (sharedViewModel.hasListChanged) {
+                Log.d("DEBUG", "MainScreen - hasListChanged = true")
+
+                attenuatorCardList.forEach() {
+                    val data = attenuatorDataMap[it.id()]
+
+                    it.setLoss(
+                        getCableLoss(
+                            data,
+                            sharedViewModel.currentFreq.toInt(),
+                            it.footage(),
+                            sharedViewModel.currentTemp.toInt()
+                        )
+                    )
+                }
+
+                Log.d("DEBUG", "MainScreen() List finished updating...")
+            }
+
             // IF there is an existing list, show it
             if (attenuatorCardList.size > 0 &&
                 !sharedViewModel.clearAttenuatorList) {
@@ -128,61 +158,10 @@ fun MainScreen(
                 attenuatorCardList.forEach() {
                     // add attenuation of each item to total
                     total += it.getLoss()
-
-                    Card(
-                        shape = MaterialTheme.shapes.large,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .fillMaxWidth()
-                            .clickable {
-                                // TODO edit card
-                            }
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                        ) {
-                            // show attenuator ID on left
-                            Text(
-                                text = it.id(),
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(
-                                    start = 15.dp,
-                                    top = 5.dp,
-                                    bottom = 5.dp
-                                )
-                            )
-                            // if coax, show footage in middle
-                            if (it.iscoax()) {
-                                Text(
-                                    text = it.footage().toString() + "'",
-                                    modifier = Modifier.padding(
-                                        start = 15.dp,
-                                        top = 5.dp,
-                                        bottom = 5.dp
-                                    )
-                                )
-                            }
-
-                            // round loss to nearest hundred
-                            val loss = round(it.getLoss() * 100) / 100
-
-                            // show attenuation on right
-                            Text(
-                                text = loss.toString() + "dB",
-                                modifier = Modifier.padding(
-                                    top = 5.dp,
-                                    bottom = 5.dp,
-                                    end = 15.dp
-                                )
-                            )
-                        }
-                    }
+                    AddAttenuatorCard(it)
                 }
 
+                // set total attenuation
                 sharedViewModel.setTotalAtten(total)
             }
             else // if no attenuators, show a message
@@ -195,14 +174,14 @@ fun MainScreen(
                     )
         }
 
-        Divider(modifier = Modifier.padding(10.dp))
+        Divider()
 
         // Show Total Attenuation
         Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .padding(20.dp)
-                .weight(2f)
+                .padding(10.dp)
+                .weight(1.5f)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -212,7 +191,7 @@ fun MainScreen(
                 val loss = round(sharedViewModel.totalAttenuation * 100) / 100
 
                 Text(text = "Total Attenuation: ",
-                    modifier = Modifier.weight(3f))
+                    modifier = Modifier.weight(2f))
                 Text(text = loss.toString() + " dB")
             }
 
@@ -262,6 +241,62 @@ fun MainScreen(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AddAttenuatorCard(data: AttenuatorCard) {
+    Card(
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth()
+            .clickable {
+                // TODO edit card
+            }
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            // show attenuator ID on left
+            Text(
+                text = data.id(),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    start = 15.dp,
+                    top = 5.dp,
+                    bottom = 5.dp
+                )
+            )
+            // if coax, show footage in middle
+            if (data.iscoax()) {
+                Text(
+                    text = data.footage().toString() + "'",
+                    modifier = Modifier.padding(
+                        start = 15.dp,
+                        top = 5.dp,
+                        bottom = 5.dp
+                    )
+                )
+            }
+
+            // round loss to nearest hundred
+            val loss = round(data.getLoss() * 100) / 100
+
+            // show attenuation on right
+            Text(
+                text = loss.toString() + "dB",
+                modifier = Modifier.padding(
+                    top = 5.dp,
+                    bottom = 5.dp,
+                    end = 15.dp
+                )
+            )
         }
     }
 }
