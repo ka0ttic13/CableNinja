@@ -1,7 +1,5 @@
 package com.aaron.cableninja.model
 
-import android.util.Log
-
 /********************************************
  * class AttenuatorData
  *      encapsulates all attenuator data
@@ -9,7 +7,7 @@ import android.util.Log
  *          key = frequency
  *          value = loss @ 100'
  ********************************************/
-class AttenuatorData(
+class ManufacturerSpecs(
     id: String,
     desc: String,
     iscoax: Boolean
@@ -39,9 +37,9 @@ class AttenuatorData(
 }
 
 class AttenuatorDataList {
-    private var _list = mutableListOf<AttenuatorData>()
+    private var _list = mutableListOf<ManufacturerSpecs>()
 
-    fun add(data: AttenuatorData) {
+    fun add(data: ManufacturerSpecs) {
         _list.add(data)
     }
     fun getLoss(id: String, freq: Int): Double? {

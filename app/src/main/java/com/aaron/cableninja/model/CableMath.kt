@@ -50,7 +50,7 @@ fun getApproxLoss(
  *
  ***/
 fun getCableLoss(
-    data: AttenuatorData?,
+    data: ManufacturerSpecs?,
     freq: Int,
     distance: Int,
     temp: Int

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.attenuatorDataMap
+import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
 import kotlin.math.round
 import com.aaron.cableninja.R
 import com.aaron.cableninja.model.AttenuatorCard
@@ -131,10 +131,8 @@ fun MainScreen(
             // if the list has changed (frequency or temperature slider changed)
             // then redraw the list with current attenuation
             if (sharedViewModel.hasListChanged) {
-                Log.d("DEBUG", "MainScreen - hasListChanged = true")
-
                 attenuatorCardList.forEach() {
-                    val data = attenuatorDataMap[it.id()]
+                    val data = manufacturerSpecsMap[it.id()]
 
                     it.setLoss(
                         getCableLoss(
@@ -145,8 +143,6 @@ fun MainScreen(
                         )
                     )
                 }
-
-                Log.d("DEBUG", "MainScreen() List finished updating...")
             }
 
             // IF there is an existing list, show it

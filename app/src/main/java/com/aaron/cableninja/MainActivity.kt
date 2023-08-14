@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.aaron.cableninja.model.AttenuatorData
+import com.aaron.cableninja.model.ManufacturerSpecs
 import com.aaron.cableninja.navigation.SetupNavGraph
 import com.aaron.cableninja.model.AttenuatorCard
 import com.aaron.cableninja.ui.theme.CableNinjaTheme
@@ -15,8 +15,7 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         // master list of RF data that can be added
-        //var attenuatorDataList = mutableListOf<AttenuatorData>()
-        var attenuatorDataMap = mutableMapOf<String, AttenuatorData>()
+        var manufacturerSpecsMap = mutableMapOf<String, ManufacturerSpecs>()
         // master list of RF data that has been added
         var attenuatorCardList = mutableListOf<AttenuatorCard>()
     }
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun _loadRFdata() {
-        val RG6 = AttenuatorData("RG6",
+        val RG6 = ManufacturerSpecs("RG6",
             "Drop/Coax", true)
         RG6.dataMap[5] = 0.58
         RG6.dataMap[55] = 1.6
@@ -57,9 +56,9 @@ class MainActivity : ComponentActivity() {
         RG6.dataMap[1100] = 6.87
         RG6.dataMap[1200] = 7.18
         RG6.dataMap[1218] = 7.21
-        attenuatorDataMap[RG6.id()] = RG6
+        manufacturerSpecsMap[RG6.id()] = RG6
 
-        val RG11 = AttenuatorData("RG11",
+        val RG11 = ManufacturerSpecs("RG11",
             "Drop/Coax", true)
         RG11.dataMap[5] = .38
         RG11.dataMap[55] = 0.96
@@ -80,9 +79,9 @@ class MainActivity : ComponentActivity() {
         RG11.dataMap[1100] = 4.54
         RG11.dataMap[1200] = 4.71
         RG11.dataMap[1218] = 4.92
-        attenuatorDataMap[RG11.id()] = RG11
+        manufacturerSpecsMap[RG11.id()] = RG11
 
-        val TwoWay = AttenuatorData("2 Way / 3 Way Low Leg",
+        val TwoWay = ManufacturerSpecs("2 Way / 3 Way Low Leg",
             "Passive/Drop", false)
         TwoWay.dataMap[5] = 3.5
         TwoWay.dataMap[55] = 3.5
@@ -95,9 +94,9 @@ class MainActivity : ComponentActivity() {
         TwoWay.dataMap[1000] = 4.2
         TwoWay.dataMap[1100] = 4.6
         TwoWay.dataMap[1200] = 4.6
-        attenuatorDataMap[TwoWay.id()] = TwoWay
+        manufacturerSpecsMap[TwoWay.id()] = TwoWay
 
-        val ThreeWayBalanced = AttenuatorData("3 Way Balanced",
+        val ThreeWayBalanced = ManufacturerSpecs("3 Way Balanced",
             "Passive/Drop", iscoax = false)
         ThreeWayBalanced.dataMap[5] = 5.8
         ThreeWayBalanced.dataMap[55] = 5.8
@@ -110,9 +109,9 @@ class MainActivity : ComponentActivity() {
         ThreeWayBalanced.dataMap[1000] = 6.8
         ThreeWayBalanced.dataMap[1100] = 7.5
         ThreeWayBalanced.dataMap[1200] = 7.5
-        attenuatorDataMap[ThreeWayBalanced.id()] = ThreeWayBalanced
+        manufacturerSpecsMap[ThreeWayBalanced.id()] = ThreeWayBalanced
 
-        val FourWay = AttenuatorData("4 Way / 3 Way High Leg",
+        val FourWay = ManufacturerSpecs("4 Way / 3 Way High Leg",
             "Passive/Drop", iscoax = false)
         FourWay.dataMap[5] = 7.0
         FourWay.dataMap[55] = 7.2
@@ -124,9 +123,9 @@ class MainActivity : ComponentActivity() {
         FourWay.dataMap[1000] = 8.5
         FourWay.dataMap[1100] = 8.9
         FourWay.dataMap[1200] = 8.9
-        attenuatorDataMap[FourWay.id()] = FourWay
+        manufacturerSpecsMap[FourWay.id()] = FourWay
 
-        val EightWay = AttenuatorData("8 Way",
+        val EightWay = ManufacturerSpecs("8 Way",
             "Passive/Drop", iscoax = false)
         EightWay.dataMap[5] = 11.2
         EightWay.dataMap[55] = 11.0
@@ -138,7 +137,7 @@ class MainActivity : ComponentActivity() {
         EightWay.dataMap[1000] = 12.5
         EightWay.dataMap[1100] = 12.7
         EightWay.dataMap[1200] = 12.9
-        attenuatorDataMap[EightWay.id()] = EightWay
+        manufacturerSpecsMap[EightWay.id()] = EightWay
 
         // TODO
         //val CS625 = AttenuatorData("P3 600", "Coax/Plant", iscoax = true)
