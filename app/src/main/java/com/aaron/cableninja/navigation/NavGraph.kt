@@ -5,10 +5,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.aaron.cableninja.screen.AddScreen
-import com.aaron.cableninja.screen.MainScreen
-import com.aaron.cableninja.screen.Screen
-import com.aaron.cableninja.screen.SharedViewModel
+import com.aaron.cableninja.ui.AddScreen
+import com.aaron.cableninja.ui.MainScreen
+import com.aaron.cableninja.ui.Screen
+import com.aaron.cableninja.ui.SharedViewModel
 
 @Composable
 fun SetupNavGraph(

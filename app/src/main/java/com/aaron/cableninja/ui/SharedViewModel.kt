@@ -1,4 +1,4 @@
-package com.aaron.cableninja.screen
+package com.aaron.cableninja.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +42,10 @@ class SharedViewModel : ViewModel() {
         if (card != null)
             card!!.setFootage(footage)
     }
+    // get attenuator length
+    fun getAttenuatorLength() : Int {
+        return card!!.footage()
+    }
 
     // Add Footage Dialog
     var isFootageDialogShown by mutableStateOf(false)
@@ -52,4 +56,8 @@ class SharedViewModel : ViewModel() {
     fun onFootageDismissDialog() {
         isFootageDialogShown = false
     }
+
+    var hasLoadedAddList by mutableStateOf(false)
+        private set
+    fun setHasLoadedAddList() { hasLoadedAddList = true }
 }

@@ -1,4 +1,4 @@
-package com.aaron.cableninja.screen
+package com.aaron.cableninja.ui
 
 import android.util.Log
 import androidx.compose.foundation.clickable
