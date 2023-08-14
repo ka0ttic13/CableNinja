@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -27,15 +27,14 @@ import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
 import kotlin.math.round
 import com.aaron.cableninja.R
-import com.aaron.cableninja.model.AttenuatorCard
-import com.aaron.cableninja.model.getCableLoss
+import com.aaron.cableninja.domain.AttenuatorCard
+import com.aaron.cableninja.domain.getCableLoss
 
 @Composable
 fun MainScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
-    //var total by remember { mutableStateOf(0.0) }                 // total attenuation
     var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}  // default to 1219MHz
     var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}    // default to 70F
 
@@ -46,7 +45,6 @@ fun MainScreen(
             .padding(10.dp)
     ) {
         // Frequency slider
-        // TODO: when slider changes, we need to update attenuation List and total attenuation
         Column(
             modifier = Modifier.weight(.75f)
         ) {
@@ -80,7 +78,6 @@ fun MainScreen(
         }
 
         // Temp slider
-        // TODO: when slider changes, we need to update attenuation List and total attenuation
         Column(
             modifier = Modifier.weight(.75f)
         ) {
@@ -131,12 +128,10 @@ fun MainScreen(
             // if the list has changed (frequency or temperature slider changed)
             // then redraw the list with current attenuation
             if (sharedViewModel.hasListChanged) {
-                attenuatorCardList.forEach() {
-                    val data = manufacturerSpecsMap[it.id()]
-
+                attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            data,
+                            manufacturerSpecsMap[it.id()],
                             sharedViewModel.currentFreq.toInt(),
                             it.footage(),
                             sharedViewModel.currentTemp.toInt()
@@ -148,10 +143,11 @@ fun MainScreen(
             // IF there is an existing list, show it
             if (attenuatorCardList.size > 0 &&
                 !sharedViewModel.clearAttenuatorList) {
+
                 var total = 0.0
 
                 // iterate over list and create Card for each item
-                attenuatorCardList.forEach() {
+                attenuatorCardList.forEach {
                     // add attenuation of each item to total
                     total += it.getLoss()
                     AddAttenuatorCard(it)
@@ -188,7 +184,7 @@ fun MainScreen(
 
                 Text(text = "Total Attenuation: ",
                     modifier = Modifier.weight(2f))
-                Text(text = loss.toString() + " dB")
+                Text(text = "$loss dB")
             }
 
             Row(
@@ -220,8 +216,7 @@ fun MainScreen(
                 //  click calls AddScreen()
                 Button(
                     onClick = {
-                        // on click, navigate to AddScreen
-                        sharedViewModel.onFootageDismissDialog()
+                        // navigate to AddScreen
                         navController.navigate(route = Screen.Add.route)
                     },
                     shape = MaterialTheme.shapes.large,

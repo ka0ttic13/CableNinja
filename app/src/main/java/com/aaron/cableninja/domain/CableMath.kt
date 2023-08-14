@@ -1,4 +1,4 @@
-package com.aaron.cableninja.model
+package com.aaron.cableninja.domain
 
 import android.util.Log
 import kotlin.math.sqrt
@@ -34,14 +34,7 @@ fun getApproxLoss(
     knownFreq: Double,
     unknownFreq: Double
 ) : Double {
-
-    Log.d(
-        "DEBUG",
-        "getApproxLoss() - knownLoss = $knownLoss, knownFreq = $knownFreq, unknownFreq = $unknownFreq")
-
-    val result = (knownLoss * sqrt((unknownFreq / knownFreq)))
-    Log.d("DEBUG", "getApproxLoss() returning $result")
-    return result
+    return knownLoss * sqrt((unknownFreq / knownFreq))
 }
 
 /***

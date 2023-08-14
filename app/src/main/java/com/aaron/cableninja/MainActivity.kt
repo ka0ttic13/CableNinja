@@ -5,10 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.aaron.cableninja.model.ManufacturerSpecs
-import com.aaron.cableninja.navigation.SetupNavGraph
-import com.aaron.cableninja.model.AttenuatorCard
-import com.aaron.cableninja.ui.theme.CableNinjaTheme
+import com.aaron.cableninja.domain.ManufacturerSpecs
+import com.aaron.cableninja.presentation.ui.SetupNavGraph
+import com.aaron.cableninja.domain.AttenuatorCard
+import com.aaron.cableninja.presentation.ui.theme.CableNinjaTheme
 
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CableNinjaTheme {
-                // load RF attenuation data
+                // load manufacturer specs
                 _loadRFdata()
 
                 // Start navigation controller and show MainScreen

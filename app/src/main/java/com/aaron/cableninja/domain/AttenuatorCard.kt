@@ -1,4 +1,4 @@
-package com.aaron.cableninja.model
+package com.aaron.cableninja.domain
 
 /********************************************
  * class AttenuatorCard

@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -39,8 +39,8 @@ import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
 import com.aaron.cableninja.R
-import com.aaron.cableninja.model.AttenuatorCard
-import com.aaron.cableninja.model.getCableLoss
+import com.aaron.cableninja.domain.AttenuatorCard
+import com.aaron.cableninja.domain.getCableLoss
 
 /*
  * AddScreen()

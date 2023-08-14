@@ -1,7 +1,7 @@
-package com.aaron.cableninja.model
+package com.aaron.cableninja.domain
 
 /********************************************
- * class AttenuatorData
+ * class ManufacturerSpecs
  *      encapsulates all attenuator data
  *      including a map of manufacturer specs
  *          key = frequency

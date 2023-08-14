@@ -1,10 +1,10 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.presentation.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.aaron.cableninja.model.AttenuatorCard
+import com.aaron.cableninja.domain.AttenuatorCard
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
@@ -46,16 +46,6 @@ class SharedViewModel : ViewModel() {
     // get attenuator length
     fun getAttenuatorLength() : Int {
         return card!!.footage()
-    }
-
-    // Add Footage Dialog
-    var isFootageDialogShown by mutableStateOf(false)
-        private set
-    fun onFootageAddClick() {
-        isFootageDialogShown = true
-    }
-    fun onFootageDismissDialog() {
-        isFootageDialogShown = false
     }
 
     var hasLoadedAddList by mutableStateOf(false)
