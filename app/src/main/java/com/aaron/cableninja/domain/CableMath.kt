@@ -62,7 +62,7 @@ fun getCableLoss(
 
     // If freq is an exact match to q frequency listed in manufacturer specs
     // go ahead and return the result
-    data.dataMap.forEach() {
+    data.specs.forEach() {
         if (it.key == freq) {
             Log.d("DEBUG", "getCableLoss() found key $freq")
             // if coax, re-calculate with distance and temperature
@@ -81,7 +81,7 @@ fun getCableLoss(
     var closestFreq = 1200
 
     // find closest frequency
-    for (key in data.dataMap.keys) {
+    for (key in data.specs.keys) {
         Log.d("DEBUG", "getCableLoss() testing if $key > $freq")
         if (key > freq) {
             Log.d("DEBUG", "getCableLoss() found closest frequency $key")

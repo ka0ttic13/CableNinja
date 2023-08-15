@@ -42,10 +42,10 @@ import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
 
-/*
+/***
  * AddScreen()
  *      Show attenuators that can be added.
- */
+ ***/
 @Composable
 fun AddScreen(
     navController: NavController,
@@ -95,14 +95,15 @@ fun AddScreen(
                 AttenuatorAddCard(
                     card,
                     onClick = {
+                        // since we are adding, reset clear list state
                         if (sharedViewModel.clearAttenuatorList)
-                            sharedViewModel.setClearListFalse()
+                            sharedViewModel.setClearList(false)
 
                         sharedViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.iscoax()) {
-                            // logic for coax is in AddScreen under footage dialog state
+                            // logic for coax is in AddScreen under footage dialog state conditional
                             showLengthDialog = true
                         } else {
                             // Find loss
@@ -358,7 +359,7 @@ private fun FootageAlertDialog() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Footage must be a positive number"
+                        text = "Footage must be a positive whole number"
                     )
                 }
             }

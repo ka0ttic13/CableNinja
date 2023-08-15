@@ -9,20 +9,20 @@ import com.aaron.cableninja.domain.AttenuatorCard
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
     // frequency slider value
+    //      defaults to 1.2GHz
     var currentFreq by mutableStateOf(1200f)
         private set
     fun setFreq(freq: Float) { currentFreq = freq }
 
     // temperature slider value
-    var currentTemp by mutableStateOf(70f)
+    //      defaults to 68F (manufacturer spec default)
+    var currentTemp by mutableStateOf(68f)
     fun setTemp(temp: Float) { currentTemp = temp }
 
     // clear main attenuator list
     var clearAttenuatorList by mutableStateOf(false)
         private set
-
-    fun setClearListTrue() { clearAttenuatorList = true }
-    fun setClearListFalse() { clearAttenuatorList = false }
+    fun setClearList(value: Boolean) { clearAttenuatorList = value }
 
     // total attenuation
     var totalAttenuation by mutableStateOf(0.0)
@@ -33,9 +33,7 @@ class SharedViewModel : ViewModel() {
     var card by mutableStateOf<AttenuatorCard?>(null)
         private set
     // set AttenuatorData
-    fun setAttenuatorCard(newCard: AttenuatorCard) {
-        card = newCard
-    }
+    fun setAttenuatorCard(newCard: AttenuatorCard) { card = newCard }
 
     // Set attenuator length
     fun addAttenuatorLength(footage: Int) {

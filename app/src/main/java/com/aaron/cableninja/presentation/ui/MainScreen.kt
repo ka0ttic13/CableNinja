@@ -68,8 +68,11 @@ fun MainScreen(
                 valueRange = 5f..1218f,
                 steps = 24,
                 onValueChangeFinished = {
-                    Log.d("DEBUG", "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition")
+                    Log.d("DEBUG",
+                        "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition")
+
                     sharedViewModel.setFreq(freqSliderPosition)
+
                     // if there is something in our list, we need to update it for new frequency
                     if (attenuatorCardList.size > 0)
                         sharedViewModel.setHasListChanged()
@@ -125,8 +128,8 @@ fun MainScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            // if the list has changed (frequency or temperature slider changed)
-            // then redraw the list with current attenuation
+            // if the list has changed after adding items (frequency or temperature
+            // slider changed, for example) then redraw the list with current attenuation
             if (sharedViewModel.hasListChanged) {
                 attenuatorCardList.forEach {
                     it.setLoss(
@@ -200,7 +203,7 @@ fun MainScreen(
                     onClick = {
                         attenuatorCardList.clear()
                         sharedViewModel.setTotalAtten(0.0)
-                        sharedViewModel.setClearListTrue()
+                        sharedViewModel.setClearList(true)
                     },
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier.weight(2f)

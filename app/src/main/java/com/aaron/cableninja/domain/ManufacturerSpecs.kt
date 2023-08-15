@@ -19,7 +19,7 @@ class ManufacturerSpecs(
     // store attenuation data as k/v pairs
     // key = frequency
     // value = attenuation in dB @ frequency
-    val dataMap = mutableMapOf<Int, Double>()
+    val specs = mutableMapOf<Int, Double>()
 
     // Is this attenuator coax?
     fun iscoax() : Boolean { return _iscoax }
@@ -32,7 +32,7 @@ class ManufacturerSpecs(
 
     // get loss at frequency
     fun getLoss(freq: Int): Double? {
-        return dataMap[freq]
+        return specs[freq]
     }
 }
 
