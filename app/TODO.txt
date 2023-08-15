@@ -1,0 +1,2 @@
+ - Create icons for coax, splitters, etc
+ - Implement way to edit/delete attenuators from main list

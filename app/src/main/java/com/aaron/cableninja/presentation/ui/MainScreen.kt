@@ -35,8 +35,8 @@ fun MainScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
-    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}  // default to 1219MHz
-    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}    // default to 70F
+    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}
+    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +65,7 @@ fun MainScreen(
                 onValueChange = {
                     freqSliderPosition = it
                 },
-                valueRange = 5f..1219f,
+                valueRange = 5f..1218f,
                 steps = 24,
                 onValueChangeFinished = {
                     Log.d("DEBUG", "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition")
@@ -150,7 +150,10 @@ fun MainScreen(
                 attenuatorCardList.forEach {
                     // add attenuation of each item to total
                     total += it.getLoss()
-                    AddAttenuatorCard(it)
+                    AddAttenuatorCard(it,
+                        onClick = {
+                            // TODO edit card
+                        })
                 }
 
                 // set total attenuation
@@ -168,7 +171,7 @@ fun MainScreen(
 
         Divider()
 
-        // Show Total Attenuation
+        // Show Total Attenuation, Clear Button, and Add Button
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -237,14 +240,17 @@ fun MainScreen(
 }
 
 @Composable
-fun AddAttenuatorCard(data: AttenuatorCard) {
+fun AddAttenuatorCard(
+    data: AttenuatorCard,
+    onClick: () -> Unit
+) {
     Card(
         shape = MaterialTheme.shapes.large,
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
             .clickable {
-                // TODO edit card
+                onClick()
             }
     ) {
         Row(

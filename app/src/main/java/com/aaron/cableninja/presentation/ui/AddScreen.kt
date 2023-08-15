@@ -137,12 +137,6 @@ fun AddScreen(
         LengthDialog(
             onCancel = { showLengthDialog = false },
             onAdd = {
-                Log.d(
-                    "DEBUG",
-                    "Footage dialog: Adding " + sharedViewModel.card!!.id()
-                )
-                Log.d("DEBUG", "with footage = ${sharedViewModel.getAttenuatorLength()}")
-
                 // Save length to current AttenuatorCard to add to MainScreen list
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
@@ -231,6 +225,8 @@ private fun LengthDialog(
     var showFootageAlert by remember { mutableStateOf(false) }
 
     if (openDialog) {
+        Log.d("DEBUG", "LengthDialog() called")
+
         Dialog(
             onDismissRequest = {
                 openDialog = false
@@ -298,10 +294,14 @@ private fun LengthDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (length.isEmpty() || !isNumeric(length))
+                                if (length.isEmpty() || !isNumeric(length)) {
+                                    Log.d("DEBUG", "FootageDialog(): \"$length\" is not valid input")
                                     showFootageAlert = true
-                                else
+                                }
+                                else {
+                                    Log.d("DEBUG", "FootageDialog() entered footage: $length")
                                     onAdd(length)
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()

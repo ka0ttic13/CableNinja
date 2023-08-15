@@ -55,8 +55,10 @@ fun getCableLoss(
         return -1.0
     }
 
-    Log.d("DEBUG", "getCableLoss() - distance: $distance")
-    Log.d("DEBUG", "getCableLoss() - temp: $temp")
+    Log.d("DEBUG", "getCableLoss() entering...")
+    Log.d("DEBUG", "getCableLoss() - freq = $freq")
+    Log.d("DEBUG", "getCableLoss() - distance = $distance")
+    Log.d("DEBUG", "getCableLoss() - temp = $temp")
 
     // If freq is an exact match to q frequency listed in manufacturer specs
     // go ahead and return the result
@@ -80,11 +82,14 @@ fun getCableLoss(
 
     // find closest frequency
     for (key in data.dataMap.keys) {
+        Log.d("DEBUG", "getCableLoss() testing if $key > $freq")
         if (key > freq) {
             Log.d("DEBUG", "getCableLoss() found closest frequency $key")
             closestFreq = key
             break
         }
+        else
+            Log.d("DEBUG", "getCableLoss() $key <= $freq, continuing...")
     }
 
     // get approximate loss
