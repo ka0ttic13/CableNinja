@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,9 @@ import kotlin.math.round
 import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
+import com.aaron.cableninja.presentation.ui.theme.LightRed
+import me.saket.swipe.SwipeAction
+import me.saket.swipe.SwipeableActionsBox
 
 @Composable
 fun MainScreen(
@@ -146,6 +150,7 @@ fun MainScreen(
             // IF there is an existing list, show it
             if (attenuatorCardList.size > 0 &&
                 !sharedViewModel.clearAttenuatorList) {
+                Log.d("DEBUG", "MainScreen() showing list...")
 
                 var total = 0.0
 
@@ -153,18 +158,39 @@ fun MainScreen(
                 attenuatorCardList.forEach {
                     // add attenuation of each item to total
                     total += it.getLoss()
+                    Log.d("DEBUG", "MainScreen() new total = $total")
+
+                    // create AttenuatorCard
                     AddAttenuatorCard(it,
-                        onClick = {
-                            // TODO edit card
-                        })
+                        onSwipeEdit = {
+                            // TODO how to get to LengthDialog() ??????
+                            Log.d("DEBUG", "OnSwipeEdit()")
+                        },
+                        onSwipeDelete = {
+                            // TODO
+                            Log.d("DEBUG", "OnSwipeDelete()")
+
+                            if (attenuatorCardList.contains(it))
+                            {
+                                sharedViewModel.setTotalAtten(
+                                    sharedViewModel.totalAttenuation - it.getLoss()
+                                )
+
+                                attenuatorCardList.remove(it)
+                                sharedViewModel.setHasListChanged()
+                            }
+                        }
+                    )
                 }
 
+                Log.d("DEBUG", "MainScreen() - setting total attenuation to $total")
                 // set total attenuation
                 sharedViewModel.setTotalAtten(total)
             }
             else // if no attenuators, show a message
                 Text(text = "Tap to add an attenuator",
                     modifier = Modifier
+                        // TODO is there a better way than 140.dp?
                         .padding(top = 140.dp)
                         .clickable {
                             navController.navigate(route = Screen.Add.route)
@@ -185,12 +211,12 @@ fun MainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                // round loss to nearest 100th
-                val loss = round(sharedViewModel.totalAttenuation * 100) / 100
-
+                // round loss to nearest 10th
                 Text(text = "Total Attenuation: ",
                     modifier = Modifier.weight(2f))
-                Text(text = "$loss dB")
+                Text(
+                    text = (round(sharedViewModel.totalAttenuation * 10) / 10).toString() + " dB"
+                )
             }
 
             Row(
@@ -198,7 +224,7 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.spacedBy(30.dp),
             ) {
                 // Clear Button
-                //  Clear attenuator list
+                //      click clears attenuator list
                 Button(
                     onClick = {
                         attenuatorCardList.clear()
@@ -219,10 +245,9 @@ fun MainScreen(
                 }
 
                 // Add Button
-                //  click calls AddScreen()
+                //      click calls AddScreen()
                 Button(
                     onClick = {
-                        // navigate to AddScreen
                         navController.navigate(route = Screen.Add.route)
                     },
                     shape = MaterialTheme.shapes.large,
@@ -245,58 +270,92 @@ fun MainScreen(
 @Composable
 fun AddAttenuatorCard(
     data: AttenuatorCard,
-    onClick: () -> Unit
+    onSwipeEdit: () -> Unit,
+    onSwipeDelete: () -> Unit
 ) {
-    Card(
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        ) {
-            // show attenuator ID on left
-            Text(
-                text = data.id(),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(
-                    start = 15.dp,
-                    top = 5.dp,
-                    bottom = 5.dp
-                )
+    // Edit swipe (left)
+    val edit = SwipeAction(
+        onSwipe = {
+            onSwipeEdit()
+        },
+        icon = {
+            Icon(
+                modifier = Modifier.padding(16.dp),
+                painter = painterResource(id = R.drawable.baseline_edit_24),
+                contentDescription = "Edit",
+                tint = Color.White
             )
-            // if coax, show footage in middle
-            if (data.iscoax()) {
+        },
+        background = Color.Gray
+    )
+
+    // Delete swipe (right)
+    val delete = SwipeAction(
+        onSwipe = {
+            onSwipeDelete()
+        },
+        icon = {
+            Icon(
+                modifier = Modifier.padding(16.dp),
+                painter = painterResource(id = R.drawable.baseline_delete_forever_24),
+                contentDescription = "Delete forever",
+                tint = Color.White
+            )
+        },
+        background = LightRed
+    )
+
+    // Swipeable Card
+    SwipeableActionsBox(
+        startActions = listOf(edit),
+        endActions = listOf(delete),
+        backgroundUntilSwipeThreshold = Color.White
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.large,
+            modifier = Modifier
+                .padding(5.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
+                // show attenuator ID on left
                 Text(
-                    text = data.footage().toString() + "'",
+                    text = data.id(),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(
                         start = 15.dp,
                         top = 5.dp,
                         bottom = 5.dp
                     )
                 )
-            }
+                // if coax, show footage in middle
+                if (data.iscoax()) {
+                    Text(
+                        text = data.footage().toString() + "'",
+                        modifier = Modifier.padding(
+                            start = 15.dp,
+                            top = 5.dp,
+                            bottom = 5.dp
+                        )
+                    )
+                }
 
-            // round loss to nearest hundred
-            val loss = round(data.getLoss() * 100) / 100
-
-            // show attenuation on right
-            Text(
-                text = loss.toString() + "dB",
-                modifier = Modifier.padding(
-                    top = 5.dp,
-                    bottom = 5.dp,
-                    end = 15.dp
+                // show attenuation on right
+                Text(
+                    text = (round(data.getLoss() * 10) / 10).toString() + "dB",
+                    modifier = Modifier.padding(
+                        top = 5.dp,
+                        bottom = 5.dp,
+                        end = 15.dp
+                    )
                 )
-            )
+            }
         }
     }
 }

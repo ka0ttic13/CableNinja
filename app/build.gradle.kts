@@ -76,6 +76,10 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
+    implementation("me.saket.swipe:swipe:1.0.0")
+
+
+    /***** Possible future use for location/weather data
 
     // Location Services
     implementation("com.google.android.gms:play-services-location:20.0.0")
@@ -84,4 +88,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+
+    *******/
 }

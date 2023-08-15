@@ -262,7 +262,9 @@ private fun LengthDialog(
                             label = { Text(text = "Enter length") },
                             singleLine = true,
                             // show number pad for input
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number
+                            )
                         )
                     }
 
@@ -296,11 +298,11 @@ private fun LengthDialog(
                             onClick = {
                                 // validate input
                                 if (length.isEmpty() || !isNumeric(length)) {
-                                    Log.d("DEBUG", "FootageDialog(): \"$length\" is not valid input")
+                                    Log.d("DEBUG", "LengthDialog(): \"$length\" is not valid input")
                                     showFootageAlert = true
                                 }
                                 else {
-                                    Log.d("DEBUG", "FootageDialog() entered footage: $length")
+                                    Log.d("DEBUG", "LengthDialog() entered length: $length")
                                     onAdd(length)
                                 }
                             },

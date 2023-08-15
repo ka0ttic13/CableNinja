@@ -36,6 +36,9 @@ class SharedViewModel : ViewModel() {
     fun setAttenuatorCard(newCard: AttenuatorCard) { card = newCard }
 
     // Set attenuator length
+    // this is separate from setAttenuatorCard because
+    //      - not every attenuator has a length
+    //      - we don't get length input at the same time the AttenuatorCard is created
     fun addAttenuatorLength(footage: Int) {
         if (card != null)
             card!!.setFootage(footage)
@@ -46,11 +49,14 @@ class SharedViewModel : ViewModel() {
         return card!!.footage()
     }
 
+    // have we loaded the AddScreen list yet? state
     var hasLoadedAddList by mutableStateOf(false)
         private set
     fun setHasLoadedAddList() { hasLoadedAddList = true }
 
+    // list change state
     var hasListChanged by mutableStateOf(false)
         private set
     fun setHasListChanged() { hasListChanged = true}
+
 }
