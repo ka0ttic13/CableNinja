@@ -167,9 +167,6 @@ fun MainScreen(
                             Log.d("DEBUG", "OnSwipeEdit()")
                         },
                         onSwipeDelete = {
-                            // TODO
-                            Log.d("DEBUG", "OnSwipeDelete()")
-
                             if (attenuatorCardList.contains(it))
                             {
                                 sharedViewModel.setTotalAtten(
@@ -307,6 +304,7 @@ fun AddAttenuatorCard(
 
     // Swipeable Card
     SwipeableActionsBox(
+        swipeThreshold = 100.dp,
         startActions = listOf(edit),
         endActions = listOf(delete),
         backgroundUntilSwipeThreshold = Color.White
@@ -314,7 +312,6 @@ fun AddAttenuatorCard(
         Card(
             shape = MaterialTheme.shapes.large,
             modifier = Modifier
-                .padding(5.dp)
                 .fillMaxWidth()
         ) {
             Row(
