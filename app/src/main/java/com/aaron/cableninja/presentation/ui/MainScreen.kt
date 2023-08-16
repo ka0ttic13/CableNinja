@@ -1,6 +1,9 @@
 package com.aaron.cableninja.presentation.ui
 
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -24,15 +27,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aaron.cableninja.MainActivity
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
-import kotlin.math.round
 import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
+import com.aaron.cableninja.presentation.ui.theme.LightBlue
 import com.aaron.cableninja.presentation.ui.theme.LightRed
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
+import kotlin.math.round
+
 
 @Composable
 fun MainScreen(
@@ -41,6 +47,11 @@ fun MainScreen(
 ) {
     var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}
     var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}
+    var editLengthDialog by remember { mutableStateOf(false) }
+
+    // temp card for editing current card
+    var editCard by remember { mutableStateOf(
+                                AttenuatorCard("", "", 0, true)) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,8 +83,10 @@ fun MainScreen(
                 valueRange = 5f..1218f,
                 steps = 24,
                 onValueChangeFinished = {
-                    Log.d("DEBUG",
-                        "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition")
+                    Log.d(
+                        "DEBUG",
+                        "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition"
+                    )
 
                     sharedViewModel.setFreq(freqSliderPosition)
 
@@ -144,12 +157,14 @@ fun MainScreen(
                             sharedViewModel.currentTemp.toInt()
                         )
                     )
+
                 }
             }
 
             // IF there is an existing list, show it
             if (attenuatorCardList.size > 0 &&
-                !sharedViewModel.clearAttenuatorList) {
+                !sharedViewModel.clearAttenuatorList
+            ) {
                 Log.d("DEBUG", "MainScreen() showing list...")
 
                 var total = 0.0
@@ -163,12 +178,13 @@ fun MainScreen(
                     // create AttenuatorCard
                     AddAttenuatorCard(it,
                         onSwipeEdit = {
-                            // TODO how to get to LengthDialog() ??????
-                            Log.d("DEBUG", "OnSwipeEdit()")
+                            // save the card for editing outside the loop
+                            editCard = it
+                            // show length dialog
+                            editLengthDialog = true
                         },
                         onSwipeDelete = {
-                            if (attenuatorCardList.contains(it))
-                            {
+                            if (attenuatorCardList.contains(it)) {
                                 sharedViewModel.setTotalAtten(
                                     sharedViewModel.totalAttenuation - it.getLoss()
                                 )
@@ -183,16 +199,14 @@ fun MainScreen(
                 Log.d("DEBUG", "MainScreen() - setting total attenuation to $total")
                 // set total attenuation
                 sharedViewModel.setTotalAtten(total)
-            }
-            else // if no attenuators, show a message
+            } else // if no attenuators, show a message
                 Text(text = "Tap to add an attenuator",
                     modifier = Modifier
-                        // TODO is there a better way than 140.dp?
-                        .padding(top = 140.dp)
+                        .padding(top = 200.dp)
                         .clickable {
                             navController.navigate(route = Screen.Add.route)
                         }
-                    )
+                )
         }
 
         Divider()
@@ -209,8 +223,10 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 // round loss to nearest 10th
-                Text(text = "Total Attenuation: ",
-                    modifier = Modifier.weight(2f))
+                Text(
+                    text = "Total Attenuation: ",
+                    modifier = Modifier.weight(2f)
+                )
                 Text(
                     text = (round(sharedViewModel.totalAttenuation * 10) / 10).toString() + " dB"
                 )
@@ -261,6 +277,32 @@ fun MainScreen(
                 }
             }
         }
+
+        Log.d("DEBUG", "editLengthDialog = $editLengthDialog")
+
+        //if (editCard != null)
+            Log.d("DEBUG", "editCard = ${editCard.id()}")
+
+        // edit length of current item in list
+        if (editLengthDialog && editCard.footage() > 0) {
+            LengthDialog(
+                onCancel = { editLengthDialog = false },
+                onAdd = {
+                    // TODO: is this still needed?
+                    sharedViewModel.addAttenuatorLength(it.toInt())
+
+                    // find card and edit footage
+                    for (card in attenuatorCardList.iterator()) {
+                        if (card.id() == editCard.id())
+                            card.setFootage(it.toInt())
+                    }
+
+                    // set state to re-draw main list
+                    sharedViewModel.setHasListChanged()
+                    editLengthDialog = false
+                }
+            )
+        }
     }
 }
 
@@ -280,10 +322,10 @@ fun AddAttenuatorCard(
                 modifier = Modifier.padding(16.dp),
                 painter = painterResource(id = R.drawable.baseline_edit_24),
                 contentDescription = "Edit",
-                tint = Color.White
+                tint = Color.LightGray
             )
         },
-        background = Color.Gray
+        background = LightBlue
     )
 
     // Delete swipe (right)
@@ -296,7 +338,7 @@ fun AddAttenuatorCard(
                 modifier = Modifier.padding(16.dp),
                 painter = painterResource(id = R.drawable.baseline_delete_forever_24),
                 contentDescription = "Delete forever",
-                tint = Color.White
+                tint = Color.LightGray
             )
         },
         background = LightRed
@@ -307,7 +349,7 @@ fun AddAttenuatorCard(
         swipeThreshold = 100.dp,
         startActions = listOf(edit),
         endActions = listOf(delete),
-        backgroundUntilSwipeThreshold = Color.White
+        backgroundUntilSwipeThreshold = Color.Transparent
     ) {
         Card(
             shape = MaterialTheme.shapes.large,

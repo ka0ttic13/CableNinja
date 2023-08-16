@@ -219,7 +219,7 @@ private fun AttenuatorAddCard(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LengthDialog(
+fun LengthDialog(
     onCancel: () -> Unit,
     onAdd: (String) -> Unit) {
     var openDialog by remember { mutableStateOf(true) }
