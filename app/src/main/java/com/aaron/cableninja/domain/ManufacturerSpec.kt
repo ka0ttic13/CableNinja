@@ -7,7 +7,7 @@ package com.aaron.cableninja.domain
  *          key = frequency
  *          value = loss @ 100'
  ********************************************/
-class ManufacturerSpecs(
+class ManufacturerSpec(
     id: String,
     desc: String,
     iscoax: Boolean
@@ -36,10 +36,17 @@ class ManufacturerSpecs(
     }
 }
 
-class AttenuatorDataList {
-    private var _list = mutableListOf<ManufacturerSpecs>()
+enum class DescTag {
+    COAX,
+    PASSIVE,
+    DROP,
+    PLANT
+}
 
-    fun add(data: ManufacturerSpecs) {
+class AttenuatorDataList {
+    private var _list = mutableListOf<ManufacturerSpec>()
+
+    fun add(data: ManufacturerSpec) {
         _list.add(data)
     }
     fun getLoss(id: String, freq: Int): Double? {

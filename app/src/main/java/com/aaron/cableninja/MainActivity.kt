@@ -5,17 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.aaron.cableninja.domain.ManufacturerSpecs
+import com.aaron.cableninja.domain.ManufacturerSpec
 import com.aaron.cableninja.presentation.ui.SetupNavGraph
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.presentation.ui.theme.CableNinjaTheme
 
 class MainActivity : ComponentActivity() {
-    lateinit var navController: NavHostController
+    private lateinit var navController: NavHostController
 
     companion object {
         // master list of RF data that can be added
-        var manufacturerSpecsMap = mutableMapOf<String, ManufacturerSpecs>()
+        var manufacturerSpecMap = mutableMapOf<String, ManufacturerSpec>()
         // master list of RF data that has been added
         var attenuatorCardList = mutableListOf<AttenuatorCard>()
     }
@@ -36,15 +36,15 @@ class MainActivity : ComponentActivity() {
 
     private fun _loadRFdata() {
         // TODO find better RG59 specs...  loss seems a bit high but may be unshielded 59.
-        val RG59 = ManufacturerSpecs("RG59", "Coax", true)
-        RG59.specs[100] = 3.81
-        RG59.specs[200] = 5.37
-        RG59.specs[550] = 9.18
-        RG59.specs[800] = 11.21
-        RG59.specs[1000] = 12.68
-        manufacturerSpecsMap[RG59.id()] = RG59
+//        val RG59 = ManufacturerSpecs("RG59", "Coax", true)
+//        RG59.specs[100] = 3.81
+//        RG59.specs[200] = 5.37
+//        RG59.specs[550] = 9.18
+//        RG59.specs[800] = 11.21
+//        RG59.specs[1000] = 12.68
+//        manufacturerSpecsMap[RG59.id()] = RG59
 
-        val RG6 = ManufacturerSpecs("RG6", "Coax", true)
+        val RG6 = ManufacturerSpec("RG6", "Coax", true)
         RG6.specs[5] = 0.58
         RG6.specs[55] = 1.6
         RG6.specs[211] = 3.05
@@ -64,9 +64,9 @@ class MainActivity : ComponentActivity() {
         RG6.specs[1100] = 6.87
         RG6.specs[1200] = 7.18
         RG6.specs[1218] = 7.21
-        manufacturerSpecsMap[RG6.id()] = RG6
+        manufacturerSpecMap[RG6.id()] = RG6
 
-        val RG11 = ManufacturerSpecs("RG11", "Coax", true)
+        val RG11 = ManufacturerSpec("RG11", "Coax", true)
         RG11.specs[5] = .38
         RG11.specs[55] = 0.96
         RG11.specs[211] = 1.9
@@ -86,9 +86,9 @@ class MainActivity : ComponentActivity() {
         RG11.specs[1100] = 4.54
         RG11.specs[1200] = 4.71
         RG11.specs[1218] = 4.92
-        manufacturerSpecsMap[RG11.id()] = RG11
+        manufacturerSpecMap[RG11.id()] = RG11
 
-        val TwoWay = ManufacturerSpecs("2 Way / 3 Way Low Leg", "Passive", false)
+        val TwoWay = ManufacturerSpec("2 Way / 3 Way Low Leg", "Passive", false)
         TwoWay.specs[5] = 3.5
         TwoWay.specs[55] = 3.5
         TwoWay.specs[211] = 3.7
@@ -100,9 +100,9 @@ class MainActivity : ComponentActivity() {
         TwoWay.specs[1000] = 4.2
         TwoWay.specs[1100] = 4.6
         TwoWay.specs[1200] = 4.6
-        manufacturerSpecsMap[TwoWay.id()] = TwoWay
+        manufacturerSpecMap[TwoWay.id()] = TwoWay
 
-        val ThreeWayBalanced = ManufacturerSpecs("3 Way Balanced", "Passive", false)
+        val ThreeWayBalanced = ManufacturerSpec("3 Way Balanced", "Passive", false)
         ThreeWayBalanced.specs[5] = 5.8
         ThreeWayBalanced.specs[55] = 5.8
         ThreeWayBalanced.specs[211] = 5.9
@@ -114,9 +114,9 @@ class MainActivity : ComponentActivity() {
         ThreeWayBalanced.specs[1000] = 6.8
         ThreeWayBalanced.specs[1100] = 7.5
         ThreeWayBalanced.specs[1200] = 7.5
-        manufacturerSpecsMap[ThreeWayBalanced.id()] = ThreeWayBalanced
+        manufacturerSpecMap[ThreeWayBalanced.id()] = ThreeWayBalanced
 
-        val FourWay = ManufacturerSpecs("4 Way / 3 Way High Leg", "Passive", false)
+        val FourWay = ManufacturerSpec("4 Way / 3 Way High Leg", "Passive", false)
         FourWay.specs[5] = 7.0
         FourWay.specs[55] = 7.2
         FourWay.specs[211] = 7.2
@@ -127,9 +127,9 @@ class MainActivity : ComponentActivity() {
         FourWay.specs[1000] = 8.5
         FourWay.specs[1100] = 8.9
         FourWay.specs[1200] = 8.9
-        manufacturerSpecsMap[FourWay.id()] = FourWay
+        manufacturerSpecMap[FourWay.id()] = FourWay
 
-        val EightWay = ManufacturerSpecs("8 Way", "Passive", false)
+        val EightWay = ManufacturerSpec("8 Way", "Passive", false)
         EightWay.specs[5] = 11.2
         EightWay.specs[55] = 11.0
         EightWay.specs[211] = 11.2
@@ -140,9 +140,9 @@ class MainActivity : ComponentActivity() {
         EightWay.specs[1000] = 12.5
         EightWay.specs[1100] = 12.7
         EightWay.specs[1200] = 12.9
-        manufacturerSpecsMap[EightWay.id()] = EightWay
+        manufacturerSpecMap[EightWay.id()] = EightWay
 
-        val P3500 = ManufacturerSpecs("0.500 P3", "Coax", true)
+        val P3500 = ManufacturerSpec("0.500 P3", "Coax", true)
         P3500.specs[5] = 0.16
         P3500.specs[55] = 0.54
         P3500.specs[85] = 0.68
@@ -160,9 +160,9 @@ class MainActivity : ComponentActivity() {
         P3500.specs[865] = 2.34
         P3500.specs[1002] = 2.54
         P3500.specs[1218] = 2.83
-        manufacturerSpecsMap[P3500.id()] = P3500
+        manufacturerSpecMap[P3500.id()] = P3500
 
-        val P3625 = ManufacturerSpecs("0.625 P3", "Coax", true)
+        val P3625 = ManufacturerSpec("0.625 P3", "Coax", true)
         P3625.specs[5] = 0.13
         P3625.specs[55] = 0.45
         P3625.specs[85] = 0.56
@@ -180,9 +180,9 @@ class MainActivity : ComponentActivity() {
         P3625.specs[865] = 1.93
         P3625.specs[1002] = 2.11
         P3625.specs[1218] = 2.32
-        manufacturerSpecsMap[P3625.id()] = P3625
+        manufacturerSpecMap[P3625.id()] = P3625
 
-        val P3750 = ManufacturerSpecs("0.750 P3", "Coax", true)
+        val P3750 = ManufacturerSpec("0.750 P3", "Coax", true)
         P3750.specs[5] = 0.11
         P3750.specs[55] = 0.37
         P3750.specs[85] = 0.46
@@ -200,9 +200,9 @@ class MainActivity : ComponentActivity() {
         P3750.specs[865] = 1.61
         P3750.specs[1002] = 1.74
         P3750.specs[1218] = 1.95
-        manufacturerSpecsMap[P3750.id()] = P3750
+        manufacturerSpecMap[P3750.id()] = P3750
 
-        val P3875 = ManufacturerSpecs("0.875 P3", "Coax", true)
+        val P3875 = ManufacturerSpec("0.875 P3", "Coax", true)
         P3875.specs[5] = 0.09
         P3875.specs[55] = 0.33
         P3875.specs[85] = 0.4
@@ -220,9 +220,9 @@ class MainActivity : ComponentActivity() {
         P3875.specs[865] = 1.41
         P3875.specs[1002] = 1.53
         P3875.specs[1218] = 1.7
-        manufacturerSpecsMap[P3875.id()] = P3875
+        manufacturerSpecMap[P3875.id()] = P3875
 
-        val QR540 = ManufacturerSpecs("0.540 QR", "Coax", true)
+        val QR540 = ManufacturerSpec("0.540 QR", "Coax", true)
         QR540.specs[5] = 0.14
         QR540.specs[55] = 0.47
         QR540.specs[85] = 0.59
@@ -240,9 +240,9 @@ class MainActivity : ComponentActivity() {
         QR540.specs[865] = 2.0
         QR540.specs[1002] = 2.17
         QR540.specs[1218] = 2.41
-        manufacturerSpecsMap[QR540.id()] = QR540
+        manufacturerSpecMap[QR540.id()] = QR540
 
-        val QR715 = ManufacturerSpecs("0.715 QR", "Coax", true)
+        val QR715 = ManufacturerSpec("0.715 QR", "Coax", true)
         QR715.specs[5] = 0.11
         QR715.specs[55] = 0.37
         QR715.specs[85] = 0.46
@@ -260,9 +260,9 @@ class MainActivity : ComponentActivity() {
         QR715.specs[865] = 1.62
         QR715.specs[1002] = 1.75
         QR715.specs[1218] = 1.96
-        manufacturerSpecsMap[QR715.id()] = QR715
+        manufacturerSpecMap[QR715.id()] = QR715
 
-        val QR860 = ManufacturerSpecs("0.860 QR", "Coax", true)
+        val QR860 = ManufacturerSpec("0.860 QR", "Coax", true)
         QR860.specs[5] = 0.09
         QR860.specs[55] = 0.32
         QR860.specs[85] = 0.4
@@ -281,7 +281,7 @@ class MainActivity : ComponentActivity() {
         QR860.specs[1000] = 1.44
         QR860.specs[1002] = 1.45
         QR860.specs[1218] = 1.61
-        manufacturerSpecsMap[QR860.id()] = QR860
+        manufacturerSpecMap[QR860.id()] = QR860
 
 
     }

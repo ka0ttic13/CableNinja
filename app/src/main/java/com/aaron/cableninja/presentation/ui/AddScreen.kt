@@ -37,7 +37,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
+import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
@@ -90,7 +90,7 @@ fun AddScreen(
 
             // iterate over attenuatorList and create an AttenuatorAddCard for
             // each Attenuator in the list
-            for (type in manufacturerSpecsMap.values) {
+            for (type in manufacturerSpecMap.values) {
                 val card = AttenuatorCard(type.id(), type.desc(), 0, type.iscoax())
                 AttenuatorAddCard(
                     card,
@@ -107,7 +107,7 @@ fun AddScreen(
                             showLengthDialog = true
                         } else {
                             // Find loss
-                            for (data in manufacturerSpecsMap.values) {
+                            for (data in manufacturerSpecMap.values) {
                                 if (data.id() == card.id()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
@@ -142,7 +142,7 @@ fun AddScreen(
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
                 // Find loss
-                for (data in manufacturerSpecsMap.values) {
+                for (data in manufacturerSpecMap.values) {
                     if (data.id() == sharedViewModel.card!!.id()) {
                         Log.d(
                             "DEBUG",

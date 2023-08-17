@@ -1,9 +1,6 @@
 package com.aaron.cableninja.presentation.ui
 
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -27,9 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aaron.cableninja.MainActivity
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecsMap
+import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
@@ -151,7 +147,7 @@ fun MainScreen(
                 attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            manufacturerSpecsMap[it.id()],
+                            manufacturerSpecMap[it.id()],
                             sharedViewModel.currentFreq.toInt(),
                             it.footage(),
                             sharedViewModel.currentTemp.toInt()
@@ -346,7 +342,7 @@ fun AddAttenuatorCard(
 
     // Swipeable Card
     SwipeableActionsBox(
-        swipeThreshold = 100.dp,
+        swipeThreshold = 130.dp,
         startActions = listOf(edit),
         endActions = listOf(delete),
         backgroundUntilSwipeThreshold = Color.Transparent
