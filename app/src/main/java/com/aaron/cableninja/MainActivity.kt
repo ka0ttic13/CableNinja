@@ -12,16 +12,16 @@ import com.aaron.cableninja.presentation.ui.AttenuatorCard
 import com.aaron.cableninja.domain.AttenuatorType
 import com.aaron.cableninja.domain.AttenuatorTag
 import com.aaron.cableninja.presentation.ui.theme.CableNinjaTheme
-import com.aaron.cableninja.presentation.ui.theme.LightBlue
-import com.aaron.cableninja.presentation.ui.theme.LightGreen
-import com.aaron.cableninja.presentation.ui.theme.LightRed
-import com.aaron.cableninja.presentation.ui.theme.LightYellow
+import com.aaron.cableninja.presentation.ui.theme.coaxColor
+import com.aaron.cableninja.presentation.ui.theme.dropColor
+import com.aaron.cableninja.presentation.ui.theme.passiveColor
+import com.aaron.cableninja.presentation.ui.theme.plantColor
 
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
 
     companion object {
-        var attenuatorTags = mutableMapOf<AttenuatorTag, Color>()
+        var attenuatorTags = mutableMapOf<AttenuatorType, Color>()
         // master map of ID strings to manufacturer data
         var attenuatorMap = mutableMapOf<String, Attenuator>()
         // master list of RF data that has been added
@@ -46,10 +46,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun _loadAttenuatorTags() {
-        attenuatorTags[AttenuatorTag(AttenuatorType.COAX)] = LightBlue
-        attenuatorTags[AttenuatorTag(AttenuatorType.PASSIVE)] = LightGreen
-        attenuatorTags[AttenuatorTag(AttenuatorType.DROP)] = LightRed
-        attenuatorTags[AttenuatorTag(AttenuatorType.PLANT)] = LightYellow
+        attenuatorTags[AttenuatorType.COAX] = coaxColor
+        attenuatorTags[AttenuatorType.PASSIVE] = passiveColor
+        attenuatorTags[AttenuatorType.DROP] = dropColor
+        attenuatorTags[AttenuatorType.PLANT] = plantColor
     }
 
     private fun _loadRFdata() {

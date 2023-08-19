@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -48,10 +49,11 @@ import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.AttenuatorTag
 import com.aaron.cableninja.domain.AttenuatorType
 import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.presentation.ui.theme.LightBlue
-import com.aaron.cableninja.presentation.ui.theme.LightGreen
-import com.aaron.cableninja.presentation.ui.theme.LightRed
-import com.aaron.cableninja.presentation.ui.theme.LightYellow
+import com.aaron.cableninja.presentation.ui.theme.coaxColor
+import com.aaron.cableninja.presentation.ui.theme.dropColor
+import com.aaron.cableninja.presentation.ui.theme.passiveColor
+import com.aaron.cableninja.presentation.ui.theme.plantColor
+
 
 /***
  * AddScreen()
@@ -67,6 +69,7 @@ fun AddScreen(
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
+    var addListFiltered by remember { mutableStateOf(false) }
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -102,16 +105,15 @@ fun AddScreen(
                 .fillMaxWidth()
                 .padding(4.dp)
         ) {
-            Text(text = "Tag Filters: ",
+            Text(text = "Filter: ",
                 modifier = Modifier.padding(start = 10.dp))
 
             // show all possible tags with no color
             attenuatorTags.forEach {
-                attenuatorTags[it.key]?.let { it1 ->
-                    AddAttenuatorTag(
-                        tag = it.key,
+                    AddTagFilter(
+                        tag = AttenuatorTag(it.key),
                         color = Color.LightGray,
-                        clickColor = it1,
+                        style = MaterialTheme.typography.bodyLarge,
                         onClick = {
                             if (it.tag == AttenuatorType.COAX)
                                 coaxFilter = true
@@ -128,7 +130,6 @@ fun AddScreen(
                     )
                 }
             }
-        }
 
         // Show attenuator types that can be added
         Column(
@@ -244,9 +245,11 @@ private fun AttenuatorAddCard(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.clickable(onClick = { onClick() })
     ) {
-        Column(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .padding(12.dp)
+                .padding(15.dp)
                 .fillMaxWidth()
         ) {
             // TODO add image of coax or splitter
@@ -258,29 +261,23 @@ private fun AttenuatorAddCard(
                 modifier = Modifier.padding(top = 2.dp, bottom = 6.dp, start = 1.dp)
             )
 
-            // Tags
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(text = "Tags:", style = MaterialTheme.typography.bodyMedium)
-                // create tags
+                // Tags
                 card.tags().forEach {
                     val color =
                         when (it.tag) {
-                            AttenuatorType.COAX     -> LightBlue
-                            AttenuatorType.PASSIVE  -> LightGreen
-                            AttenuatorType.DROP     -> LightRed
-                            AttenuatorType.PLANT    -> LightYellow
+                            AttenuatorType.COAX -> coaxColor
+                            AttenuatorType.PASSIVE -> passiveColor
+                            AttenuatorType.DROP -> dropColor
+                            AttenuatorType.PLANT -> plantColor
                         }
-                    AddAttenuatorTag(it, color) {
-                        /* no onClick() wanted here so pass an empty lambda */
-                    }
+                    AddAttenuatorTag(it, color, MaterialTheme.typography.bodySmall)
                 }
-            }
-        }
+
+            }        }
     }
 }
 
@@ -458,7 +455,27 @@ private fun LengthAlertDialog() {
 private fun AddAttenuatorTag(
     tag: AttenuatorTag,
     color: Color,
-    clickColor: Color = Color.Transparent,
+    style: TextStyle,
+) {
+    Surface(
+        shape = RoundedCornerShape(4.dp),
+    ) {
+        Text(
+            text = tag.toString(),
+            color = Color.White,
+            style = style,
+            modifier = Modifier
+                .background(color)
+                .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
+        )
+    }
+}
+
+@Composable
+private fun AddTagFilter(
+    tag: AttenuatorTag,
+    color: Color,
+    style: TextStyle,
     onClick: (AttenuatorTag) -> Unit
 ) {
     Surface(
@@ -467,10 +484,9 @@ private fun AddAttenuatorTag(
         Text(
             text = tag.toString(),
             color = Color.White,
+            style = style,
             modifier = Modifier
-                .background(
-                    color
-                )
+                .background(color)
                 .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
                 .clickable {
                     onClick(tag)
