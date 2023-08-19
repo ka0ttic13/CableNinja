@@ -3,7 +3,7 @@ package com.aaron.cableninja.domain
 import android.util.Log
 import kotlin.math.sqrt
 
-/***
+/*************************************************************
  * Adjust attenuation for given temperature
  *   Manufacturer data sheets list attenuation data for 68F
  *   Given a temperature and the amount of attenuation at a
@@ -11,7 +11,7 @@ import kotlin.math.sqrt
  *   temperature using the following formula:
  *
  *   Attenuation at F = Atten. at 68F * (1+0.0011(t-68))
- ***/
+ *************************************************************/
 fun adjustRFTemp(loss68: Double, temp: Int = 68) : Double {
     if (temp == 68)
         return loss68
@@ -21,14 +21,14 @@ fun adjustRFTemp(loss68: Double, temp: Int = 68) : Double {
     return result
 }
 
-/***
+/*************************************************************
  * getApproxLoss()
  *      Given a known loss on a known frequency (from manufacturer specs),
  *      calculate an approximate loss for an undocumented frequency
  *
  *      Uses formula from Cisco Broadband Data Book (pg 197)
  *          knownLoss * sqrt(unknownFreq / knownFreq)
- ***/
+ *************************************************************/
 fun getApproxLoss(
     knownLoss: Double,
     knownFreq: Double,
@@ -37,13 +37,13 @@ fun getApproxLoss(
     return knownLoss * sqrt((unknownFreq / knownFreq))
 }
 
-/***
+/*************************************************************
  * getCableLoss()
  *      given frequency, distance, and temp, calculate attenuation
  *
- ***/
+ *************************************************************/
 fun getCableLoss(
-    data: ManufacturerSpec?,
+    data: Attenuator?,
     freq: Int,
     distance: Int,
     temp: Int
@@ -66,7 +66,7 @@ fun getCableLoss(
         if (it.key == freq) {
             Log.d("DEBUG", "getCableLoss() found key $freq")
             // if coax, re-calculate with distance and temperature
-            if (data.iscoax())
+            if (data.isCoax())
                 return (distance * adjustRFTemp(it.value, temp)) / 100
             else
                 return it.value
@@ -100,7 +100,7 @@ fun getCableLoss(
     Log.d("DEBUG", "getCableLoss() after getApproxLoss() result = $result")
 
     // re-calculate with distance and temp if this is coax
-    if (data.iscoax()) {
+    if (data.isCoax()) {
         result = (distance * adjustRFTemp(result, temp)) / 100
         Log.d("DEBUG", "getCableLoss() after distance/temp adjustment, result = $result")
     }

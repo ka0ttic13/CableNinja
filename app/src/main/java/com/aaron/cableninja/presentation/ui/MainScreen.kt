@@ -25,9 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecMap
+import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
-import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.getCableLoss
 import com.aaron.cableninja.presentation.ui.theme.LightBlue
 import com.aaron.cableninja.presentation.ui.theme.LightRed
@@ -46,8 +45,7 @@ fun MainScreen(
     var editLengthDialog by remember { mutableStateOf(false) }
 
     // temp card for editing current card
-    var editCard by remember { mutableStateOf(
-                                AttenuatorCard("", "", 0, true)) }
+    var editCard by remember { mutableStateOf(AttenuatorCard("", listOf(), false)) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,9 +145,9 @@ fun MainScreen(
                 attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            manufacturerSpecMap[it.id()],
+                            attenuatorMap[it.id()],
                             sharedViewModel.currentFreq.toInt(),
-                            it.footage(),
+                            it.length(),
                             sharedViewModel.currentTemp.toInt()
                         )
                     )
@@ -280,7 +278,7 @@ fun MainScreen(
             Log.d("DEBUG", "editCard = ${editCard.id()}")
 
         // edit length of current item in list
-        if (editLengthDialog && editCard.footage() > 0) {
+        if (editLengthDialog && editCard.length() > 0) {
             LengthDialog(
                 onCancel = { editLengthDialog = false },
                 onAdd = {
@@ -290,7 +288,7 @@ fun MainScreen(
                     // find card and edit footage
                     for (card in attenuatorCardList.iterator()) {
                         if (card.id() == editCard.id())
-                            card.setFootage(it.toInt())
+                            card.setLength(it.toInt())
                     }
 
                     // set state to re-draw main list
@@ -370,9 +368,9 @@ fun AddAttenuatorCard(
                     )
                 )
                 // if coax, show footage in middle
-                if (data.iscoax()) {
+                if (data.isCoax()) {
                     Text(
-                        text = data.footage().toString() + "'",
+                        text = data.length().toString() + "'",
                         modifier = Modifier.padding(
                             start = 15.dp,
                             top = 5.dp,

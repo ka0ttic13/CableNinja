@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.aaron.cableninja.domain.AttenuatorCard
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
@@ -41,12 +40,12 @@ class SharedViewModel : ViewModel() {
     //      - we don't get length input at the same time the AttenuatorCard is created
     fun addAttenuatorLength(footage: Int) {
         if (card != null)
-            card!!.setFootage(footage)
+            card!!.setLength(footage)
     }
 
     // get attenuator length
     fun getAttenuatorLength() : Int {
-        return card!!.footage()
+        return card!!.length()
     }
 
     // have we loaded the AddScreen list yet? state

@@ -1,6 +1,7 @@
 package com.aaron.cableninja.presentation.ui
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,8 +17,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -28,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,10 +42,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.manufacturerSpecMap
+import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
+import com.aaron.cableninja.MainActivity.Companion.attenuatorTags
 import com.aaron.cableninja.R
-import com.aaron.cableninja.domain.AttenuatorCard
+import com.aaron.cableninja.domain.AttenuatorTag
+import com.aaron.cableninja.domain.AttenuatorType
 import com.aaron.cableninja.domain.getCableLoss
+import com.aaron.cableninja.presentation.ui.theme.LightBlue
+import com.aaron.cableninja.presentation.ui.theme.LightGreen
+import com.aaron.cableninja.presentation.ui.theme.LightRed
+import com.aaron.cableninja.presentation.ui.theme.LightYellow
 
 /***
  * AddScreen()
@@ -52,6 +63,10 @@ fun AddScreen(
     sharedViewModel: SharedViewModel,
 ) {
     var showLengthDialog by remember { mutableStateOf(false) }
+    var coaxFilter by remember { mutableStateOf(false) }
+    var passiveFilter by remember { mutableStateOf(false) }
+    var dropFilter by remember { mutableStateOf(false) }
+    var plantFilter by remember { mutableStateOf(false) }
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -77,6 +92,44 @@ fun AddScreen(
             )
         }
 
+        Divider(modifier = Modifier.padding(bottom = 6.dp))
+
+        // Filter by tags
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+        ) {
+            Text(text = "Tag Filters: ",
+                modifier = Modifier.padding(start = 10.dp))
+
+            // show all possible tags with no color
+            attenuatorTags.forEach {
+                attenuatorTags[it.key]?.let { it1 ->
+                    AddAttenuatorTag(
+                        tag = it.key,
+                        color = Color.LightGray,
+                        clickColor = it1,
+                        onClick = {
+                            if (it.tag == AttenuatorType.COAX)
+                                coaxFilter = true
+                            else if (it.tag == AttenuatorType.PASSIVE)
+                                passiveFilter = true
+                            else if (it.tag == AttenuatorType.DROP)
+                                dropFilter = true
+                            else if (it.tag == AttenuatorType.PLANT)
+                                plantFilter = true
+
+                            Log.d("DEBUG", "AddScreen() filter selected: $it")
+                            // TODO only show types that match tags selected
+                        }
+                    )
+                }
+            }
+        }
+
         // Show attenuator types that can be added
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,12 +139,16 @@ fun AddScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            Log.d("DEBUG", "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}")
+            Log.d("DEBUG",
+                "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}")
+
+            // TODO iterator over tags, if any.  If not, show all tags.
+
 
             // iterate over attenuatorList and create an AttenuatorAddCard for
             // each Attenuator in the list
-            for (type in manufacturerSpecMap.values) {
-                val card = AttenuatorCard(type.id(), type.desc(), 0, type.iscoax())
+            for (type in attenuatorMap.values) {
+                val card = AttenuatorCard(type.id(), type.tags(), type.isCoax())
                 AttenuatorAddCard(
                     card,
                     onClick = {
@@ -102,12 +159,12 @@ fun AddScreen(
                         sharedViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
-                        if (card.iscoax()) {
+                        if (card.isCoax()) {
                             // logic for coax is in AddScreen under footage dialog state conditional
                             showLengthDialog = true
                         } else {
                             // Find loss
-                            for (data in manufacturerSpecMap.values) {
+                            for (data in attenuatorMap.values) {
                                 if (data.id() == card.id()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
@@ -142,21 +199,8 @@ fun AddScreen(
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
                 // Find loss
-                for (data in manufacturerSpecMap.values) {
+                for (data in attenuatorMap.values) {
                     if (data.id() == sharedViewModel.card!!.id()) {
-                        Log.d(
-                            "DEBUG",
-                            "Footage dialog: Found attenuator ${data.id()}"
-                        )
-                        Log.d(
-                            "DEBUG",
-                            "Footage dialog: current freq " + sharedViewModel.currentFreq.toString()
-                        )
-                        Log.d(
-                            "DEBUG",
-                            "Footage dialog: current temp " + sharedViewModel.currentTemp.toString()
-                        )
-
                         sharedViewModel.card!!.setLoss(
                             getCableLoss(
                                 data,
@@ -173,9 +217,9 @@ fun AddScreen(
                 attenuatorCardList.add(
                     AttenuatorCard(
                         sharedViewModel.card!!.id(),
-                        sharedViewModel.card!!.desc(),
-                        sharedViewModel.card!!.footage(),
-                        sharedViewModel.card!!.iscoax(),
+                        sharedViewModel.card!!.tags(),
+                        sharedViewModel.card!!.isCoax(),
+                        sharedViewModel.card!!.length(),
                         sharedViewModel.card!!.getLoss()
                     )
                 )
@@ -187,12 +231,10 @@ fun AddScreen(
     }
 }
 
-/*
- *
+/************************************************
  * AttenuatorAddCard()
  *      Create Card for attenuator type
- */
-
+ ************************************************/
 @Composable
 private fun AttenuatorAddCard(
     card: AttenuatorCard,
@@ -208,22 +250,54 @@ private fun AttenuatorAddCard(
                 .fillMaxWidth()
         ) {
             // TODO add image of coax or splitter
+
+            // ID
             Text(
                 text = card.id(),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 2.dp, bottom = 6.dp, start = 1.dp)
             )
-            Text(text = card.desc())
+
+            // Tags
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Tags:", style = MaterialTheme.typography.bodyMedium)
+                // create tags
+                card.tags().forEach {
+                    val color =
+                        when (it.tag) {
+                            AttenuatorType.COAX     -> LightBlue
+                            AttenuatorType.PASSIVE  -> LightGreen
+                            AttenuatorType.DROP     -> LightRed
+                            AttenuatorType.PLANT    -> LightYellow
+                        }
+                    AddAttenuatorTag(it, color) {
+                        /* no onClick() wanted here so pass an empty lambda */
+                    }
+                }
+            }
         }
     }
 }
 
+/************************************************
+ * LengthDialog()
+ *      Create Dialog for user to enter
+ *      attenuator length
+ *      Note: not declared private as we use the
+ *      same dialog to edit length in MainScreen()
+ ************************************************/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LengthDialog(
     onCancel: () -> Unit,
     onAdd: (String) -> Unit) {
     var openDialog by remember { mutableStateOf(true) }
-    var showFootageAlert by remember { mutableStateOf(false) }
+    var showLengthAlert by remember { mutableStateOf(false) }
 
     if (openDialog) {
         Log.d("DEBUG", "LengthDialog() called")
@@ -299,7 +373,7 @@ fun LengthDialog(
                                 // validate input
                                 if (length.isEmpty() || !isNumeric(length)) {
                                     Log.d("DEBUG", "LengthDialog(): \"$length\" is not valid input")
-                                    showFootageAlert = true
+                                    showLengthAlert = true
                                 }
                                 else {
                                     Log.d("DEBUG", "LengthDialog() entered length: $length")
@@ -324,12 +398,17 @@ fun LengthDialog(
     }
 
     // Show AlertDialog if footage entered is not a number
-    if (showFootageAlert)
-        FootageAlertDialog()
+    if (showLengthAlert)
+        LengthAlertDialog()
 }
 
+/************************************************
+ * LengthAlertDialog()
+ *      Create AlertDialog for invalid user
+ *      input from LengthDialog
+ ************************************************/
 @Composable
-private fun FootageAlertDialog() {
+private fun LengthAlertDialog() {
     var openDialog by remember { mutableStateOf(true) }
 
     if (openDialog) {
@@ -365,6 +444,37 @@ private fun FootageAlertDialog() {
                     )
                 }
             }
+        )
+    }
+}
+
+/************************************************
+ * AttenuatorTags()
+ *      Create small tags to describe each
+ *      attenuator type.  Used for filtering
+ *      add list.
+ ************************************************/
+@Composable
+private fun AddAttenuatorTag(
+    tag: AttenuatorTag,
+    color: Color,
+    clickColor: Color = Color.Transparent,
+    onClick: (AttenuatorTag) -> Unit
+) {
+    Surface(
+        shape = RoundedCornerShape(4.dp),
+    ) {
+        Text(
+            text = tag.toString(),
+            color = Color.White,
+            modifier = Modifier
+                .background(
+                    color
+                )
+                .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
+                .clickable {
+                    onClick(tag)
+                }
         )
     }
 }
