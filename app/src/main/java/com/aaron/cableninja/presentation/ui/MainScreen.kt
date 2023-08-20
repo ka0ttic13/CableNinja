@@ -4,14 +4,17 @@ import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
@@ -29,12 +33,14 @@ import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.domain.getCableLoss
 import com.aaron.cableninja.presentation.ui.theme.LightBlue
+import com.aaron.cableninja.presentation.ui.theme.LightGreen
 import com.aaron.cableninja.presentation.ui.theme.LightRed
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import kotlin.math.round
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
@@ -65,7 +71,8 @@ fun MainScreen(
             ) {
                 Text(
                     text = "Frequency: ",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Text(round(freqSliderPosition).toInt().toString() + " MHz")
             }
@@ -103,7 +110,8 @@ fun MainScreen(
             ) {
                 Text(
                     text = "Temperature: ",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
                     text = round(tempSliderPosition).toInt().toString() + " F"
@@ -125,6 +133,42 @@ fun MainScreen(
                         sharedViewModel.setHasListChanged()
                 }
 
+            )
+        }
+
+        // Starting level
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+//                modifier = Modifier
+//                    .weight(0.75f)
+            )
+            {
+                Text(
+                    text = "Starting Level: ",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = "@ ${sharedViewModel.currentFreq.toInt()}MHz",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            TextField(
+                value = sharedViewModel.currentStartLevel,
+                onValueChange = {
+                    sharedViewModel.setStartLevel(it)
+                },
+//                label = { Text(text = "Level in dB") },
+                singleLine = true,
+                // show number pad for input
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number),
+                modifier = Modifier.padding(start = 80.dp, end = 10.dp, top = 10.dp)
             )
         }
 
@@ -196,7 +240,7 @@ fun MainScreen(
             } else // if no attenuators, show a message
                 Text(text = "Tap to add an attenuator",
                     modifier = Modifier
-                        .padding(top = 200.dp)
+                        .padding(top = 160.dp)
                         .clickable {
                             navController.navigate(route = Screen.Add.route)
                         }
@@ -205,13 +249,14 @@ fun MainScreen(
 
         Divider()
 
-        // Show Total Attenuation, Clear Button, and Add Button
+        // Show Total Attenuation, Ending Level, Clear Button, and Add Button
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(10.dp)
-                .weight(1.5f)
+                .weight(2.25f)
         ) {
+            // total attenuation
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -221,11 +266,50 @@ fun MainScreen(
                     text = "Total Attenuation: ",
                     modifier = Modifier.weight(2f)
                 )
+                if (sharedViewModel.totalAttenuation > 0)
+                    Text(text = "-")
+
                 Text(
                     text = (round(sharedViewModel.totalAttenuation * 10) / 10).toString() + " dB"
                 )
             }
 
+            // ending level
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.padding(top = 2.dp, bottom = 10.dp)
+            ) {
+                Text(
+                    text = "Ending level: ",
+                    fontWeight = FontWeight.ExtraBold,
+                    modifier = Modifier.weight(2f)
+                )
+
+                // if we clear list, clear end level
+                if (sharedViewModel.clearAttenuatorList)
+                    sharedViewModel.setStartLevel("")
+
+                // if we set a start level, do the math and display end result
+                if (!sharedViewModel.currentStartLevel.isEmpty()) {
+                    val result = sharedViewModel.currentStartLevel.toInt() - sharedViewModel.totalAttenuation
+                    val color: Color
+
+                    // if result is between -10 and +10, set color to green
+                    if (result >= -10 && result <= 10)
+                        color = LightGreen
+                    else // otherwise, set color to red
+                        color = Color.Red
+
+                    Text(
+                        text = (round(result * 10) / 10).toString() + " dB",
+                        color = color,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            }
+
+            // Button row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(30.dp),

@@ -2,6 +2,7 @@ package com.aaron.cableninja.presentation.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
@@ -17,6 +18,9 @@ class SharedViewModel : ViewModel() {
     //      defaults to 68F (manufacturer spec default)
     var currentTemp by mutableStateOf(68f)
     fun setTemp(temp: Float) { currentTemp = temp }
+
+    var currentStartLevel by mutableStateOf("")
+    fun setStartLevel(level: String) { currentStartLevel = level }
 
     // clear main attenuator list
     var clearAttenuatorList by mutableStateOf(false)

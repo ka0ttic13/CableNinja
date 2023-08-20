@@ -69,7 +69,6 @@ fun AddScreen(
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
-    var addListFiltered by remember { mutableStateOf(false) }
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -100,7 +99,7 @@ fun AddScreen(
         // Filter by tags
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
@@ -108,12 +107,16 @@ fun AddScreen(
             Text(text = "Filter: ",
                 modifier = Modifier.padding(start = 10.dp))
 
-            // show all possible tags with no color
+            // show all possible tags
             attenuatorTags.forEach {
+                // if no filters
+                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
+                    Log.d("DEBUG", "AddScreen() no filters selected")
+
                     AddTagFilter(
                         tag = AttenuatorTag(it.key),
                         color = Color.LightGray,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         onClick = {
                             if (it.tag == AttenuatorType.COAX)
                                 coaxFilter = true
@@ -129,7 +132,53 @@ fun AddScreen(
                         }
                     )
                 }
+
+                if (coaxFilter) {
+                    Log.d("DEBUG", "AddScreen() coaxFilter = true")
+                    attenuatorTags[it.key]?.let { it1 ->
+                        AddTagFilter(
+                            tag = AttenuatorTag(it.key),
+                            color = it1,
+                            style = MaterialTheme.typography.bodyLarge,
+                            onClick = {}
+                        )
+                    }
+                }
+                if (passiveFilter) {
+                    Log.d("DEBUG", "AddScreen() passiveFilter = true")
+                    attenuatorTags[it.key]?.let { it1 ->
+                        AddTagFilter(
+                            tag = AttenuatorTag(it.key),
+                            color = it1,
+                            style = MaterialTheme.typography.bodyLarge,
+                            onClick = {}
+                        )
+                    }
+                }
+                if (dropFilter) {
+                    Log.d("DEBUG", "AddScreen() dropFilter = true")
+                    attenuatorTags[it.key]?.let { it1 ->
+                        AddTagFilter(
+                            tag = AttenuatorTag(it.key),
+                            color = it1,
+                            style = MaterialTheme.typography.bodyLarge,
+                            onClick = {}
+                        )
+                    }
+                }
+                if (plantFilter) {
+                    Log.d("DEBUG", "AddScreen() plantFilter = true")
+                    attenuatorTags[it.key]?.let { it1 ->
+                        AddTagFilter(
+                            tag = AttenuatorTag(it.key),
+                            color = it1,
+                            style = MaterialTheme.typography.bodyLarge,
+                            onClick = {}
+                        )
+                    }
+                }
             }
+        }
 
         // Show attenuator types that can be added
         Column(
@@ -479,7 +528,7 @@ private fun AddTagFilter(
     onClick: (AttenuatorTag) -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(8.dp),
     ) {
         Text(
             text = tag.toString(),

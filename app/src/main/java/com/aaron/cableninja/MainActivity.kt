@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
 
     companion object {
+        // map of attenuator tags to colors
         var attenuatorTags = mutableMapOf<AttenuatorType, Color>()
         // master map of ID strings to manufacturer data
         var attenuatorMap = mutableMapOf<String, Attenuator>()
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 _loadRFdata()
 
                 // load tags
-                _loadAttenuatorTags()
+                _loadAttenuatorColors()
 
                 // Start navigation controller and show MainScreen
                 navController = rememberNavController()
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun _loadAttenuatorTags() {
+    private fun _loadAttenuatorColors() {
         attenuatorTags[AttenuatorType.COAX] = coaxColor
         attenuatorTags[AttenuatorType.PASSIVE] = passiveColor
         attenuatorTags[AttenuatorType.DROP] = dropColor
