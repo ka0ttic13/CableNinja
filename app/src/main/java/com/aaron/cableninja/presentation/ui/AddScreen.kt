@@ -10,24 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,11 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
@@ -57,10 +45,10 @@ import com.aaron.cableninja.presentation.ui.theme.passiveColor
 import com.aaron.cableninja.presentation.ui.theme.plantColor
 
 
-/***
+/**************************************************************
  * AddScreen()
  *      Show attenuators that can be added.
- ***/
+ **************************************************************/
 @Composable
 fun AddScreen(
     navController: NavController,
@@ -139,83 +127,23 @@ fun AddScreen(
 
                 // coax filter
                 if (coaxFilter && it.key == AttenuatorType.COAX) {
-                    val color = attenuatorTags[AttenuatorType.COAX]
                     Log.d("DEBUG", "AddScreen() coaxFilter = true")
-
-                    if (color != null) {
-                        // show all coax
-                        AddTagFilter(
-                            tag = AttenuatorTag(AttenuatorType.COAX),
-                            color = color,
-                            style = MaterialTheme.typography.bodyLarge,
-                            onClick = {}
-                        )
-                        Icon(
-                            painterResource(id = R.drawable.baseline_close_24),
-                            contentDescription = "Clear filter",
-                            modifier = Modifier.clickable { coaxFilter = false }
-                        )
-                    }
+                    AddFilter(AttenuatorType.COAX, onClearFilter = { coaxFilter = false })
                 }
                 // passive filter
                 if (passiveFilter && it.key == AttenuatorType.PASSIVE) {
-                    val color = attenuatorTags[AttenuatorType.PASSIVE]
                     Log.d("DEBUG", "AddScreen() passiveFilter = true")
-
-                    if (color != null) {
-                        // show all coax
-                        AddTagFilter(
-                            tag = AttenuatorTag(AttenuatorType.PASSIVE),
-                            color = color,
-                            style = MaterialTheme.typography.bodyLarge,
-                            onClick = {}
-                        )
-                        Icon(
-                            painterResource(id = R.drawable.baseline_close_24),
-                            contentDescription = "Clear filter",
-                            modifier = Modifier.clickable { passiveFilter = false }
-                        )
-                    }
+                    AddFilter(AttenuatorType.PASSIVE, onClearFilter = { passiveFilter = false })
                 }
                 // drop filter
                 if (dropFilter && it.key == AttenuatorType.DROP) {
-                    val color = attenuatorTags[AttenuatorType.DROP]
                     Log.d("DEBUG", "AddScreen() dropFilter = true")
-
-                    if (color != null) {
-                        // show all coax
-                        AddTagFilter(
-                            tag = AttenuatorTag(AttenuatorType.DROP),
-                            color = color,
-                            style = MaterialTheme.typography.bodyLarge,
-                            onClick = {}
-                        )
-                        Icon(
-                            painterResource(id = R.drawable.baseline_close_24),
-                            contentDescription = "Clear filter",
-                            modifier = Modifier.clickable { dropFilter = false }
-                        )
-                    }
+                    AddFilter(AttenuatorType.DROP, onClearFilter = { dropFilter = false })
                 }
                 // plant filter
                 if (plantFilter && it.key == AttenuatorType.PLANT) {
-                    val color = attenuatorTags[AttenuatorType.PLANT]
                     Log.d("DEBUG", "AddScreen() plantFilter = true")
-
-                    if (color != null) {
-                        // show all coax
-                        AddTagFilter(
-                            tag = AttenuatorTag(AttenuatorType.PLANT),
-                            color = color,
-                            style = MaterialTheme.typography.bodyLarge,
-                            onClick = {}
-                        )
-                        Icon(
-                            painterResource(id = R.drawable.baseline_close_24),
-                            contentDescription = "Clear filter",
-                            modifier = Modifier.clickable { plantFilter = false }
-                        )
-                    }
+                    AddFilter(AttenuatorType.PLANT, onClearFilter = { plantFilter = false })
                 }
             }
         }
@@ -234,15 +162,14 @@ fun AddScreen(
                 "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}"
             )
 
-            // List<Attenuator>
+            // The list we will show based on filters (or all if no filters)
             val showList = mutableListOf<Attenuator>()
 
-            // iterate over attenuatorList and create an AttenuatorAddCard for
-            // each Attenuator in the list
-            for (type in attenuatorMap.values) {
-                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
+            // iterate over all possible attenuators and add to showList the
+            // ones we want to display
+            attenuatorMap.values.forEach{ type ->
+                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
                     showList.add(type)
-                }
 
                 if (coaxFilter && type.isCoax())
                     showList.add(type)
@@ -254,6 +181,7 @@ fun AddScreen(
                     showList.add(type)
             }
 
+            // display the list
             showList.forEach() {
                 val card = AttenuatorCard(it.id(), it.tags(), it.isCoax())
 
@@ -262,7 +190,7 @@ fun AddScreen(
                         "    ${it.tagsToStrings()}\n" +
                         "    ${it.isCoax()}")
 
-                AttenuatorAddCard(
+                AddAttenuatorCard(
                     card,
                     onClick = {
                         // since we are adding, reset clear list state
@@ -347,11 +275,11 @@ fun AddScreen(
 }
 
 /************************************************
- * AttenuatorAddCard()
+ * AddAttenuatorCard()
  *      Create Card for attenuator type
  ************************************************/
 @Composable
-private fun AttenuatorAddCard(
+private fun AddAttenuatorCard(
     card: AttenuatorCard,
     onClick:() -> Unit
 ) {
@@ -396,171 +324,7 @@ private fun AttenuatorAddCard(
 }
 
 /************************************************
- * LengthDialog()
- *      Create Dialog for user to enter
- *      attenuator length
- *      Note: not declared private as we use the
- *      same dialog to edit length in MainScreen()
- ************************************************/
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LengthDialog(
-    onCancel: () -> Unit,
-    onAdd: (String) -> Unit) {
-    var openDialog by remember { mutableStateOf(true) }
-    var showLengthAlert by remember { mutableStateOf(false) }
-
-    if (openDialog) {
-        Log.d("DEBUG", "LengthDialog() called")
-
-        Dialog(
-            onDismissRequest = {
-                openDialog = false
-            },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false
-            )
-        ) {
-            Card(
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier.fillMaxWidth(0.95f)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp)
-                ) {
-                    var length by remember { mutableStateOf("") }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(30.dp),
-                        verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        TextField(
-                            value = length,
-                            onValueChange = {
-                                length = it
-                            },
-                            label = { Text(text = "Enter length") },
-                            singleLine = true,
-                            // show number pad for input
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number
-                            )
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(50.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Cancel Button
-                        Button(
-                            onClick = {
-                                openDialog = false
-                                onCancel()
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            shape = CircleShape
-                        ) {
-                            Text(
-                                text = "Cancel",
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-                        // Add Button
-                        Button(
-                            onClick = {
-                                // validate input
-                                if (length.isEmpty() || !isNumeric(length)) {
-                                    Log.d("DEBUG", "LengthDialog(): \"$length\" is not valid input")
-                                    showLengthAlert = true
-                                }
-                                else {
-                                    Log.d("DEBUG", "LengthDialog() entered length: $length")
-                                    onAdd(length)
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            shape = CircleShape
-                        ) {
-                            Text(
-                                text = "Add",
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Show AlertDialog if footage entered is not a number
-    if (showLengthAlert)
-        LengthAlertDialog()
-}
-
-/************************************************
- * LengthAlertDialog()
- *      Create AlertDialog for invalid user
- *      input from LengthDialog
- ************************************************/
-@Composable
-private fun LengthAlertDialog() {
-    var openDialog by remember { mutableStateOf(true) }
-
-    if (openDialog) {
-        AlertDialog(
-            onDismissRequest = {},
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false
-            ),
-            tonalElevation = 10.dp,
-            confirmButton = {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-
-                ) {
-                    TextButton(
-                        onClick = { openDialog = false }
-                    ) {
-                        Text(
-                            text = "OK",
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            },
-            text = {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Footage must be a positive whole number"
-                    )
-                }
-            }
-        )
-    }
-}
-
-/************************************************
- * AttenuatorTags()
+ * AddAttenuatorTag()
  *      Create small tags to describe each
  *      attenuator type.  Used for filtering
  *      add list.
@@ -581,6 +345,25 @@ private fun AddAttenuatorTag(
             modifier = Modifier
                 .background(color)
                 .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
+        )
+    }
+}
+
+@Composable
+private fun AddFilter(type: AttenuatorType, onClearFilter: () -> Unit) {
+    val color = attenuatorTags[type]
+
+    if (color != null) {
+        AddTagFilter(
+            tag = AttenuatorTag(type),
+            color = color,
+            style = MaterialTheme.typography.bodyLarge,
+            onClick = {}
+        )
+        Icon(
+            painterResource(id = R.drawable.baseline_close_24),
+            contentDescription = "Clear filter",
+            modifier = Modifier.clickable { onClearFilter() }
         )
     }
 }
@@ -609,7 +392,3 @@ private fun AddTagFilter(
     }
 }
 
-// Return true if string is numeric
-private fun isNumeric(toCheck: String): Boolean {
-    return toCheck.all { char -> char.isDigit() }
-}

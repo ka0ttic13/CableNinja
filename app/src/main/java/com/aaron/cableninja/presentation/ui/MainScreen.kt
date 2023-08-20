@@ -74,7 +74,7 @@ fun MainScreen(
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Text(text = (round(sharedViewModel.currentFreq).toInt()).toString() + " MHz")
+                Text(text = "${round(freqSliderPosition).toInt()} MHz")
             }
             Slider(
                 value = freqSliderPosition,
@@ -355,11 +355,6 @@ fun MainScreen(
             }
         }
 
-        Log.d("DEBUG", "editLengthDialog = $editLengthDialog")
-
-        //if (editCard != null)
-            Log.d("DEBUG", "editCard = ${editCard.id()}")
-
         // edit length of current item in list
         if (editLengthDialog && editCard.length() > 0) {
             LengthDialog(
@@ -384,7 +379,7 @@ fun MainScreen(
 }
 
 @Composable
-fun AddAttenuatorCard(
+private fun AddAttenuatorCard(
     data: AttenuatorCard,
     onSwipeEdit: () -> Unit,
     onSwipeDelete: () -> Unit
