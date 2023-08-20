@@ -1,5 +1,6 @@
 package com.aaron.cableninja
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,6 +34,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CableNinjaTheme {
+                // Lock screen orientation to portrait
+                this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
                 // load manufacturer specs
                 _loadRFdata()
 

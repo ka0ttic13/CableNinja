@@ -74,7 +74,7 @@ fun MainScreen(
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Text(round(freqSliderPosition).toInt().toString() + " MHz")
+                Text(text = (round(sharedViewModel.currentFreq).toInt()).toString() + " MHz")
             }
             Slider(
                 value = freqSliderPosition,
@@ -140,11 +140,10 @@ fun MainScreen(
         Row(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(25.dp)
         ) {
             Column(
-//                modifier = Modifier
-//                    .weight(0.75f)
+
             )
             {
                 Text(
@@ -153,7 +152,7 @@ fun MainScreen(
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "@ ${sharedViewModel.currentFreq.toInt()}MHz",
+                    text = "@ ${round(sharedViewModel.currentFreq).toInt()} MHz",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -163,7 +162,7 @@ fun MainScreen(
                 onValueChange = {
                     sharedViewModel.setStartLevel(it)
                 },
-//                label = { Text(text = "Level in dB") },
+                label = { Text(text = "dB") },
                 singleLine = true,
                 // show number pad for input
                 keyboardOptions = KeyboardOptions.Default.copy(
