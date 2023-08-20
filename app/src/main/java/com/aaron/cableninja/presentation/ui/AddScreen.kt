@@ -5,13 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -59,6 +59,9 @@ fun AddScreen(
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
+
+    // The list we will show based on filters (or all if no filters)
+    val showList = mutableListOf<Attenuator>()
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -148,47 +151,45 @@ fun AddScreen(
             }
         }
 
-        // Show attenuator types that can be added
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            modifier = Modifier
-                .padding(10.dp)
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
+        // iterate over all possible attenuators and add to showList the
+        // ones we want to display
+        attenuatorMap.values.forEach { type ->
+            if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
+                showList.add(type)
+
+            if (coaxFilter && type.isCoax())
+                showList.add(type)
+            if (passiveFilter && type.isPassive())
+                showList.add(type)
+            if (dropFilter && type.isDrop())
+                showList.add(type)
+            if (plantFilter && type.isPlant())
+                showList.add(type)
+        }
+
+        // display the list
+        LazyColumn(
+            contentPadding = PaddingValues(all = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Log.d(
-                "DEBUG",
-                "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}"
-            )
+            items(items = showList) { attenuator ->
+                Log.d(
+                    "DEBUG",
+                    "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}"
+                )
 
-            // The list we will show based on filters (or all if no filters)
-            val showList = mutableListOf<Attenuator>()
+                val card = AttenuatorCard(
+                    attenuator.id(),
+                    attenuator.tags(),
+                    attenuator.isCoax()
+                )
 
-            // iterate over all possible attenuators and add to showList the
-            // ones we want to display
-            attenuatorMap.values.forEach{ type ->
-                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
-                    showList.add(type)
-
-                if (coaxFilter && type.isCoax())
-                    showList.add(type)
-                if (passiveFilter && type.isPassive())
-                    showList.add(type)
-                if (dropFilter && type.isDrop())
-                    showList.add(type)
-                if (plantFilter && type.isPlant())
-                    showList.add(type)
-            }
-
-            // display the list
-            showList.forEach() {
-                val card = AttenuatorCard(it.id(), it.tags(), it.isCoax())
-
-                Log.d("DEBUG", "AddScreen(): showList.forEach() \n" +
-                        "    ${it.id()}\n" +
-                        "    ${it.tagsToStrings()}\n" +
-                        "    ${it.isCoax()}")
+                Log.d(
+                    "DEBUG", "AddScreen(): showList.forEach() \n" +
+                            "    ${attenuator.id()}\n" +
+                            "    ${attenuator.tagsToStrings()}\n" +
+                            "    ${attenuator.isCoax()}"
+                )
 
                 AddAttenuatorCard(
                     card,
