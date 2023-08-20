@@ -27,6 +27,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +47,7 @@ import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.MainActivity.Companion.attenuatorTags
 import com.aaron.cableninja.R
+import com.aaron.cableninja.domain.Attenuator
 import com.aaron.cableninja.domain.AttenuatorTag
 import com.aaron.cableninja.domain.AttenuatorType
 import com.aaron.cableninja.domain.getCableLoss
@@ -104,8 +106,10 @@ fun AddScreen(
                 .fillMaxWidth()
                 .padding(4.dp)
         ) {
-            Text(text = "Filter: ",
-                modifier = Modifier.padding(start = 10.dp))
+            Text(
+                text = "Filter: ",
+                modifier = Modifier.padding(start = 10.dp)
+            )
 
             // show all possible tags
             attenuatorTags.forEach {
@@ -120,11 +124,11 @@ fun AddScreen(
                         onClick = {
                             if (it.tag == AttenuatorType.COAX)
                                 coaxFilter = true
-                            else if (it.tag == AttenuatorType.PASSIVE)
+                            if (it.tag == AttenuatorType.PASSIVE)
                                 passiveFilter = true
-                            else if (it.tag == AttenuatorType.DROP)
+                            if (it.tag == AttenuatorType.DROP)
                                 dropFilter = true
-                            else if (it.tag == AttenuatorType.PLANT)
+                            if (it.tag == AttenuatorType.PLANT)
                                 plantFilter = true
 
                             Log.d("DEBUG", "AddScreen() filter selected: $it")
@@ -133,47 +137,83 @@ fun AddScreen(
                     )
                 }
 
-                if (coaxFilter) {
+                // coax filter
+                if (coaxFilter && it.key == AttenuatorType.COAX) {
+                    val color = attenuatorTags[AttenuatorType.COAX]
                     Log.d("DEBUG", "AddScreen() coaxFilter = true")
-                    attenuatorTags[it.key]?.let { it1 ->
+
+                    if (color != null) {
+                        // show all coax
                         AddTagFilter(
-                            tag = AttenuatorTag(it.key),
-                            color = it1,
+                            tag = AttenuatorTag(AttenuatorType.COAX),
+                            color = color,
                             style = MaterialTheme.typography.bodyLarge,
                             onClick = {}
                         )
+                        Icon(
+                            painterResource(id = R.drawable.baseline_close_24),
+                            contentDescription = "Clear filter",
+                            modifier = Modifier.clickable { coaxFilter = false }
+                        )
                     }
                 }
-                if (passiveFilter) {
+                // passive filter
+                if (passiveFilter && it.key == AttenuatorType.PASSIVE) {
+                    val color = attenuatorTags[AttenuatorType.PASSIVE]
                     Log.d("DEBUG", "AddScreen() passiveFilter = true")
-                    attenuatorTags[it.key]?.let { it1 ->
+
+                    if (color != null) {
+                        // show all coax
                         AddTagFilter(
-                            tag = AttenuatorTag(it.key),
-                            color = it1,
+                            tag = AttenuatorTag(AttenuatorType.PASSIVE),
+                            color = color,
                             style = MaterialTheme.typography.bodyLarge,
                             onClick = {}
                         )
+                        Icon(
+                            painterResource(id = R.drawable.baseline_close_24),
+                            contentDescription = "Clear filter",
+                            modifier = Modifier.clickable { passiveFilter = false }
+                        )
                     }
                 }
-                if (dropFilter) {
+                // drop filter
+                if (dropFilter && it.key == AttenuatorType.DROP) {
+                    val color = attenuatorTags[AttenuatorType.DROP]
                     Log.d("DEBUG", "AddScreen() dropFilter = true")
-                    attenuatorTags[it.key]?.let { it1 ->
+
+                    if (color != null) {
+                        // show all coax
                         AddTagFilter(
-                            tag = AttenuatorTag(it.key),
-                            color = it1,
+                            tag = AttenuatorTag(AttenuatorType.DROP),
+                            color = color,
                             style = MaterialTheme.typography.bodyLarge,
                             onClick = {}
                         )
+                        Icon(
+                            painterResource(id = R.drawable.baseline_close_24),
+                            contentDescription = "Clear filter",
+                            modifier = Modifier.clickable { dropFilter = false }
+                        )
                     }
                 }
-                if (plantFilter) {
+                // plant filter
+                if (plantFilter && it.key == AttenuatorType.PLANT) {
+                    val color = attenuatorTags[AttenuatorType.PLANT]
                     Log.d("DEBUG", "AddScreen() plantFilter = true")
-                    attenuatorTags[it.key]?.let { it1 ->
+
+                    if (color != null) {
+                        // show all coax
                         AddTagFilter(
-                            tag = AttenuatorTag(it.key),
-                            color = it1,
+                            tag = AttenuatorTag(AttenuatorType.PLANT),
+                            color = color,
                             style = MaterialTheme.typography.bodyLarge,
                             onClick = {}
+                        )
+                        Icon(
+                            painterResource(id = R.drawable.baseline_close_24),
+                            contentDescription = "Clear filter",
+                            modifier = Modifier.clickable { plantFilter = false }
                         )
                     }
                 }
@@ -189,16 +229,39 @@ fun AddScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            Log.d("DEBUG",
-                "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}")
+            Log.d(
+                "DEBUG",
+                "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}"
+            )
 
-            // TODO iterator over tags, if any.  If not, show all tags.
-
+            // List<Attenuator>
+            val showList = mutableListOf<Attenuator>()
 
             // iterate over attenuatorList and create an AttenuatorAddCard for
             // each Attenuator in the list
             for (type in attenuatorMap.values) {
-                val card = AttenuatorCard(type.id(), type.tags(), type.isCoax())
+                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
+                    showList.add(type)
+                }
+
+                if (coaxFilter && type.isCoax())
+                    showList.add(type)
+                if (passiveFilter && type.isPassive())
+                    showList.add(type)
+                if (dropFilter && type.isDrop())
+                    showList.add(type)
+                if (plantFilter && type.isPlant())
+                    showList.add(type)
+            }
+
+            showList.forEach() {
+                val card = AttenuatorCard(it.id(), it.tags(), it.isCoax())
+
+                Log.d("DEBUG", "AddScreen(): showList.forEach() \n" +
+                        "    ${it.id()}\n" +
+                        "    ${it.tagsToStrings()}\n" +
+                        "    ${it.isCoax()}")
+
                 AttenuatorAddCard(
                     card,
                     onClick = {
@@ -238,6 +301,8 @@ fun AddScreen(
             }
         }
     }
+
+    sharedViewModel.setHasLoadedAddList()
 
     // Show footage dialog when adding coax attenuators
     if (showLengthDialog) {

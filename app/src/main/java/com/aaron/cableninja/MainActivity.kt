@@ -68,7 +68,8 @@ class MainActivity : ComponentActivity() {
 //        RG59.specs[1000] = 12.68
 //        manufacturerSpecsMap[RG59.id()] = RG59
 
-        val RG6 = Attenuator(id = "RG6", tags = listOf(coax, drop), iscoax = true)
+        val RG6 = Attenuator(id = "RG6", tags = listOf(coax, drop),
+            iscoax = true, ispassive = false, isdrop = true, isplant = false)
         RG6.specs[5] = 0.58
         RG6.specs[55] = 1.6
         RG6.specs[211] = 3.05
@@ -90,7 +91,8 @@ class MainActivity : ComponentActivity() {
         RG6.specs[1218] = 7.21
         attenuatorMap[RG6.id()] = RG6
 
-        val RG11 = Attenuator(id = "RG11", tags = listOf(coax, drop, plant), iscoax = true)
+        val RG11 = Attenuator(id = "RG11", tags = listOf(coax, drop, plant),
+            iscoax = true, ispassive = false, isdrop = true, isplant = true)
         RG11.specs[5] = .38
         RG11.specs[55] = 0.96
         RG11.specs[211] = 1.9
@@ -112,7 +114,8 @@ class MainActivity : ComponentActivity() {
         RG11.specs[1218] = 4.92
         attenuatorMap[RG11.id()] = RG11
 
-        val TwoWay = Attenuator(id = "2 Way / 3 Way Low Leg", tags = listOf(passive, drop))
+        val TwoWay = Attenuator(id = "2 Way / 3 Way Low Leg", tags = listOf(passive, drop),
+            iscoax = false, ispassive = true, isdrop = true, isplant = false)
         TwoWay.specs[5] = 3.5
         TwoWay.specs[55] = 3.5
         TwoWay.specs[211] = 3.7
@@ -126,7 +129,8 @@ class MainActivity : ComponentActivity() {
         TwoWay.specs[1200] = 4.6
         attenuatorMap[TwoWay.id()] = TwoWay
 
-        val ThreeWayBalanced = Attenuator(id = "3 Way Balanced", tags = listOf(passive, drop))
+        val ThreeWayBalanced = Attenuator(id = "3 Way Balanced", tags = listOf(passive, drop),
+            iscoax = false, ispassive = true, isdrop = true, isplant = false)
         ThreeWayBalanced.specs[5] = 5.8
         ThreeWayBalanced.specs[55] = 5.8
         ThreeWayBalanced.specs[211] = 5.9
@@ -140,7 +144,8 @@ class MainActivity : ComponentActivity() {
         ThreeWayBalanced.specs[1200] = 7.5
         attenuatorMap[ThreeWayBalanced.id()] = ThreeWayBalanced
 
-        val FourWay = Attenuator(id = "4 Way / 3 Way High Leg", tags = listOf(passive, drop))
+        val FourWay = Attenuator(id = "4 Way / 3 Way High Leg", tags = listOf(passive, drop),
+            iscoax = false, ispassive = true, isdrop = true, isplant = false)
         FourWay.specs[5] = 7.0
         FourWay.specs[55] = 7.2
         FourWay.specs[211] = 7.2
@@ -153,7 +158,8 @@ class MainActivity : ComponentActivity() {
         FourWay.specs[1200] = 8.9
         attenuatorMap[FourWay.id()] = FourWay
 
-        val EightWay = Attenuator(id = "8 Way", tags = listOf(passive, drop))
+        val EightWay = Attenuator(id = "8 Way", tags = listOf(passive, drop),
+            iscoax = false, ispassive = true, isdrop = true, isplant = false)
         EightWay.specs[5] = 11.2
         EightWay.specs[55] = 11.0
         EightWay.specs[211] = 11.2
@@ -166,7 +172,8 @@ class MainActivity : ComponentActivity() {
         EightWay.specs[1200] = 12.9
         attenuatorMap[EightWay.id()] = EightWay
 
-        val P3500 = Attenuator(id = "0.500 P3", tags = listOf(coax, plant), iscoax = true)
+        val P3500 = Attenuator(id = "0.500 P3", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3500.specs[5] = 0.16
         P3500.specs[55] = 0.54
         P3500.specs[85] = 0.68
@@ -186,7 +193,8 @@ class MainActivity : ComponentActivity() {
         P3500.specs[1218] = 2.83
         attenuatorMap[P3500.id()] = P3500
 
-        val P3625 = Attenuator(id = "0.625 P3", tags = listOf(coax, plant), iscoax = true)
+        val P3625 = Attenuator(id = "0.625 P3", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3625.specs[5] = 0.13
         P3625.specs[55] = 0.45
         P3625.specs[85] = 0.56
@@ -206,7 +214,8 @@ class MainActivity : ComponentActivity() {
         P3625.specs[1218] = 2.32
         attenuatorMap[P3625.id()] = P3625
 
-        val P3750 = Attenuator(id = "0.750 P3", tags = listOf(coax, plant), iscoax = true)
+        val P3750 = Attenuator(id = "0.750 P3", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3750.specs[5] = 0.11
         P3750.specs[55] = 0.37
         P3750.specs[85] = 0.46
@@ -226,7 +235,8 @@ class MainActivity : ComponentActivity() {
         P3750.specs[1218] = 1.95
         attenuatorMap[P3750.id()] = P3750
 
-        val P3875 = Attenuator(id = "0.875 P3", tags = listOf(coax, plant), iscoax = true)
+        val P3875 = Attenuator(id = "0.875 P3", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3875.specs[5] = 0.09
         P3875.specs[55] = 0.33
         P3875.specs[85] = 0.4
@@ -246,7 +256,8 @@ class MainActivity : ComponentActivity() {
         P3875.specs[1218] = 1.7
         attenuatorMap[P3875.id()] = P3875
 
-        val QR540 = Attenuator(id = "0.540 QR", tags = listOf(coax, plant), iscoax = true)
+        val QR540 = Attenuator(id = "0.540 QR", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR540.specs[5] = 0.14
         QR540.specs[55] = 0.47
         QR540.specs[85] = 0.59
@@ -266,7 +277,8 @@ class MainActivity : ComponentActivity() {
         QR540.specs[1218] = 2.41
         attenuatorMap[QR540.id()] = QR540
 
-        val QR715 = Attenuator(id = "0.715 QR", tags = listOf(coax, plant), iscoax = true)
+        val QR715 = Attenuator(id = "0.715 QR", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR715.specs[5] = 0.11
         QR715.specs[55] = 0.37
         QR715.specs[85] = 0.46
@@ -286,7 +298,8 @@ class MainActivity : ComponentActivity() {
         QR715.specs[1218] = 1.96
         attenuatorMap[QR715.id()] = QR715
 
-        val QR860 = Attenuator(id = "0.860 QR", tags = listOf(coax, plant), iscoax = true)
+        val QR860 = Attenuator(id = "0.860 QR", tags = listOf(coax, plant),
+            iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR860.specs[5] = 0.09
         QR860.specs[55] = 0.32
         QR860.specs[85] = 0.4
