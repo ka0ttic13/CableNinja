@@ -1,4 +1,4 @@
-package com.aaron.cableninja.presentation.ui
+package com.aaron.cableninja.ui.mainscreen
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -28,13 +28,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
+import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
+import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
+import com.aaron.cableninja.ui.SharedViewModel
 import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.presentation.ui.theme.LightBlue
-import com.aaron.cableninja.presentation.ui.theme.LightGreen
-import com.aaron.cableninja.presentation.ui.theme.LightRed
+import com.aaron.cableninja.ui.AttenuatorCard
+import com.aaron.cableninja.ui.LengthDialog
+import com.aaron.cableninja.ui.navigation.Screen
+import com.aaron.cableninja.ui.theme.LightBlue
+import com.aaron.cableninja.ui.theme.LightGreen
+import com.aaron.cableninja.ui.theme.LightRed
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import kotlin.math.round

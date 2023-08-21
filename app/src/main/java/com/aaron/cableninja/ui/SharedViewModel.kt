@@ -1,8 +1,7 @@
-package com.aaron.cableninja.presentation.ui
+package com.aaron.cableninja.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 

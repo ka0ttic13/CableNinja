@@ -1,6 +1,6 @@
 package com.aaron.cableninja.domain
 
-import com.aaron.cableninja.domain.AttenuatorType
+import com.aaron.cableninja.data.AttenuatorType
 
 /******************************************************************
  * AttenuatorTag

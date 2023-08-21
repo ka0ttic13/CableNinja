@@ -1,4 +1,4 @@
-package com.aaron.cableninja.presentation.ui
+package com.aaron.cableninja.ui.addscreen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -31,18 +31,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aaron.cableninja.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.MainActivity.Companion.attenuatorMap
-import com.aaron.cableninja.MainActivity.Companion.attenuatorTags
+import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
+import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
+import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorTags
 import com.aaron.cableninja.R
-import com.aaron.cableninja.domain.Attenuator
+import com.aaron.cableninja.ui.SharedViewModel
+import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.domain.AttenuatorTag
-import com.aaron.cableninja.domain.AttenuatorType
+import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.presentation.ui.theme.coaxColor
-import com.aaron.cableninja.presentation.ui.theme.dropColor
-import com.aaron.cableninja.presentation.ui.theme.passiveColor
-import com.aaron.cableninja.presentation.ui.theme.plantColor
+import com.aaron.cableninja.ui.AttenuatorCard
+import com.aaron.cableninja.ui.LengthDialog
+import com.aaron.cableninja.ui.navigation.Screen
+import com.aaron.cableninja.ui.theme.coaxColor
+import com.aaron.cableninja.ui.theme.dropColor
+import com.aaron.cableninja.ui.theme.passiveColor
+import com.aaron.cableninja.ui.theme.plantColor
 
 
 /**************************************************************
@@ -179,14 +183,14 @@ fun AddScreen(
                 )
 
                 val card = AttenuatorCard(
-                    attenuator.id(),
+                    attenuator.name(),
                     attenuator.tags(),
                     attenuator.isCoax()
                 )
 
                 Log.d(
                     "DEBUG", "AddScreen(): showList.forEach() \n" +
-                            "    ${attenuator.id()}\n" +
+                            "    ${attenuator.name()}\n" +
                             "    ${attenuator.tagsToStrings()}\n" +
                             "    ${attenuator.isCoax()}"
                 )
@@ -207,7 +211,7 @@ fun AddScreen(
                         } else {
                             // Find loss
                             for (data in attenuatorMap.values) {
-                                if (data.id() == card.id()) {
+                                if (data.name() == card.id()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
                                             data,
@@ -244,7 +248,7 @@ fun AddScreen(
 
                 // Find loss
                 for (data in attenuatorMap.values) {
-                    if (data.id() == sharedViewModel.card!!.id()) {
+                    if (data.name() == sharedViewModel.card!!.id()) {
                         sharedViewModel.card!!.setLoss(
                             getCableLoss(
                                 data,

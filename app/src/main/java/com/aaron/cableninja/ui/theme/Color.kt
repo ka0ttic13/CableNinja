@@ -1,4 +1,4 @@
-package com.aaron.cableninja.presentation.ui.theme
+package com.aaron.cableninja.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

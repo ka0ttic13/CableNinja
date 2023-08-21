@@ -1,6 +1,7 @@
 package com.aaron.cableninja.domain
 
 import android.util.Log
+import com.aaron.cableninja.data.Attenuator
 import kotlin.math.sqrt
 
 /*************************************************************
@@ -48,7 +49,7 @@ fun getCableLoss(
     distance: Int,
     temp: Int
 ): Double {
-    var result = 0.0
+    var result: Double
 
     if (data == null) {
         Log.d("DEBUG", "getCableLoss() - AttenuatorData == NULL!")

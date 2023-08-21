@@ -1,4 +1,19 @@
-package com.aaron.cableninja.domain
+package com.aaron.cableninja.data
+
+import com.aaron.cableninja.domain.AttenuatorTag
+
+data class AttenuatorData(
+    val id: Int,
+    val name: String,
+    val tags: List<AttenuatorTag>
+)
+
+enum class AttenuatorType {
+    COAX,
+    PASSIVE,
+    DROP,
+    PLANT
+}
 
 /************************************************************
  * class Attenuator
@@ -7,14 +22,14 @@ package com.aaron.cableninja.domain
  *          key = frequency
  *          value = loss @ 100'
  ************************************************************/
-class Attenuator(id: String, tags: List<AttenuatorTag>,
+class Attenuator(name: String, tags: List<AttenuatorTag>,
                  iscoax: Boolean = false,
                  ispassive: Boolean = false,
                  isdrop: Boolean = false,
                  isplant: Boolean = false
     ) {
-    private val _id = id
-    private val _tags = tags
+    private var _id = 0
+    private val _data = AttenuatorData(_id, name, tags)
     private val _iscoax = iscoax
     private val _ispassive = ispassive
     private val _isdrop = isdrop
@@ -28,19 +43,22 @@ class Attenuator(id: String, tags: List<AttenuatorTag>,
     // Is this attenuator coax?
     fun isCoax() : Boolean { return _iscoax }
     // Is this attenuator passive?
-    fun isPassive(): Boolean { return !_iscoax }
+    fun isPassive(): Boolean { return _ispassive }
     fun isDrop(): Boolean { return _isdrop }
     fun isPlant(): Boolean { return _isplant }
 
-    // get ID string
-    fun id(): String { return _id }
+    // get ID
+    fun id(): Int { return _data.id }
+
+    // get name
+    fun name(): String { return _data.name }
 
     // get tag list
-    fun tags(): List<AttenuatorTag> { return _tags }
+    fun tags(): List<AttenuatorTag> { return _data.tags }
     // get tag list as strings
     fun tagsToStrings(): List<String> {
         val strings = mutableListOf<String>()
-        _tags.forEach {
+        _data.tags.forEach {
             strings.add(it.string)
         }
         return strings
@@ -50,16 +68,5 @@ class Attenuator(id: String, tags: List<AttenuatorTag>,
     fun getLoss(freq: Int): Double? {
         return specs[freq]
     }
-}
-
-/************************************************************
- *  AttenuatorType
- *      enumeration for describing types of attenuators
- ************************************************************/
-enum class AttenuatorType {
-    COAX,
-    PASSIVE,
-    DROP,
-    PLANT
 }
 
