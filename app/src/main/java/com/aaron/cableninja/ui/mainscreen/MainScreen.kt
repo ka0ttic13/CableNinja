@@ -33,7 +33,7 @@ import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.SharedViewModel
 import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.ui.AttenuatorCard
+import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.ui.LengthDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.LightBlue

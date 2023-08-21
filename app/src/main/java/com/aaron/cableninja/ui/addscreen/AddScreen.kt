@@ -40,7 +40,7 @@ import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.domain.AttenuatorTag
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.ui.AttenuatorCard
+import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.ui.LengthDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.coaxColor

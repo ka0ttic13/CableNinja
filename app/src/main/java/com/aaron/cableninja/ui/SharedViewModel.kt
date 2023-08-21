@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.aaron.cableninja.domain.AttenuatorCard
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {

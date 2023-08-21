@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.domain
 
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.domain.AttenuatorTag

@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
+import com.aaron.cableninja.domain.AttenuatorCard
 import com.aaron.cableninja.domain.AttenuatorTag
 import com.aaron.cableninja.ui.navigation.SetupNavGraph
 import com.aaron.cableninja.ui.theme.CableNinjaTheme
