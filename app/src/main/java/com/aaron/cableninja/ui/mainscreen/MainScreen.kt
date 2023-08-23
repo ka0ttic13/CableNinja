@@ -167,7 +167,7 @@ fun MainScreen(
                         sharedViewModel.setHasListChanged()
                     }
                 },
-                label = { Text(text = "dB") },
+                label = { Text(text = "dBmV") },
                 singleLine = true,
                 // show number pad for input
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -306,7 +306,7 @@ fun MainScreen(
                         color = Color.Red
 
                     Text(
-                        text = (round(result * 10) / 10).toString() + " dB",
+                        text = (round(result * 10) / 10).toString() + " dBmV",
                         color = color,
                         fontWeight = FontWeight.ExtraBold
                     )

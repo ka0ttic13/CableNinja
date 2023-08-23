@@ -13,6 +13,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -85,7 +86,13 @@ fun LengthDialog(
                                 if (it.isDigitsOnly())
                                     length = it
                             },
-                            label = { Text(text = label) },
+                            label = {
+                                Text(
+                                    text = label,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            },
                             singleLine = true,
                             // show number pad for input
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -94,6 +101,7 @@ fun LengthDialog(
                         )
                     }
 
+                    // Button Row
                     Row(
                         modifier = Modifier
                             .padding(10.dp)
