@@ -23,11 +23,6 @@ class SharedViewModel : ViewModel() {
     var currentStartLevel by mutableStateOf("")
     fun setStartLevel(level: String) { currentStartLevel = level }
 
-    // clear main attenuator list
-    var clearAttenuatorList by mutableStateOf(false)
-        private set
-    fun setClearList(value: Boolean) { clearAttenuatorList = value }
-
     // total attenuation
     var totalAttenuation by mutableStateOf(0.0)
         private set

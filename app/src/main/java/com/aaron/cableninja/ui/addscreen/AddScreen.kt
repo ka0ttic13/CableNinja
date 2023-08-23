@@ -112,22 +112,21 @@ fun AddScreen(
                 if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
                     Log.d("DEBUG", "AddScreen() no filters selected")
 
-                    AddTagFilter(
+                    AddTag(
                         tag = AttenuatorTag(it.key),
                         color = Color.LightGray,
                         style = MaterialTheme.typography.titleMedium,
-                        onClick = {
-                            if (it.tag == AttenuatorType.COAX)
+                        onClick = { t ->
+                            if (t.tag == AttenuatorType.COAX)
                                 coaxFilter = true
-                            if (it.tag == AttenuatorType.PASSIVE)
+                            if (t.tag == AttenuatorType.PASSIVE)
                                 passiveFilter = true
-                            if (it.tag == AttenuatorType.DROP)
+                            if (t.tag == AttenuatorType.DROP)
                                 dropFilter = true
-                            if (it.tag == AttenuatorType.PLANT)
+                            if (t.tag == AttenuatorType.PLANT)
                                 plantFilter = true
 
-                            Log.d("DEBUG", "AddScreen() filter selected: $it")
-                            // TODO only show types that match tags selected
+                            Log.d("DEBUG", "AddScreen() filter selected: $t")
                         }
                     )
                 }
@@ -186,10 +185,6 @@ fun AddScreen(
                 AddAttenuatorCard(
                     card,
                     onClick = {
-                        // since we are adding, reset clear list state, if set
-                        if (sharedViewModel.clearAttenuatorList)
-                            sharedViewModel.setClearList(false)
-
                         sharedViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
@@ -200,7 +195,7 @@ fun AddScreen(
                         } else {
                             // Find loss
                             for (data in attenuatorMap.values) {
-                                if (data.name() == card.id()) {
+                                if (data.name() == card.name()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
                                             data,
@@ -237,7 +232,7 @@ fun AddScreen(
 
                 // Find loss
                 for (data in attenuatorMap.values) {
-                    if (data.name() == sharedViewModel.card!!.id()) {
+                    if (data.name() == sharedViewModel.card!!.name()) {
                         sharedViewModel.card!!.setLoss(
                             getCableLoss(
                                 data,
@@ -253,7 +248,7 @@ fun AddScreen(
 
                 attenuatorCardList.add(
                     AttenuatorCard(
-                        sharedViewModel.card!!.id(),
+                        sharedViewModel.card!!.name(),
                         sharedViewModel.card!!.tags(),
                         sharedViewModel.card!!.isCoax(),
                         sharedViewModel.card!!.length(),
@@ -288,11 +283,9 @@ private fun AddAttenuatorCard(
                 .padding(15.dp)
                 .fillMaxWidth()
         ) {
-            // TODO add image of coax or splitter
-
-            // ID
+            // Name
             Text(
-                text = card.id(),
+                text = card.name(),
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 2.dp, bottom = 6.dp, start = 1.dp)
             )
@@ -348,7 +341,7 @@ private fun AddFilter(type: AttenuatorType, onClearFilter: () -> Unit) {
     val color = attenuatorTags[type]
 
     if (color != null) {
-        AddTagFilter(
+        AddTag(
             tag = AttenuatorTag(type),
             color = color,
             style = MaterialTheme.typography.bodyLarge,
@@ -363,7 +356,7 @@ private fun AddFilter(type: AttenuatorType, onClearFilter: () -> Unit) {
 }
 
 @Composable
-private fun AddTagFilter(
+private fun AddTag(
     tag: AttenuatorTag,
     color: Color,
     style: TextStyle,

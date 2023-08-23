@@ -1,7 +1,6 @@
 package com.aaron.cableninja.domain
 
 import com.aaron.cableninja.data.Attenuator
-import com.aaron.cableninja.domain.AttenuatorTag
 
 /********************************************
  * class AttenuatorCard
@@ -10,7 +9,7 @@ import com.aaron.cableninja.domain.AttenuatorTag
  ********************************************/
 class AttenuatorCard(atten: Attenuator) {
         private var _atten = atten
-        private val _id = _atten.name()
+        private val _name = _atten.name()
         private val _tags = _atten.tags()
         private var _iscoax = _atten.isCoax()
         private var _length = 0
@@ -18,16 +17,16 @@ class AttenuatorCard(atten: Attenuator) {
 
         // secondary constructor without using pre-existing Attenuator object
         constructor(
-                id: String,
+                name: String,
                 tags: List<AttenuatorTag>,
                 iscoax: Boolean,
                 length: Int = 0,
-                loss: Double = 0.0) : this(Attenuator(id, tags, iscoax)) {
+                loss: Double = 0.0) : this(Attenuator(name, tags, iscoax)) {
                 _length = length
                 _loss = loss
         }
 
-        fun id(): String { return _id }
+        fun name(): String { return _name }
         fun tags(): List<AttenuatorTag> { return _tags }
         fun length(): Int { return _length }
         fun setLength(length: Int) { _length = length }

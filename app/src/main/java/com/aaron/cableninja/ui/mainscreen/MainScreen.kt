@@ -162,8 +162,6 @@ fun MainScreen(
             TextField(
                 value = sharedViewModel.currentStartLevel,
                 onValueChange = {
-                    if (sharedViewModel.clearAttenuatorList)
-                        sharedViewModel.setClearList(false)
                     if (it.isDigitsOnly())
                         sharedViewModel.setStartLevel(it)
                 },
@@ -193,7 +191,7 @@ fun MainScreen(
                 attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            attenuatorMap[it.id()],
+                            attenuatorMap[it.name()],
                             sharedViewModel.currentFreq.toInt(),
                             it.length(),
                             sharedViewModel.currentTemp.toInt()
@@ -204,9 +202,7 @@ fun MainScreen(
             }
 
             // IF there is an existing list, show it
-            if (attenuatorCardList.size > 0 &&
-                !sharedViewModel.clearAttenuatorList
-            ) {
+            if (attenuatorCardList.isNotEmpty()) {
                 Log.d("DEBUG", "MainScreen() showing list...")
 
                 var total = 0.0
@@ -290,12 +286,8 @@ fun MainScreen(
                     modifier = Modifier.weight(2f)
                 )
 
-                // if we clear list, clear end level
-                if (sharedViewModel.clearAttenuatorList)
-                    sharedViewModel.setStartLevel("")
-
                 // if we set a start level, do the math and display end result
-                if (!sharedViewModel.currentStartLevel.isEmpty()) {
+                if (sharedViewModel.currentStartLevel.isNotEmpty()) {
                     val result = sharedViewModel.currentStartLevel.toInt() - sharedViewModel.totalAttenuation
                     val color: Color
 
@@ -324,7 +316,7 @@ fun MainScreen(
                     onClick = {
                         attenuatorCardList.clear()
                         sharedViewModel.setTotalAtten(0.0)
-                        sharedViewModel.setClearList(true)
+                        sharedViewModel.setStartLevel("")
                     },
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier.weight(2f)
@@ -372,7 +364,7 @@ fun MainScreen(
 
                     // find card and edit footage
                     for (card in attenuatorCardList.iterator()) {
-                        if (card.id() == editCard.id())
+                        if (card.name() == editCard.name())
                             card.setLength(it.toInt())
                     }
 
@@ -444,7 +436,7 @@ private fun AddAttenuatorCard(
             ) {
                 // show attenuator ID on left
                 Text(
-                    text = data.id(),
+                    text = data.name(),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(
                         start = 15.dp,

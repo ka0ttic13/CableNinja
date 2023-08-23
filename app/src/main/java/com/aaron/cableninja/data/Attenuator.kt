@@ -48,7 +48,7 @@ class Attenuator(name: String,
     fun isPlant(): Boolean { return _isplant }
 
     // get ID
-    fun id(): Int { return _data.id }
+//    fun id(): Int { return _data.id }
 
     // get name
     fun name(): String { return _data.name }
