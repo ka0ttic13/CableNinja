@@ -177,28 +177,16 @@ fun AddScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = showList) { attenuator ->
-                Log.d(
-                    "DEBUG",
-                    "AddScreen(): hasLoadedAddList = ${sharedViewModel.hasLoadedAddList}"
-                )
-
                 val card = AttenuatorCard(
                     attenuator.name(),
                     attenuator.tags(),
                     attenuator.isCoax()
                 )
 
-                Log.d(
-                    "DEBUG", "AddScreen(): showList.forEach() \n" +
-                            "    ${attenuator.name()}\n" +
-                            "    ${attenuator.tagsToStrings()}\n" +
-                            "    ${attenuator.isCoax()}"
-                )
-
                 AddAttenuatorCard(
                     card,
                     onClick = {
-                        // since we are adding, reset clear list state
+                        // since we are adding, reset clear list state, if set
                         if (sharedViewModel.clearAttenuatorList)
                             sharedViewModel.setClearList(false)
 
@@ -206,7 +194,8 @@ fun AddScreen(
 
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.isCoax()) {
-                            // logic for coax is in AddScreen under footage dialog state conditional
+                            // logic for coax is in this function below in
+                            // showLengthDialog conditional
                             showLengthDialog = true
                         } else {
                             // Find loss
@@ -234,8 +223,6 @@ fun AddScreen(
             }
         }
     }
-
-    sharedViewModel.setHasLoadedAddList()
 
     // Show footage dialog when adding coax attenuators
     if (showLengthDialog) {
