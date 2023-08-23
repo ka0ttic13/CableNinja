@@ -162,9 +162,10 @@ fun MainScreen(
             TextField(
                 value = sharedViewModel.currentStartLevel,
                 onValueChange = {
-                    if (it.isDigitsOnly()) {
+                    if (sharedViewModel.clearAttenuatorList)
+                        sharedViewModel.setClearList(false)
+                    if (it.isDigitsOnly())
                         sharedViewModel.setStartLevel(it)
-                    }
                 },
                 label = { Text(text = "dBmV") },
                 singleLine = true,
