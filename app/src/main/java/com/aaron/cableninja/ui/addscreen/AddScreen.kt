@@ -241,6 +241,8 @@ fun AddScreen(
     if (showLengthDialog) {
         Log.d("DEBUG", "Entering showFootageDialog")
         LengthDialog(
+            label = "Enter length",
+            defaultValue = "",
             onCancel = { showLengthDialog = false },
             onAdd = {
                 // Save length to current AttenuatorCard to add to MainScreen list

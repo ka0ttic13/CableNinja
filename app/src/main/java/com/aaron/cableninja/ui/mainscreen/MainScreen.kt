@@ -128,7 +128,7 @@ fun MainScreen(
                     tempSliderPosition = it
                 },
                 valueRange = -40f..120f,
-                steps = 25,
+                steps = 15,
                 onValueChangeFinished = {
                     Log.d("DEBUG", "MainScreen() tempSliderPosition = $tempSliderPosition")
                     sharedViewModel.setTemp(tempSliderPosition)
@@ -147,10 +147,7 @@ fun MainScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(25.dp)
         ) {
-            Column(
-
-            )
-            {
+            Column {
                 Text(
                     text = "Starting Level: ",
                     fontWeight = FontWeight.Bold,
@@ -165,8 +162,10 @@ fun MainScreen(
             TextField(
                 value = sharedViewModel.currentStartLevel,
                 onValueChange = {
-                    if (it.isDigitsOnly())
+                    if (it.isDigitsOnly()) {
                         sharedViewModel.setStartLevel(it)
+                        sharedViewModel.setHasListChanged()
+                    }
                 },
                 label = { Text(text = "dB") },
                 singleLine = true,
@@ -364,6 +363,8 @@ fun MainScreen(
         // edit length of current item in list
         if (editLengthDialog && editCard.length() > 0) {
             LengthDialog(
+                label = "Edit length",
+                defaultValue = editCard.length().toString(),
                 onCancel = { editLengthDialog = false },
                 onAdd = {
                     // TODO: is this still needed?

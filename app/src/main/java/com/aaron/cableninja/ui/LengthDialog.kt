@@ -42,8 +42,11 @@ import androidx.core.text.isDigitsOnly
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LengthDialog(
+    label: String,
+    defaultValue: String,
     onCancel: () -> Unit,
-    onAdd: (String) -> Unit) {
+    onAdd: (String) -> Unit
+) {
     var openDialog by remember { mutableStateOf(true) }
     var showLengthAlert by remember { mutableStateOf(false) }
 
@@ -67,7 +70,7 @@ fun LengthDialog(
                         .fillMaxWidth()
                         .padding(15.dp)
                 ) {
-                    var length by remember { mutableStateOf("") }
+                    var length by remember { mutableStateOf(defaultValue) }
 
                     Row(
                         modifier = Modifier
@@ -82,7 +85,7 @@ fun LengthDialog(
                                 if (it.isDigitsOnly())
                                     length = it
                             },
-                            label = { Text(text = "Enter length") },
+                            label = { Text(text = label) },
                             singleLine = true,
                             // show number pad for input
                             keyboardOptions = KeyboardOptions.Default.copy(

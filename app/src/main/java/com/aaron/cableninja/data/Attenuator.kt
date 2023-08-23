@@ -22,7 +22,8 @@ enum class AttenuatorType {
  *          key = frequency
  *          value = loss @ 100'
  ************************************************************/
-class Attenuator(name: String, tags: List<AttenuatorTag>,
+class Attenuator(name: String,
+                 tags: List<AttenuatorTag>,
                  iscoax: Boolean = false,
                  ispassive: Boolean = false,
                  isdrop: Boolean = false,

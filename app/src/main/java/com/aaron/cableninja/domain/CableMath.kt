@@ -82,7 +82,7 @@ fun getCableLoss(
     var closestFreq = 1200
     val maxFreq = data.specs.keys.max()
 
-    Log.d("DEBUG", "getCableLoss(): maxFreq = $maxFreq")
+    Log.d("DEBUG", "getCableLoss(): maxFreq for ${data.name()} = $maxFreq")
 
     if (freq < maxFreq) {
         // find closest frequency
