@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.text.isDigitsOnly
+
 
 /************************************************
  * LengthDialog()
@@ -77,7 +79,8 @@ fun LengthDialog(
                         TextField(
                             value = length,
                             onValueChange = {
-                                length = it
+                                if (it.isDigitsOnly())
+                                    length = it
                             },
                             label = { Text(text = "Enter length") },
                             singleLine = true,
@@ -117,7 +120,7 @@ fun LengthDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (length.isEmpty() || !isNumeric(length)) {
+                                if (length.isEmpty() || !length.isDigitsOnly()) {
                                     Log.d("DEBUG", "LengthDialog(): \"$length\" is not valid input")
                                     showLengthAlert = true
                                 }
@@ -195,6 +198,6 @@ private fun LengthAlertDialog() {
 }
 
 // Return true if string is numeric
-private fun isNumeric(toCheck: String): Boolean {
-    return toCheck.all { char -> char.isDigit() }
-}
+//fun isNumeric(toCheck: String): Boolean {
+//    return toCheck.all { char -> char.isDigit() }
+//}

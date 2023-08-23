@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+//    id("kotlin-kapt")
 }
 
 android {
@@ -76,8 +77,12 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
+    // swipe library for swipeable composables
     implementation("me.saket.swipe:swipe:1.0.0")
 
+    // Room DB
+//    implementation("androidx.room:room-ktx:2.5.2")
+//    kapt("androidx.room:room-compiler:2.5.2")
 
     /***** Possible future use for location/weather data
 

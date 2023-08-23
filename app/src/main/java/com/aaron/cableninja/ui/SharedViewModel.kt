@@ -10,7 +10,7 @@ import com.aaron.cableninja.domain.AttenuatorCard
 class SharedViewModel : ViewModel() {
     // frequency slider value
     //      defaults to 1.2GHz
-    var currentFreq by mutableStateOf(1200f)
+    var currentFreq by mutableStateOf(1218f)
         private set
     fun setFreq(freq: Float) { currentFreq = freq }
 

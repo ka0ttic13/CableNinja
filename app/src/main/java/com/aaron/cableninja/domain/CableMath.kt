@@ -22,14 +22,14 @@ fun adjustRFTemp(loss68: Double, temp: Int = 68) : Double {
     return result
 }
 
-/*************************************************************
+/***************************************************************************
  * getApproxLoss()
  *      Given a known loss on a known frequency (from manufacturer specs),
  *      calculate an approximate loss for an undocumented frequency
  *
  *      Uses formula from Cisco Broadband Data Book (pg 197)
  *          knownLoss * sqrt(unknownFreq / knownFreq)
- *************************************************************/
+ **************************************************************************/
 fun getApproxLoss(
     knownLoss: Double,
     knownFreq: Double,
@@ -38,11 +38,11 @@ fun getApproxLoss(
     return knownLoss * sqrt((unknownFreq / knownFreq))
 }
 
-/*************************************************************
+/*********************************************************************
  * getCableLoss()
  *      given frequency, distance, and temp, calculate attenuation
  *
- *************************************************************/
+ *********************************************************************/
 fun getCableLoss(
     data: Attenuator?,
     freq: Int,
@@ -80,18 +80,24 @@ fun getCableLoss(
     // the frequencies in the manufacturer specs.  Get the approximate loss based on the closest
     // known frequency.
     var closestFreq = 1200
+    val maxFreq = data.specs.keys.max()
 
-    // find closest frequency
-    for (key in data.specs.keys) {
-        Log.d("DEBUG", "getCableLoss() testing if $key > $freq")
-        if (key > freq) {
-            Log.d("DEBUG", "getCableLoss() found closest frequency $key")
-            closestFreq = key
-            break
+    Log.d("DEBUG", "getCableLoss(): maxFreq = $maxFreq")
+
+    if (freq < maxFreq) {
+        // find closest frequency
+        for (key in data.specs.keys) {
+            Log.d("DEBUG", "getCableLoss() testing if $key > $freq")
+            if (key > freq) {
+                Log.d("DEBUG", "getCableLoss() found closest frequency $key")
+                closestFreq = key
+                break
+            } else
+                Log.d("DEBUG", "getCableLoss() $key <= $freq, continuing...")
         }
-        else
-            Log.d("DEBUG", "getCableLoss() $key <= $freq, continuing...")
     }
+    else
+        closestFreq = maxFreq
 
     // get approximate loss
     result = data.getLoss(closestFreq)?.let {
@@ -113,4 +119,3 @@ fun getCableLoss(
 
     return result
 }
-

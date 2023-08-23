@@ -63,14 +63,25 @@ class MainActivity : ComponentActivity() {
         val drop    = AttenuatorTag(AttenuatorType.DROP)
         val plant   = AttenuatorTag(AttenuatorType.PLANT)
 
-        // TODO find better RG59 specs...  loss seems a bit high but may be unshielded 59.
-//        val RG59 = ManufacturerSpecs("RG59", listOf(AttenuatorType.COAX, AttenuatorType.DROP)
-//        RG59.specs[100] = 3.81
-//        RG59.specs[200] = 5.37
-//        RG59.specs[550] = 9.18
-//        RG59.specs[800] = 11.21
-//        RG59.specs[1000] = 12.68
-//        manufacturerSpecsMap[RG59.id()] = RG59
+        val RG59 = Attenuator(name = "RG59", tags = listOf(coax, drop),
+            iscoax = true, ispassive = false, isdrop = true, isplant = false)
+        RG59.specs[5] = 0.86
+        RG59.specs[55] = 2.05
+        RG59.specs[83] = 2.45
+        RG59.specs[187] = 3.6
+        RG59.specs[211] = 3.8
+        RG59.specs[250] = 4.1
+        RG59.specs[300] = 4.45
+        RG59.specs[350] = 4.8
+        RG59.specs[400] = 5.1
+        RG59.specs[450] = 5.4
+        RG59.specs[500] = 5.7
+        RG59.specs[550] = 5.95
+        RG59.specs[600] = 6.2
+        RG59.specs[750] = 6.97
+        RG59.specs[865] = 7.52
+        RG59.specs[1000] = 8.12
+        attenuatorMap[RG59.name()] = RG59
 
         val RG6 = Attenuator(name = "RG6", tags = listOf(coax, drop),
             iscoax = true, ispassive = false, isdrop = true, isplant = false)

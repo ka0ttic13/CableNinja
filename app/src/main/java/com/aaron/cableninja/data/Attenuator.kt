@@ -3,9 +3,9 @@ package com.aaron.cableninja.data
 import com.aaron.cableninja.domain.AttenuatorTag
 
 data class AttenuatorData(
-    val id: Int,
     val name: String,
-    val tags: List<AttenuatorTag>
+    val tags: List<AttenuatorTag>,
+    val id: Int = 0
 )
 
 enum class AttenuatorType {
@@ -28,8 +28,7 @@ class Attenuator(name: String, tags: List<AttenuatorTag>,
                  isdrop: Boolean = false,
                  isplant: Boolean = false
     ) {
-    private var _id = 0
-    private val _data = AttenuatorData(_id, name, tags)
+    private val _data = AttenuatorData(name, tags)
     private val _iscoax = iscoax
     private val _ispassive = ispassive
     private val _isdrop = isdrop

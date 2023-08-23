@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
@@ -85,8 +86,8 @@ fun MainScreen(
                 onValueChange = {
                     freqSliderPosition = it
                 },
-                valueRange = 5f..1218f,
-                steps = 24,
+                valueRange = 12f..1218f,
+                steps = 201,
                 onValueChangeFinished = {
                     Log.d(
                         "DEBUG",
@@ -127,7 +128,7 @@ fun MainScreen(
                     tempSliderPosition = it
                 },
                 valueRange = -40f..120f,
-                steps = 15,
+                steps = 25,
                 onValueChangeFinished = {
                     Log.d("DEBUG", "MainScreen() tempSliderPosition = $tempSliderPosition")
                     sharedViewModel.setTemp(tempSliderPosition)
@@ -164,7 +165,8 @@ fun MainScreen(
             TextField(
                 value = sharedViewModel.currentStartLevel,
                 onValueChange = {
-                    sharedViewModel.setStartLevel(it)
+                    if (it.isDigitsOnly())
+                        sharedViewModel.setStartLevel(it)
                 },
                 label = { Text(text = "dB") },
                 singleLine = true,
