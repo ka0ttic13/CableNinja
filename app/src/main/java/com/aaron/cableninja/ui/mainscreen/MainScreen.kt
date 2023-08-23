@@ -164,7 +164,6 @@ fun MainScreen(
                 onValueChange = {
                     if (it.isDigitsOnly()) {
                         sharedViewModel.setStartLevel(it)
-                        sharedViewModel.setHasListChanged()
                     }
                 },
                 label = { Text(text = "dBmV") },
