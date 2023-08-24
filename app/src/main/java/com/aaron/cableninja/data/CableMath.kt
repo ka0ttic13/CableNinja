@@ -1,7 +1,6 @@
-package com.aaron.cableninja.domain
+package com.aaron.cableninja.data
 
 import android.util.Log
-import com.aaron.cableninja.data.Attenuator
 import kotlin.math.sqrt
 
 /*************************************************************
@@ -118,4 +117,10 @@ fun getCableLoss(
         )
 
     return result
+}
+
+// is given string a numeric?
+fun isNumeric(toCheck: String): Boolean {
+    val regex = "-?[0-9]+(\\.[0-9]+)?".toRegex()
+    return toCheck.matches(regex)
 }

@@ -1,10 +1,10 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.ui.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.aaron.cableninja.domain.AttenuatorCard
+import com.aaron.cableninja.data.AttenuatorCard
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {

@@ -12,9 +12,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,10 +32,11 @@ import androidx.navigation.NavController
 import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
 import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
-import com.aaron.cableninja.ui.SharedViewModel
-import com.aaron.cableninja.domain.getCableLoss
-import com.aaron.cableninja.domain.AttenuatorCard
-import com.aaron.cableninja.ui.LengthDialog
+import com.aaron.cableninja.ui.viewmodels.SharedViewModel
+import com.aaron.cableninja.data.getCableLoss
+import com.aaron.cableninja.data.AttenuatorCard
+import com.aaron.cableninja.data.isNumeric
+import com.aaron.cableninja.ui.dialogs.LengthDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.LightBlue
 import com.aaron.cableninja.ui.theme.LightGreen
@@ -51,8 +52,9 @@ fun MainScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
-    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq)}
-    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp)}
+    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq) }
+    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp) }
+    var startLevel by remember { mutableStateOf(sharedViewModel.currentStartLevel) }
     var editLengthDialog by remember { mutableStateOf(false) }
 
     // temp card for editing current card
@@ -159,11 +161,16 @@ fun MainScreen(
                 )
             }
 
-            TextField(
-                value = sharedViewModel.currentStartLevel,
+            OutlinedTextField(
+                value = startLevel,
                 onValueChange = {
-                    if (it.isDigitsOnly())
+                    // if we manually delete all characters, update start level state
+                    if (it.isEmpty() || it.isDigitsOnly()) {
                         sharedViewModel.setStartLevel(it)
+                        startLevel = it
+                    }
+                    else if (it == "-" || isNumeric(it) || it.contains(char = '.'))
+                        startLevel = it
                 },
                 label = { Text(text = "dBmV") },
                 singleLine = true,
@@ -172,7 +179,15 @@ fun MainScreen(
                     keyboardType = KeyboardType.Number),
                 modifier = Modifier.padding(start = 80.dp, end = 10.dp, top = 10.dp)
             )
+
+            // only allow input that is a positive or negative whole number
+            if (startLevel.isNotEmpty() && isNumeric(startLevel)) {
+                Log.d("DEBUG", "MainScreen: starting level = $startLevel")
+                sharedViewModel.setStartLevel(startLevel)
+            }
         }
+
+
 
         Divider(modifier = Modifier.padding(10.dp))
 
@@ -288,14 +303,28 @@ fun MainScreen(
 
                 // if we set a start level, do the math and display end result
                 if (sharedViewModel.currentStartLevel.isNotEmpty()) {
-                    val result = sharedViewModel.currentStartLevel.toInt() - sharedViewModel.totalAttenuation
-                    val color: Color
+                    val result =
+                        sharedViewModel.currentStartLevel.toDouble() - sharedViewModel.totalAttenuation
+                    var color: Color = MaterialTheme.colorScheme.primary
 
-                    // if result is between -10 and +10, set color to green
-                    if (result >= -10 && result <= 10)
-                        color = LightGreen
-                    else // otherwise, set color to red
-                        color = Color.Red
+                    // figure out if all the cards are plant cards
+                    var allPlant = true
+                    for (card in attenuatorCardList.iterator()) {
+                        if (!card.tagsToStrings().contains("plant") || card.name() == "RG11")
+                            allPlant = false
+                    }
+
+                    if (attenuatorCardList.isEmpty())
+                        allPlant = false
+
+                    // if it is not all plant, use CPE specs for coloring end level
+                    if (!allPlant) {
+                        // if result is between -10 and +10, set color to green
+                        if ((result >= -10) && (result <= 10))
+                            color = LightGreen
+                        else // otherwise, set color to red
+                            color = Color.Red
+                    }
 
                     Text(
                         text = (round(result * 10) / 10).toString() + " dBmV",
@@ -314,8 +343,10 @@ fun MainScreen(
                 //      click clears attenuator list
                 Button(
                     onClick = {
+                        Log.d("DEBUG", "MainScreen() clearing attenuator list")
                         attenuatorCardList.clear()
                         sharedViewModel.setTotalAtten(0.0)
+                        startLevel = ""
                         sharedViewModel.setStartLevel("")
                     },
                     shape = MaterialTheme.shapes.large,

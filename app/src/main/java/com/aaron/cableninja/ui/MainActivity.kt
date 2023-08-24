@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
-import com.aaron.cableninja.domain.AttenuatorCard
-import com.aaron.cableninja.domain.AttenuatorTag
+import com.aaron.cableninja.data.AttenuatorCard
+import com.aaron.cableninja.data.AttenuatorTag
 import com.aaron.cableninja.ui.navigation.SetupNavGraph
 import com.aaron.cableninja.ui.theme.CableNinjaTheme
 import com.aaron.cableninja.ui.theme.coaxColor
@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
         val drop    = AttenuatorTag(AttenuatorType.DROP)
         val plant   = AttenuatorTag(AttenuatorType.PLANT)
 
+        // CommScope RG-59
         val RG59 = Attenuator(name = "RG59", tags = listOf(coax, drop),
             iscoax = true, ispassive = false, isdrop = true, isplant = false)
         RG59.specs[5] = 0.86
@@ -83,6 +84,7 @@ class MainActivity : ComponentActivity() {
         RG59.specs[1000] = 8.12
         attenuatorMap[RG59.name()] = RG59
 
+        // Amphenol RG-6
         val RG6 = Attenuator(name = "RG6", tags = listOf(coax, drop),
             iscoax = true, ispassive = false, isdrop = true, isplant = false)
         RG6.specs[5] = 0.58
@@ -106,6 +108,7 @@ class MainActivity : ComponentActivity() {
         RG6.specs[1218] = 7.21
         attenuatorMap[RG6.name()] = RG6
 
+        // Amphenol RG11
         val RG11 = Attenuator(name = "RG11", tags = listOf(coax, drop, plant),
             iscoax = true, ispassive = false, isdrop = true, isplant = true)
         RG11.specs[5] = .38
@@ -129,6 +132,7 @@ class MainActivity : ComponentActivity() {
         RG11.specs[1218] = 4.92
         attenuatorMap[RG11.name()] = RG11
 
+        // Antronix 2-Way / 3-Way Low
         val TwoWay = Attenuator(name = "2 Way / 3 Way Low Leg", tags = listOf(passive, drop),
             iscoax = false, ispassive = true, isdrop = true, isplant = false)
         TwoWay.specs[5] = 3.5
@@ -144,6 +148,7 @@ class MainActivity : ComponentActivity() {
         TwoWay.specs[1200] = 4.6
         attenuatorMap[TwoWay.name()] = TwoWay
 
+        // Antronix Balanced 3-Way
         val ThreeWayBalanced = Attenuator(name = "3 Way Balanced", tags = listOf(passive, drop),
             iscoax = false, ispassive = true, isdrop = true, isplant = false)
         ThreeWayBalanced.specs[5] = 5.8
@@ -159,6 +164,7 @@ class MainActivity : ComponentActivity() {
         ThreeWayBalanced.specs[1200] = 7.5
         attenuatorMap[ThreeWayBalanced.name()] = ThreeWayBalanced
 
+        // Antronix 2-Way
         val FourWay = Attenuator(name = "4 Way / 3 Way High Leg", tags = listOf(passive, drop),
             iscoax = false, ispassive = true, isdrop = true, isplant = false)
         FourWay.specs[5] = 7.0
@@ -173,6 +179,7 @@ class MainActivity : ComponentActivity() {
         FourWay.specs[1200] = 8.9
         attenuatorMap[FourWay.name()] = FourWay
 
+        // Antronix 8-Way
         val EightWay = Attenuator(name = "8 Way", tags = listOf(passive, drop),
             iscoax = false, ispassive = true, isdrop = true, isplant = false)
         EightWay.specs[5] = 11.2
@@ -187,6 +194,7 @@ class MainActivity : ComponentActivity() {
         EightWay.specs[1200] = 12.9
         attenuatorMap[EightWay.name()] = EightWay
 
+        // CommScope P3 500
         val P3500 = Attenuator(name = "0.500 P3", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3500.specs[5] = 0.16
@@ -208,6 +216,7 @@ class MainActivity : ComponentActivity() {
         P3500.specs[1218] = 2.83
         attenuatorMap[P3500.name()] = P3500
 
+        // CommScope P3 625
         val P3625 = Attenuator(name = "0.625 P3", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3625.specs[5] = 0.13
@@ -229,6 +238,7 @@ class MainActivity : ComponentActivity() {
         P3625.specs[1218] = 2.32
         attenuatorMap[P3625.name()] = P3625
 
+        // CommScope P3 750
         val P3750 = Attenuator(name = "0.750 P3", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3750.specs[5] = 0.11
@@ -250,6 +260,7 @@ class MainActivity : ComponentActivity() {
         P3750.specs[1218] = 1.95
         attenuatorMap[P3750.name()] = P3750
 
+        // CommScope P3 875
         val P3875 = Attenuator(name = "0.875 P3", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         P3875.specs[5] = 0.09
@@ -271,6 +282,7 @@ class MainActivity : ComponentActivity() {
         P3875.specs[1218] = 1.7
         attenuatorMap[P3875.name()] = P3875
 
+        // CommScope 540QR
         val QR540 = Attenuator(name = "0.540 QR", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR540.specs[5] = 0.14
@@ -292,6 +304,7 @@ class MainActivity : ComponentActivity() {
         QR540.specs[1218] = 2.41
         attenuatorMap[QR540.name()] = QR540
 
+        // CommScope 715QR (my favorite to splice)
         val QR715 = Attenuator(name = "0.715 QR", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR715.specs[5] = 0.11
@@ -313,6 +326,7 @@ class MainActivity : ComponentActivity() {
         QR715.specs[1218] = 1.96
         attenuatorMap[QR715.name()] = QR715
 
+        // CommScope 860QR
         val QR860 = Attenuator(name = "0.860 QR", tags = listOf(coax, plant),
             iscoax = true, ispassive = false, isdrop = false, isplant = true)
         QR860.specs[5] = 0.09
@@ -334,6 +348,52 @@ class MainActivity : ComponentActivity() {
         QR860.specs[1002] = 1.45
         QR860.specs[1218] = 1.61
         attenuatorMap[QR860.name()] = QR860
+
+        // CommScope FFT23Q 2 port tap
+        val CS23Q2 = Attenuator(name = "FFT23Q 2 port tap", tags = listOf(passive, plant),
+            iscoax = false, ispassive = true, isdrop = false, isplant = true)
+        CS23Q2.specs[5] = 0.4
+        CS23Q2.specs[10] = 0.3
+        CS23Q2.specs[50] = 0.3
+        CS23Q2.specs[100] = 0.5
+        CS23Q2.specs[450] = 0.7
+        CS23Q2.specs[550] = 0.8
+        CS23Q2.specs[750] = 0.9
+        CS23Q2.specs[870] = 1.0
+        CS23Q2.specs[1000] = 1.2
+        CS23Q2.specs[1218] = 1.7
+        attenuatorMap[CS23Q2.name()] = CS23Q2
+
+        // CommScope FFT23Q 4 port tap
+        val CS23Q4 = Attenuator(name = "FFT23Q 4 port tap", tags = listOf(passive, plant),
+            iscoax = false, ispassive = true, isdrop = false, isplant = true)
+        CS23Q4.specs[5] = 0.5
+        CS23Q4.specs[10] = 0.4
+        CS23Q4.specs[50] = 0.4
+        CS23Q4.specs[100] = 0.6
+        CS23Q4.specs[450] = 0.8
+        CS23Q4.specs[550] = 0.9
+        CS23Q4.specs[750] = 1.0
+        CS23Q4.specs[870] = 1.1
+        CS23Q4.specs[1000] = 1.2
+        CS23Q4.specs[1218] = 1.6
+        attenuatorMap[CS23Q4.name()] = CS23Q4
+
+        // CommScope FFT23Q 2 port tap
+        val CS23Q8 = Attenuator(name = "FFT23Q 8 port tap", tags = listOf(passive, plant),
+            iscoax = false, ispassive = true, isdrop = false, isplant = true)
+        CS23Q8.specs[5] = 0.9
+        CS23Q8.specs[10] = 0.8
+        CS23Q8.specs[50] = 0.7
+        CS23Q8.specs[100] = 0.9
+        CS23Q8.specs[450] = 1.2
+        CS23Q8.specs[550] = 1.3
+        CS23Q8.specs[750] = 1.4
+        CS23Q8.specs[870] = 1.5
+        CS23Q8.specs[1000] = 1.7
+        CS23Q8.specs[1218] = 2.1
+        attenuatorMap[CS23Q8.name()] = CS23Q8
+
 
     }
 }

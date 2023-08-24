@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.aaron.cableninja.ui.SharedViewModel
+import com.aaron.cableninja.ui.viewmodels.SharedViewModel
 import com.aaron.cableninja.ui.addscreen.AddScreen
 import com.aaron.cableninja.ui.mainscreen.MainScreen
 

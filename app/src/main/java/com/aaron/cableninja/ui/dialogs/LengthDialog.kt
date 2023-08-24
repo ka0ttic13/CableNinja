@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui
+package com.aaron.cableninja.ui.dialogs
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +14,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +80,7 @@ fun LengthDialog(
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        TextField(
+                        OutlinedTextField(
                             value = length,
                             onValueChange = {
                                 if (it.isDigitsOnly())
@@ -104,9 +104,9 @@ fun LengthDialog(
                     // Button Row
                     Row(
                         modifier = Modifier
-                            .padding(10.dp)
+                            .padding(start = 30.dp, end = 30.dp, bottom = 10.dp)
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(50.dp),
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Cancel Button

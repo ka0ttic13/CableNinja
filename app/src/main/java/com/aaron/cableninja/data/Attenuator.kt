@@ -1,7 +1,5 @@
 package com.aaron.cableninja.data
 
-import com.aaron.cableninja.domain.AttenuatorTag
-
 data class AttenuatorData(
     val name: String,
     val tags: List<AttenuatorTag>,
@@ -56,13 +54,13 @@ class Attenuator(name: String,
     // get tag list
     fun tags(): List<AttenuatorTag> { return _data.tags }
     // get tag list as strings
-//    fun tagsToStrings(): List<String> {
-//        val strings = mutableListOf<String>()
-//        _data.tags.forEach {
-//            strings.add(it.string)
-//        }
-//        return strings
-//    }
+    fun tagsToStrings(): List<String> {
+        val strings = mutableListOf<String>()
+        _data.tags.forEach {
+            strings.add(it.string)
+        }
+        return strings
+    }
 
     // get loss at frequency
     fun getLoss(freq: Int): Double? {

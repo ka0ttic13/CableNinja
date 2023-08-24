@@ -1,6 +1,4 @@
-package com.aaron.cableninja.domain
-
-import com.aaron.cableninja.data.Attenuator
+package com.aaron.cableninja.data
 
 /********************************************
  * class AttenuatorCard
@@ -28,6 +26,7 @@ class AttenuatorCard(atten: Attenuator) {
 
         fun name(): String { return _name }
         fun tags(): List<AttenuatorTag> { return _tags }
+        fun tagsToStrings(): List<String> { return _atten.tagsToStrings() }
         fun length(): Int { return _length }
         fun setLength(length: Int) { _length = length }
         fun isCoax(): Boolean { return _iscoax }
