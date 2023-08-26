@@ -141,6 +141,162 @@ fun loadRFdata() {
     EightWay.specs[1200] = 12.9
     MainActivity.attenuatorMap[EightWay.name()] = EightWay
 
+    // Antronix DC-6 tap leg
+    val DC6H = Attenuator(name = "DC-6 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC6H.specs[5] = 6.0
+    DC6H.specs[100] = 6.1
+    DC6H.specs[450] = 6.3
+    DC6H.specs[600] = 6.4
+    DC6H.specs[750] = 6.5
+    DC6H.specs[1000] = 7.0
+    DC6H.specs[1218] = 7.5
+    MainActivity.attenuatorMap[DC6H.name()] = DC6H
+
+    // Antronix DC-6 thru leg
+    val DC6L = Attenuator(name = "DC-6 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC6L.specs[5] = 2.6
+    DC6L.specs[100] = 2.4
+    DC6L.specs[450] = 2.4
+    DC6L.specs[600] = 3.0
+    DC6L.specs[750] = 3.2
+    DC6L.specs[1000] = 3.4
+    DC6L.specs[1218] = 3.5
+    MainActivity.attenuatorMap[DC6L.name()] = DC6L
+
+    // Antronix DC-9 tap leg
+    val DC9H = Attenuator(name = "DC-9 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC9H.specs[5] = 9.0
+    DC9H.specs[100] = 9.1
+    DC9H.specs[450] = 9.3
+    DC9H.specs[600] = 9.4
+    DC9H.specs[750] = 9.5
+    DC9H.specs[1000] = 10.0
+    DC9H.specs[1218] = 10.5
+    MainActivity.attenuatorMap[DC9H.name()] = DC9H
+
+    // Antronix DC-9 thru leg
+    val DC9L = Attenuator(name = "DC-9 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC9L.specs[5] = 1.4
+    DC9L.specs[100] = 1.4
+    DC9L.specs[450] = 1.5
+    DC9L.specs[600] = 1.8
+    DC9L.specs[750] = 1.9
+    DC9L.specs[1000] = 2.1
+    DC9L.specs[1218] = 2.5
+    MainActivity.attenuatorMap[DC9L.name()] = DC9L
+
+    // Antronix DC-12 tap leg
+    val DC12H = Attenuator(name = "DC-12 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC12H.specs[5] = 12.0
+    DC12H.specs[100] = 12.1
+    DC12H.specs[450] = 12.3
+    DC12H.specs[600] = 12.4
+    DC12H.specs[750] = 12.5
+    DC12H.specs[1000] = 13.0
+    DC12H.specs[1218] = 13.5
+    MainActivity.attenuatorMap[DC12H.name()] = DC12H
+
+    // Antronix DC-12 thru leg
+    val DC12L = Attenuator(name = "DC-12 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC12L.specs[5] = 1.0
+    DC12L.specs[100] = 1.0
+    DC12L.specs[450] = 1.0
+    DC12L.specs[600] = 1.2
+    DC12L.specs[750] = 1.5
+    DC12L.specs[1000] = 1.6
+    DC12L.specs[1218] = 1.8
+    MainActivity.attenuatorMap[DC12L.name()] = DC12L
+
+    // Antronix DC-16 tap leg
+    val DC16H = Attenuator(name = "DC-16 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC16H.specs[5] = 16.0
+    DC16H.specs[100] = 16.1
+    DC16H.specs[450] = 16.3
+    DC16H.specs[600] = 16.4
+    DC16H.specs[750] = 16.5
+    DC16H.specs[1000] = 17.0
+    DC16H.specs[1218] = 17.5
+    MainActivity.attenuatorMap[DC16H.name()] = DC16H
+
+    // Antronix DC-16 thru leg
+    val DC16L = Attenuator(name = "DC-16 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC16L.specs[5] = 0.8
+    DC16L.specs[100] = 0.8
+    DC16L.specs[450] = 0.6
+    DC16L.specs[600] = 0.8
+    DC16L.specs[750] = 1.1
+    DC16L.specs[1000] = 1.4
+    DC16L.specs[1218] = 1.5
+    MainActivity.attenuatorMap[DC16L.name()] = DC16L
+
+    // Antronix DC-20 tap leg
+    val DC20H = Attenuator(name = "DC-20 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC20H.specs[5] = 20.0
+    DC20H.specs[100] = 20.1
+    DC20H.specs[450] = 20.3
+    DC20H.specs[600] = 20.4
+    DC20H.specs[750] = 20.5
+    DC20H.specs[1000] = 21.0
+    DC20H.specs[1218] = 21.5
+    MainActivity.attenuatorMap[DC20H.name()] = DC20H
+
+    // Antronix DC-20 thru leg
+    val DC20L = Attenuator(name = "DC-20 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC20L.specs[5] = 0.8
+    DC20L.specs[100] = 0.8
+    DC20L.specs[450] = 0.6
+    DC20L.specs[600] = 1.0
+    DC20L.specs[750] = 1.2
+    DC20L.specs[1000] = 1.4
+    DC20L.specs[1218] = 1.6
+    MainActivity.attenuatorMap[DC20L.name()] = DC20L
+
+    // Antronix DC-24 tap leg
+    val DC24H = Attenuator(name = "DC-24 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC24H.specs[5] = 24.0
+    DC24H.specs[100] = 24.1
+    DC24H.specs[450] = 24.3
+    DC24H.specs[600] = 24.4
+    DC24H.specs[750] = 24.5
+    DC24H.specs[1000] = 25.0
+    DC24H.specs[1218] = 25.5
+    MainActivity.attenuatorMap[DC24H.name()] = DC24H
+
+    // Antronix DC-24 thru leg
+    val DC24L = Attenuator(name = "DC-24 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC24L.specs = DC20L.specs // DC24 is same as DC20
+    MainActivity.attenuatorMap[DC24L.name()] = DC24L
+
+    // Antronix DC-27 tap leg
+    val DC27H = Attenuator(name = "DC-27 Tap Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC27H.specs[5] = 27.0
+    DC27H.specs[100] = 27.1
+    DC27H.specs[450] = 27.3
+    DC27H.specs[600] = 27.4
+    DC27H.specs[750] = 27.5
+    DC27H.specs[1000] = 28.0
+    DC27H.specs[1218] = 28.5
+    MainActivity.attenuatorMap[DC27H.name()] = DC27H
+
+    // Antronix DC-27 thru leg
+    val DC27L = Attenuator(name = "DC-27 Thru Leg", tags = listOf(drop, passive),
+        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    DC27L.specs = DC20L.specs // DC27 is same as DC20
+    MainActivity.attenuatorMap[DC27L.name()] = DC27L
+
     // CommScope P3 500
     val P3500 = Attenuator(name = "0.500 P3", tags = listOf(coax, plant),
         iscoax = true, ispassive = false, isdrop = false, isplant = true)

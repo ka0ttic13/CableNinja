@@ -36,7 +36,7 @@ class Attenuator(name: String,
     // store manufacturer specs as k/v pairs
     //      key = frequency
     //      value = attenuation in dB per 100'
-    val specs = mutableMapOf<Int, Double>()
+    var specs = mutableMapOf<Int, Double>()
 
     // Is this attenuator coax?
     fun isCoax() : Boolean { return _iscoax }
