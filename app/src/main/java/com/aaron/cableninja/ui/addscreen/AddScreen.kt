@@ -12,20 +12,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,32 +60,40 @@ import com.aaron.cableninja.ui.theme.plantColor
  * AddScreen()
  *      Show attenuators that can be added.
  **************************************************************/
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
     var showLengthDialog by remember { mutableStateOf(false) }
+    var search by remember { mutableStateOf("") }
+    var executeSearch by remember { mutableStateOf(false) }
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
 
     // The list we will show based on filters (or all if no filters)
-    val showList = mutableListOf<Attenuator>()
+    var showList = mutableListOf<Attenuator>()
+
+    val kbController = LocalSoftwareKeyboardController.current
 
     Column {
         // Add Header with Close Icon "X" on right side
         //      cancels Add operation
         Row(
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
         ) {
             // Add Label
-            Text(text = "Add attenuator")
+            Text(
+                text = "Add attenuator",
+                fontWeight = FontWeight.Bold
+            )
 
             // Close Icon - exits back to MainScreen
             Icon(
@@ -93,13 +108,50 @@ fun AddScreen(
 
         Divider(modifier = Modifier.padding(bottom = 6.dp))
 
+        // search box
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            OutlinedTextField(
+                value = search,
+                onValueChange = {
+                    search = it.trim()
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .weight(.6f)
+                    .padding(start = 10.dp, end = 20.dp)
+            )
+            Button(
+                onClick = {
+                    if (!search.isNullOrEmpty()) {
+                        Log.d("DEBUG", "AddScreen(): executing search for $search")
+
+                        // hide keyboard
+                        kbController?.hide()
+                        executeSearch = true
+                    }
+                },
+                shape = MaterialTheme.shapes.large,
+                modifier = Modifier
+                    .weight(.4f)
+                    .padding(end = 20.dp)
+            ) {
+                Text(text = "Search")
+            }
+        }
+
         // Filter by tags
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp)
+                .padding(top = 10.dp, bottom = 10.dp)
         ) {
             Text(
                 text = "Filter: ",
@@ -108,7 +160,6 @@ fun AddScreen(
 
             // show all possible tags
             attenuatorTags.forEach {
-                // if no filters
                 if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
                     Log.d("DEBUG", "AddScreen() no filters selected")
 
@@ -154,20 +205,35 @@ fun AddScreen(
             }
         }
 
-        // iterate over all possible attenuators and add to showList the
-        // ones we want to display
-        attenuatorMap.values.forEach { type ->
-            if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
-                showList.add(type)
+        val noTags = (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
+        // if no tags and no search query, just copy the whole list
+        if (noTags && !executeSearch)
+            showList = attenuatorMap.values.toMutableList()
+        else {
+            // iterate over all possible attenuators and add to showList
+            // the ones that match search filters
+            for (att in attenuatorMap.values) {
+                // execute search query
+                if (noTags && executeSearch) {
+                    if (att.name().contains(search, ignoreCase = true)) {
+                        showList.add(att)
+                        // if no tags, no point in going any further
+                        continue
+                    }
+                }
 
-            if (coaxFilter && type.isCoax())
-                showList.add(type)
-            if (passiveFilter && type.isPassive())
-                showList.add(type)
-            if (dropFilter && type.isDrop())
-                showList.add(type)
-            if (plantFilter && type.isPlant())
-                showList.add(type)
+                // check if attenuator meets tag filter
+                if ((coaxFilter && att.isCoax()) ||
+                    (passiveFilter && att.isPassive()) ||
+                    (dropFilter && att.isDrop()) ||
+                    (plantFilter && att.isPlant()))
+                {
+                    if (!executeSearch ||
+                        (executeSearch && att.name().contains(search, ignoreCase = true)))
+
+                        showList.add(att)
+                }
+            }
         }
 
         // display the list

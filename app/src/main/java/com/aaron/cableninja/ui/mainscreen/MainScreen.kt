@@ -177,7 +177,7 @@ fun MainScreen(
                 // show number pad for input
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number),
-                modifier = Modifier.padding(start = 80.dp, end = 10.dp, top = 10.dp)
+                modifier = Modifier.padding(start = 80.dp, end = 10.dp)
             )
 
             // only allow input that is a positive or negative whole number
