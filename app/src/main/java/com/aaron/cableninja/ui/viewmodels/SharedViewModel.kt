@@ -1,10 +1,12 @@
 package com.aaron.cableninja.ui.viewmodels
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.aaron.cableninja.data.AttenuatorCard
+import com.aaron.cableninja.data.AttenuatorType
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
@@ -52,4 +54,9 @@ class SharedViewModel : ViewModel() {
         private set
     fun setHasListChanged() { hasListChanged = true}
 
+    // filters for AddScreen
+    private var _filterList = mutableStateListOf<AttenuatorType>()
+    var filterList: List<AttenuatorType> = _filterList
+    fun addFilter(type: AttenuatorType) { _filterList.add(type) }
+    fun clearFilters() { _filterList.clear() }
 }

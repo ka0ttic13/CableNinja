@@ -142,7 +142,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[EightWay.name()] = EightWay
 
     // Antronix DC-6 tap leg
-    val DC6H = Attenuator(name = "DC-6 Tap Leg", tags = listOf(drop, passive),
+    val DC6H = Attenuator(name = "DC-6 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC6H.specs[5] = 6.0
     DC6H.specs[100] = 6.1
@@ -154,7 +154,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC6H.name()] = DC6H
 
     // Antronix DC-6 thru leg
-    val DC6L = Attenuator(name = "DC-6 Thru Leg", tags = listOf(drop, passive),
+    val DC6L = Attenuator(name = "DC-6 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC6L.specs[5] = 2.6
     DC6L.specs[100] = 2.4
@@ -166,7 +166,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC6L.name()] = DC6L
 
     // Antronix DC-9 tap leg
-    val DC9H = Attenuator(name = "DC-9 Tap Leg", tags = listOf(drop, passive),
+    val DC9H = Attenuator(name = "DC-9 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC9H.specs[5] = 9.0
     DC9H.specs[100] = 9.1
@@ -178,7 +178,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC9H.name()] = DC9H
 
     // Antronix DC-9 thru leg
-    val DC9L = Attenuator(name = "DC-9 Thru Leg", tags = listOf(drop, passive),
+    val DC9L = Attenuator(name = "DC-9 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC9L.specs[5] = 1.4
     DC9L.specs[100] = 1.4
@@ -190,7 +190,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC9L.name()] = DC9L
 
     // Antronix DC-12 tap leg
-    val DC12H = Attenuator(name = "DC-12 Tap Leg", tags = listOf(drop, passive),
+    val DC12H = Attenuator(name = "DC-12 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC12H.specs[5] = 12.0
     DC12H.specs[100] = 12.1
@@ -202,7 +202,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC12H.name()] = DC12H
 
     // Antronix DC-12 thru leg
-    val DC12L = Attenuator(name = "DC-12 Thru Leg", tags = listOf(drop, passive),
+    val DC12L = Attenuator(name = "DC-12 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC12L.specs[5] = 1.0
     DC12L.specs[100] = 1.0
@@ -214,7 +214,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC12L.name()] = DC12L
 
     // Antronix DC-16 tap leg
-    val DC16H = Attenuator(name = "DC-16 Tap Leg", tags = listOf(drop, passive),
+    val DC16H = Attenuator(name = "DC-16 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC16H.specs[5] = 16.0
     DC16H.specs[100] = 16.1
@@ -226,7 +226,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC16H.name()] = DC16H
 
     // Antronix DC-16 thru leg
-    val DC16L = Attenuator(name = "DC-16 Thru Leg", tags = listOf(drop, passive),
+    val DC16L = Attenuator(name = "DC-16 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC16L.specs[5] = 0.8
     DC16L.specs[100] = 0.8
@@ -238,7 +238,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC16L.name()] = DC16L
 
     // Antronix DC-20 tap leg
-    val DC20H = Attenuator(name = "DC-20 Tap Leg", tags = listOf(drop, passive),
+    val DC20H = Attenuator(name = "DC-20 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC20H.specs[5] = 20.0
     DC20H.specs[100] = 20.1
@@ -250,7 +250,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC20H.name()] = DC20H
 
     // Antronix DC-20 thru leg
-    val DC20L = Attenuator(name = "DC-20 Thru Leg", tags = listOf(drop, passive),
+    val DC20L = Attenuator(name = "DC-20 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC20L.specs[5] = 0.8
     DC20L.specs[100] = 0.8
@@ -262,7 +262,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC20L.name()] = DC20L
 
     // Antronix DC-24 tap leg
-    val DC24H = Attenuator(name = "DC-24 Tap Leg", tags = listOf(drop, passive),
+    val DC24H = Attenuator(name = "DC-24 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC24H.specs[5] = 24.0
     DC24H.specs[100] = 24.1
@@ -274,13 +274,13 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC24H.name()] = DC24H
 
     // Antronix DC-24 thru leg
-    val DC24L = Attenuator(name = "DC-24 Thru Leg", tags = listOf(drop, passive),
+    val DC24L = Attenuator(name = "DC-24 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC24L.specs = DC20L.specs // DC24 is same as DC20
     MainActivity.attenuatorMap[DC24L.name()] = DC24L
 
     // Antronix DC-27 tap leg
-    val DC27H = Attenuator(name = "DC-27 Tap Leg", tags = listOf(drop, passive),
+    val DC27H = Attenuator(name = "DC-27 Tap Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC27H.specs[5] = 27.0
     DC27H.specs[100] = 27.1
@@ -292,7 +292,7 @@ fun loadRFdata() {
     MainActivity.attenuatorMap[DC27H.name()] = DC27H
 
     // Antronix DC-27 thru leg
-    val DC27L = Attenuator(name = "DC-27 Thru Leg", tags = listOf(drop, passive),
+    val DC27L = Attenuator(name = "DC-27 Thru Leg", tags = listOf(passive, drop),
         iscoax = false, ispassive = true, isdrop = true, isplant = false)
     DC27L.specs = DC20L.specs // DC27 is same as DC20
     MainActivity.attenuatorMap[DC27L.name()] = DC27L

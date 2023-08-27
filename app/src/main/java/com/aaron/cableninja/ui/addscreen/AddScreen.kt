@@ -65,17 +65,22 @@ fun AddScreen(
     sharedViewModel: SharedViewModel,
 ) {
     var showLengthDialog by remember { mutableStateOf(false) }
+
     var search by remember { mutableStateOf("") }
-    var executeSearch by remember { mutableStateOf(false) }
+    var doSearch by remember { mutableStateOf(false) }
+    var dontSearch by remember { mutableStateOf(false) }
+    var doFilter by remember { mutableStateOf(false) }
+    var dontFilter by remember { mutableStateOf(false) }
+
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
 
-    // The list we will show based on filters (or all if no filters)
-    var showList = mutableListOf<Attenuator>()
-
     val kbController = LocalSoftwareKeyboardController.current
+
+//    var showList: List<Attenuator>? = null
+    var showList = mutableListOf<Attenuator>()
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -141,7 +146,7 @@ fun AddScreen(
 
                         // hide keyboard
                         kbController?.hide()
-                        executeSearch = true
+                        doSearch = true
                     }
                 },
                 shape = MaterialTheme.shapes.large,
@@ -161,88 +166,157 @@ fun AddScreen(
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 10.dp)
         ) {
+            val tagBackgroundColor = Color.LightGray
+            val tagFontStyle = MaterialTheme.typography.titleMedium
+
             Text(
                 text = "Filter: ",
                 modifier = Modifier.padding(start = 10.dp)
             )
 
             // show all possible tags
-            attenuatorTags.forEach {
-                if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
-                    Log.d("DEBUG", "AddScreen() no filters selected")
+            if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
+                attenuatorTags.keys.forEach {
+                    AddTag(it, tagBackgroundColor, tagFontStyle,
+                        onClick = { type ->
 
+                            sharedViewModel.addFilter(type)
+
+                            when (type) {
+                                AttenuatorType.COAX -> coaxFilter = true
+                                AttenuatorType.PASSIVE -> passiveFilter = true
+                                AttenuatorType.DROP -> dropFilter = true
+                                AttenuatorType.PLANT -> plantFilter = true
+                            }
+                        }
+                    )
+                }
+            }
+            // show filters
+            else {
+                if (coaxFilter)
+                    AddFilter(AttenuatorType.COAX)
+
+                if (!coaxFilter) {
                     AddTag(
-                        tag = AttenuatorTag(it.key),
-                        color = Color.LightGray,
-                        style = MaterialTheme.typography.titleMedium,
-                        onClick = { t ->
-                            if (t.tag == AttenuatorType.COAX)
-                                coaxFilter = true
-                            if (t.tag == AttenuatorType.PASSIVE)
-                                passiveFilter = true
-                            if (t.tag == AttenuatorType.DROP)
-                                dropFilter = true
-                            if (t.tag == AttenuatorType.PLANT)
-                                plantFilter = true
-
-                            Log.d("DEBUG", "AddScreen() filter selected: $t")
+                        type = AttenuatorType.COAX,
+                        bgColor = tagBackgroundColor,
+                        style = tagFontStyle,
+                        onClick = {
+                            sharedViewModel.addFilter(it)
+                            coaxFilter = true
                         }
                     )
                 }
 
-                // coax filter
-                if (coaxFilter && it.key == AttenuatorType.COAX) {
-                    Log.d("DEBUG", "AddScreen() coaxFilter = true")
-                    AddFilter(AttenuatorType.COAX, onClearFilter = { coaxFilter = false })
+                if (passiveFilter)
+                    AddFilter(AttenuatorType.PASSIVE)
+
+                if (!passiveFilter) {
+                    AddTag(
+                        type = AttenuatorType.PASSIVE,
+                        bgColor = tagBackgroundColor,
+                        style = tagFontStyle,
+                        onClick = {
+                            sharedViewModel.addFilter(it)
+                            passiveFilter = true
+                        }
+                    )
                 }
-                // passive filter
-                if (passiveFilter && it.key == AttenuatorType.PASSIVE) {
-                    Log.d("DEBUG", "AddScreen() passiveFilter = true")
-                    AddFilter(AttenuatorType.PASSIVE, onClearFilter = { passiveFilter = false })
+
+                if (dropFilter)
+                    AddFilter(AttenuatorType.DROP)
+
+                if (!dropFilter) {
+                    AddTag(
+                        type = AttenuatorType.DROP,
+                        bgColor = tagBackgroundColor,
+                        style = tagFontStyle,
+                        onClick = {
+                            sharedViewModel.addFilter(it)
+                            dropFilter = true
+                        }
+                    )
                 }
-                // drop filter
-                if (dropFilter && it.key == AttenuatorType.DROP) {
-                    Log.d("DEBUG", "AddScreen() dropFilter = true")
-                    AddFilter(AttenuatorType.DROP, onClearFilter = { dropFilter = false })
+
+                if (plantFilter)
+                    AddFilter(AttenuatorType.PLANT)
+
+                if (!plantFilter) {
+                    AddTag(
+                        type = AttenuatorType.PLANT,
+                        bgColor = tagBackgroundColor,
+                        style = tagFontStyle,
+                        onClick = {
+                            sharedViewModel.addFilter(it)
+                            plantFilter = true
+                        }
+                    )
                 }
-                // plant filter
-                if (plantFilter && it.key == AttenuatorType.PLANT) {
-                    Log.d("DEBUG", "AddScreen() plantFilter = true")
-                    AddFilter(AttenuatorType.PLANT, onClearFilter = { plantFilter = false })
-                }
+            }
+
+            // if any filters, show clear icon
+            if (coaxFilter || passiveFilter || dropFilter || plantFilter) {
+                Icon(
+                    painterResource(id = R.drawable.baseline_close_24),
+                    contentDescription = "Clear filter",
+                    modifier = Modifier.clickable {
+                        coaxFilter = false
+                        passiveFilter = false
+                        dropFilter = false
+                        plantFilter = false
+                        sharedViewModel.clearFilters()
+                    }
+                )
             }
         }
 
-        val noTags = (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
+        dontFilter = (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
+        doFilter = !dontFilter
+        dontSearch = !doSearch
+
         // if no tags and no search query, just copy the whole list
-        if (noTags && !executeSearch)
-            showList = attenuatorMap.values.toMutableList()
+        if (dontFilter && dontSearch)
+            showList = attenuatorMap.values.toList().toMutableList()
         else {
             // iterate over all possible attenuators and add to showList
             // the ones that match search filters
             for (att in attenuatorMap.values) {
-                // execute search query
-                if (noTags && executeSearch) {
+                // search and no filters
+                if (doSearch && dontFilter) {
                     if (att.name().contains(search, ignoreCase = true)) {
-                        showList.add(att)
-                        // if no tags, no point in going any further
-                        continue
+                        if (!showList.contains(att))
+                            showList.add(att)
                     }
                 }
 
-                // check if attenuator meets tag filter
-                if ((coaxFilter && att.isCoax()) ||
-                    (passiveFilter && att.isPassive()) ||
-                    (dropFilter && att.isDrop()) ||
-                    (plantFilter && att.isPlant()))
-                {
-                    if (!executeSearch ||
-                        (executeSearch && att.name().contains(search, ignoreCase = true)))
+                // search and filters
+                else if (doSearch && doFilter) {
+                    sharedViewModel.filterList.forEach() {
+                        if (att.tags().contains(AttenuatorTag(it)) &&
+                            att.name().contains(search, ignoreCase = true)) {
+                            if (!showList.contains(att))
+                                showList.add(att)
+                        }
+                    }
+                }
 
+                // tag filters only
+                else {
+                    var matches = true
+
+                    sharedViewModel.filterList.forEach() {
+                        if (!att.tagsToStrings().contains(AttenuatorTag(it).toString()))
+                            matches = false
+                    }
+
+                    if (matches && !showList.contains(att))
                         showList.add(att)
+
                 }
             }
         }
+
 
         // display the list
         LazyColumn(
@@ -410,44 +484,40 @@ private fun AddAttenuatorTag(
     }
 }
 
+// AddFilter runs AddTag with a different bg color
 @Composable
-private fun AddFilter(type: AttenuatorType, onClearFilter: () -> Unit) {
+private fun AddFilter(type: AttenuatorType) {
     val color = attenuatorTags[type]
 
     if (color != null) {
         AddTag(
-            tag = AttenuatorTag(type),
-            color = color,
+            type = type,
+            bgColor = color,
             style = MaterialTheme.typography.bodyLarge,
             onClick = {}
-        )
-        Icon(
-            painterResource(id = R.drawable.baseline_close_24),
-            contentDescription = "Clear filter",
-            modifier = Modifier.clickable { onClearFilter() }
         )
     }
 }
 
 @Composable
 private fun AddTag(
-    tag: AttenuatorTag,
-    color: Color,
+    type: AttenuatorType,
+    bgColor: Color,
     style: TextStyle,
-    onClick: (AttenuatorTag) -> Unit
+    onClick: (AttenuatorType) -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(8.dp),
     ) {
         Text(
-            text = tag.toString(),
+            text = AttenuatorTag(type).toString(),
             color = Color.White,
             style = style,
             modifier = Modifier
-                .background(color)
+                .background(bgColor)
                 .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
                 .clickable {
-                    onClick(tag)
+                    onClick(type)
                 }
         )
     }
