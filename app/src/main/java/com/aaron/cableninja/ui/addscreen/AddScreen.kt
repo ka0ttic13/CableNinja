@@ -166,20 +166,17 @@ fun AddScreen(
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 10.dp)
         ) {
-            val tagBackgroundColor = Color.LightGray
-            val tagFontStyle = MaterialTheme.typography.titleMedium
-
             Text(
                 text = "Filter: ",
                 modifier = Modifier.padding(start = 10.dp)
             )
 
             // show all possible tags
-            if (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter) {
+            if (sharedViewModel.filterList.isEmpty()) {
                 attenuatorTags.keys.forEach {
-                    AddTag(it, tagBackgroundColor, tagFontStyle,
+                    AddTag(filterEnabled = false,
+                        type = it,
                         onClick = { type ->
-
                             sharedViewModel.addFilter(type)
 
                             when (type) {
@@ -194,84 +191,81 @@ fun AddScreen(
             }
             // show filters
             else {
-                if (coaxFilter)
-                    AddFilter(AttenuatorType.COAX)
-
-                if (!coaxFilter) {
-                    AddTag(
-                        type = AttenuatorType.COAX,
-                        bgColor = tagBackgroundColor,
-                        style = tagFontStyle,
-                        onClick = {
+                // coax tag
+                AddTag(
+                    filterEnabled = coaxFilter,
+                    type = AttenuatorType.COAX,
+                    onClick = {
+                        if (coaxFilter)
+                            sharedViewModel.removeFilter(it)
+                        else
                             sharedViewModel.addFilter(it)
-                            coaxFilter = true
-                        }
-                    )
-                }
 
-                if (passiveFilter)
-                    AddFilter(AttenuatorType.PASSIVE)
-
-                if (!passiveFilter) {
-                    AddTag(
-                        type = AttenuatorType.PASSIVE,
-                        bgColor = tagBackgroundColor,
-                        style = tagFontStyle,
-                        onClick = {
-                            sharedViewModel.addFilter(it)
-                            passiveFilter = true
-                        }
-                    )
-                }
-
-                if (dropFilter)
-                    AddFilter(AttenuatorType.DROP)
-
-                if (!dropFilter) {
-                    AddTag(
-                        type = AttenuatorType.DROP,
-                        bgColor = tagBackgroundColor,
-                        style = tagFontStyle,
-                        onClick = {
-                            sharedViewModel.addFilter(it)
-                            dropFilter = true
-                        }
-                    )
-                }
-
-                if (plantFilter)
-                    AddFilter(AttenuatorType.PLANT)
-
-                if (!plantFilter) {
-                    AddTag(
-                        type = AttenuatorType.PLANT,
-                        bgColor = tagBackgroundColor,
-                        style = tagFontStyle,
-                        onClick = {
-                            sharedViewModel.addFilter(it)
-                            plantFilter = true
-                        }
-                    )
-                }
-            }
-
-            // if any filters, show clear icon
-            if (coaxFilter || passiveFilter || dropFilter || plantFilter) {
-                Icon(
-                    painterResource(id = R.drawable.baseline_close_24),
-                    contentDescription = "Clear filter",
-                    modifier = Modifier.clickable {
-                        coaxFilter = false
-                        passiveFilter = false
-                        dropFilter = false
-                        plantFilter = false
-                        sharedViewModel.clearFilters()
+                        coaxFilter = !coaxFilter
                     }
                 )
+
+                // passive tag
+                AddTag(
+                    filterEnabled = passiveFilter,
+                    type = AttenuatorType.PASSIVE,
+                    onClick = {
+                        if (passiveFilter)
+                            sharedViewModel.removeFilter(it)
+                        else
+                            sharedViewModel.addFilter(it)
+
+                        passiveFilter = !passiveFilter
+                    }
+                )
+
+                // drop tag
+                AddTag(
+                    filterEnabled = dropFilter,
+                    type = AttenuatorType.DROP,
+                    onClick = {
+                        if (dropFilter)
+                            sharedViewModel.removeFilter(it)
+                        else
+                            sharedViewModel.addFilter(it)
+
+                        dropFilter = !dropFilter
+                    }
+                )
+
+                // plant tag
+                AddTag(
+                    filterEnabled = plantFilter,
+                    type = AttenuatorType.PLANT,
+                    onClick = {
+                        if (plantFilter)
+                            sharedViewModel.removeFilter(it)
+                        else
+                            sharedViewModel.addFilter(it)
+
+                        plantFilter = !plantFilter
+                    }
+                )
+
+
+                // if any filters, show clear icon
+                if (sharedViewModel.filterList.isNotEmpty()) {
+                    Icon(
+                        painterResource(id = R.drawable.baseline_close_24),
+                        contentDescription = "Clear filter",
+                        modifier = Modifier.clickable {
+                            coaxFilter = false
+                            passiveFilter = false
+                            dropFilter = false
+                            plantFilter = false
+                            sharedViewModel.clearFilters()
+                        }
+                    )
+                }
             }
         }
 
-        dontFilter = (!coaxFilter && !passiveFilter && !dropFilter && !plantFilter)
+        dontFilter = sharedViewModel.filterList.isEmpty()
         doFilter = !dontFilter
         dontSearch = !doSearch
 
@@ -292,7 +286,7 @@ fun AddScreen(
 
                 // search and filters
                 else if (doSearch && doFilter) {
-                    sharedViewModel.filterList.forEach() {
+                    sharedViewModel.filterList.forEach {
                         if (att.tags().contains(AttenuatorTag(it)) &&
                             att.name().contains(search, ignoreCase = true)) {
                             if (!showList.contains(att))
@@ -305,7 +299,7 @@ fun AddScreen(
                 else {
                     var matches = true
 
-                    sharedViewModel.filterList.forEach() {
+                    sharedViewModel.filterList.forEach {
                         if (!att.tagsToStrings().contains(AttenuatorTag(it).toString()))
                             matches = false
                     }
@@ -369,7 +363,6 @@ fun AddScreen(
 
     // Show footage dialog when adding coax attenuators
     if (showLengthDialog) {
-        Log.d("DEBUG", "Entering showFootageDialog")
         LengthDialog(
             label = "Enter length",
             defaultValue = "",
@@ -484,37 +477,27 @@ private fun AddAttenuatorTag(
     }
 }
 
-// AddFilter runs AddTag with a different bg color
-@Composable
-private fun AddFilter(type: AttenuatorType) {
-    val color = attenuatorTags[type]
-
-    if (color != null) {
-        AddTag(
-            type = type,
-            bgColor = color,
-            style = MaterialTheme.typography.bodyLarge,
-            onClick = {}
-        )
-    }
-}
-
 @Composable
 private fun AddTag(
+    filterEnabled: Boolean,
     type: AttenuatorType,
-    bgColor: Color,
-    style: TextStyle,
     onClick: (AttenuatorType) -> Unit
 ) {
+    var tagBackgroundColor = Color.LightGray
+    val tagFontStyle = MaterialTheme.typography.titleMedium
+
+    if (filterEnabled)
+        tagBackgroundColor = attenuatorTags[type]!!
+
     Surface(
         shape = RoundedCornerShape(8.dp),
     ) {
         Text(
             text = AttenuatorTag(type).toString(),
             color = Color.White,
-            style = style,
+            style = tagFontStyle,
             modifier = Modifier
-                .background(bgColor)
+                .background(tagBackgroundColor)
                 .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
                 .clickable {
                     onClick(type)

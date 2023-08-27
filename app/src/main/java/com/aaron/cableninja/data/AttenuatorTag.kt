@@ -16,5 +16,6 @@ class AttenuatorTag(val tag: AttenuatorType, var string: String) {
             AttenuatorType.PLANT    -> "plant"
         }
     }
+
     override fun toString(): String { return string }
 }

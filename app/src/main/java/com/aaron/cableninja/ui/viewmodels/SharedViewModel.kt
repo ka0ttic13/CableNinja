@@ -58,5 +58,6 @@ class SharedViewModel : ViewModel() {
     private var _filterList = mutableStateListOf<AttenuatorType>()
     var filterList: List<AttenuatorType> = _filterList
     fun addFilter(type: AttenuatorType) { _filterList.add(type) }
+    fun removeFilter(type: AttenuatorType) { _filterList.remove(type) }
     fun clearFilters() { _filterList.clear() }
 }
