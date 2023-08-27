@@ -297,6 +297,30 @@ fun loadRFdata() {
     DC27L.specs = DC20L.specs // DC27 is same as DC20
     MainActivity.attenuatorMap[DC27L.name()] = DC27L
 
+    // CommScope F5077TS "Flex 500"
+    val Flex500 = Attenuator(name = "Flex 500", tags = listOf(coax, drop, plant),
+        iscoax = true, ispassive = false, isdrop = true, isplant = true)
+    Flex500.specs[5] = 0.21
+    Flex500.specs[55] = 0.6
+    Flex500.specs[83] = 0.73
+    Flex500.specs[85] = 0.74
+    Flex500.specs[187] = 1.09
+    Flex500.specs[204] = 1.14
+    Flex500.specs[211] = 1.16
+    Flex500.specs[250] = 1.27
+    Flex500.specs[300] = 1.39
+    Flex500.specs[350] = 1.5
+    Flex500.specs[400] = 1.61
+    Flex500.specs[450] = 1.71
+    Flex500.specs[500] = 1.8
+    Flex500.specs[550] = 1.89
+    Flex500.specs[600] = 1.98
+    Flex500.specs[750] = 2.23
+    Flex500.specs[865] = 2.4
+    Flex500.specs[1000] = 2.59
+    Flex500.specs[1218] = 2.87
+    MainActivity.attenuatorMap[Flex500.name()] = Flex500
+
     // CommScope P3 500
     val P3500 = Attenuator(name = "0.500 P3", tags = listOf(coax, plant),
         iscoax = true, ispassive = false, isdrop = false, isplant = true)
@@ -451,6 +475,78 @@ fun loadRFdata() {
     QR860.specs[1002] = 1.45
     QR860.specs[1218] = 1.61
     MainActivity.attenuatorMap[QR860.name()] = QR860
+
+    // Trilogy 500MC2
+    // 1.2GHz not provided by specs, so used the average of 0.24 for last (2) 100MHz increments
+    val TC500MC2 = Attenuator(name = "0.500 MC2", tags = listOf(coax, plant),
+        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    TC500MC2.specs[5] = 0.14
+    TC500MC2.specs[55] = 0.48
+    TC500MC2.specs[350] = 1.23
+    TC500MC2.specs[400] = 1.32
+    TC500MC2.specs[450] = 1.4
+    TC500MC2.specs[550] = 1.55
+    TC500MC2.specs[600] = 1.63
+    TC500MC2.specs[750] = 1.83
+    TC500MC2.specs[800] = 1.91
+    TC500MC2.specs[900] = 2.03
+    TC500MC2.specs[1000] = 2.15
+    TC500MC2.specs[1218] = 2.39
+    MainActivity.attenuatorMap[TC500MC2.name()] = TC500MC2
+
+    // Trilogy 650 MC2
+    // 1.2GHz not provided by specs, so used the average of 0.11 for last (2) 100MHz increments
+    val TC650MC2 = Attenuator(name = "0.650 MC2", tags = listOf(coax, plant),
+        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    TC650MC2.specs[5] = 0.11
+    TC650MC2.specs[55] = 0.38
+    TC650MC2.specs[350] = 0.99
+    TC650MC2.specs[400] = 1.06
+    TC650MC2.specs[450] = 1.13
+    TC650MC2.specs[550] = 1.25
+    TC650MC2.specs[600] = 1.34
+    TC650MC2.specs[750] = 1.5
+    TC650MC2.specs[800] = 1.56
+    TC650MC2.specs[900] = 1.67
+    TC650MC2.specs[1000] = 1.77
+    TC650MC2.specs[1218] = 1.88
+    MainActivity.attenuatorMap[TC650MC2.name()] = TC650MC2
+
+    // Trilogy 750 MC2
+    // 1.2GHz not provided by specs, so used the average of 0.09 for last (2) 100MHz increments
+    val TC750MC2 = Attenuator(name = "0.750 MC2", tags = listOf(coax, plant),
+        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    TC750MC2.specs[5] = 0.1
+    TC750MC2.specs[55] = 0.34
+    TC750MC2.specs[350] = 0.86
+    TC750MC2.specs[400] = 0.91
+    TC750MC2.specs[450] = 0.97
+    TC750MC2.specs[550] = 1.08
+    TC750MC2.specs[600] = 1.11
+    TC750MC2.specs[750] = 1.25
+    TC750MC2.specs[800] = 1.3
+    TC750MC2.specs[900] = 1.39
+    TC750MC2.specs[1000] = 1.47
+    TC750MC2.specs[1218] = 1.56
+    MainActivity.attenuatorMap[TC750MC2.name()] = TC750MC2
+
+    // Trilogy 1.00 MC2
+    // 1.2GHz not provided by specs, so used the average of 0.07 for last (2) 100MHz increments
+    val TC1000MC2 = Attenuator(name = "1.00 MC2", tags = listOf(coax, plant),
+        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    TC1000MC2.specs[5] = 0.07
+    TC1000MC2.specs[55] = 0.24
+    TC1000MC2.specs[350] = 0.65
+    TC1000MC2.specs[400] = 0.70
+    TC1000MC2.specs[450] = 0.74
+    TC1000MC2.specs[550] = 0.82
+    TC1000MC2.specs[600] = 0.87
+    TC1000MC2.specs[750] = 0.97
+    TC1000MC2.specs[800] = 1.02
+    TC1000MC2.specs[900] = 1.09
+    TC1000MC2.specs[1000] = 1.16
+    TC1000MC2.specs[1218] = 1.23
+    MainActivity.attenuatorMap[TC1000MC2.name()] = TC1000MC2
 
     // CommScope FFT 29Q 2 port tap
     val CS29Q2 = Attenuator(name = "FFT 29Q 2 port tap", tags = listOf(passive, plant),
