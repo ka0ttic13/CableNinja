@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -79,7 +78,6 @@ fun AddScreen(
 
     val kbController = LocalSoftwareKeyboardController.current
 
-//    var showList: List<Attenuator>? = null
     var showList = mutableListOf<Attenuator>()
 
     Column {
@@ -123,39 +121,32 @@ fun AddScreen(
                 value = search,
                 onValueChange = {
                     search = it.trim()
+                    if (search.isNotEmpty())
+                        doSearch = true
                 },
                 singleLine = true,
-                trailingIcon = {
+                leadingIcon = {
                     Icon(
-                        painterResource(id = R.drawable.baseline_close_24),
-                        contentDescription = "Clear search",
-                        modifier = Modifier.clickable {
-                            search = ""
-                            kbController?.hide()
-                        }
+                        painterResource(id = R.drawable.baseline_search_24),
+                        contentDescription = "Perform search",
                     )
+                },
+                trailingIcon = {
+                    if (search.isNotEmpty()) {
+                        Icon(
+                            painterResource(id = R.drawable.baseline_close_24),
+                            contentDescription = "Clear search",
+                            modifier = Modifier.clickable {
+                                search = ""
+                                kbController?.hide()
+                            }
+                        )
+                    }
                 },
                 modifier = Modifier
                     .weight(.6f)
                     .padding(start = 10.dp, end = 20.dp)
             )
-            Button(
-                onClick = {
-                    if (search.isNotEmpty()) {
-                        Log.d("DEBUG", "AddScreen(): executing search for $search")
-
-                        // hide keyboard
-                        kbController?.hide()
-                        doSearch = true
-                    }
-                },
-                shape = MaterialTheme.shapes.large,
-                modifier = Modifier
-                    .weight(.4f)
-                    .padding(end = 20.dp)
-            ) {
-                Text(text = "Search")
-            }
         }
 
         // Filter by tags
@@ -191,6 +182,11 @@ fun AddScreen(
             }
             // show filters
             else {
+                Log.d("AddScreen","Adding filters:")
+                sharedViewModel.filterList.forEach {
+                    Log.d("AddScreen", "  -  ${it}")
+                }
+
                 // coax tag
                 AddTag(
                     filterEnabled = coaxFilter,
@@ -265,6 +261,7 @@ fun AddScreen(
             }
         }
 
+        doSearch = search.isNotEmpty()
         dontFilter = sharedViewModel.filterList.isEmpty()
         doFilter = !dontFilter
         dontSearch = !doSearch
@@ -287,7 +284,7 @@ fun AddScreen(
                 // search and filters
                 else if (doSearch && doFilter) {
                     sharedViewModel.filterList.forEach {
-                        if (att.tags().contains(AttenuatorTag(it)) &&
+                        if (att.tagsToStrings().contains(AttenuatorTag(it).toString()) &&
                             att.name().contains(search, ignoreCase = true)) {
                             if (!showList.contains(att))
                                 showList.add(att)

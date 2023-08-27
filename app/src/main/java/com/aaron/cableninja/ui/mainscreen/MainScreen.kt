@@ -164,13 +164,15 @@ fun MainScreen(
             OutlinedTextField(
                 value = startLevel,
                 onValueChange = {
+                    val str = it.trim()
+
                     // if we manually delete all characters, update start level state
-                    if (it.isEmpty() || it.isDigitsOnly()) {
-                        sharedViewModel.setStartLevel(it)
-                        startLevel = it
+                    if (str.isEmpty() || str.isDigitsOnly()) {
+                        sharedViewModel.setStartLevel(str)
+                        startLevel = str
                     }
-                    else if (it == "-" || isNumeric(it) || it.contains(char = '.'))
-                        startLevel = it
+                    else if (str == "-" || isNumeric(str) || str.contains(char = '.'))
+                        startLevel = str
                 },
                 label = { Text(text = "dBmV") },
                 singleLine = true,
@@ -366,6 +368,7 @@ fun MainScreen(
                 //      click calls AddScreen()
                 Button(
                     onClick = {
+                        sharedViewModel.clearFilters()
                         navController.navigate(route = Screen.Add.route)
                     },
                     shape = MaterialTheme.shapes.large,
