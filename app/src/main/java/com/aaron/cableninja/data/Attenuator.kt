@@ -47,8 +47,8 @@ class Attenuator(name: String,
 
     fun tags(): List<AttenuatorType> { return _data.tags }
 
-    fun getLoss(freq: Int): Double? {
-        return specs[freq]
+    fun getLoss(frequency: Int): Double? {
+        return specs[frequency]
     }
 }
 

@@ -239,13 +239,13 @@ fun AddScreen(
         }
 
         doSearch = search.isNotEmpty()
+        dontSearch = !doSearch
         dontFilter = sharedViewModel.filterList.isEmpty()
         doFilter = !dontFilter
-        dontSearch = !doSearch
 
         // if no tags and no search query, just copy the whole list
         if (dontFilter && dontSearch)
-            showList = attenuatorMap.values.toList().toMutableList()
+            showList = attenuatorMap.values.toList().toList().toMutableList()
         else {
             // iterate over all possible attenuators and add to showList
             // the ones that match search filters

@@ -1,6 +1,5 @@
 package com.aaron.cableninja.ui.mainscreen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -92,14 +91,8 @@ fun MainScreen(
                 valueRange = 12f..1218f,
                 steps = 201,
                 onValueChangeFinished = {
-                    Log.d(
-                        "DEBUG",
-                        "MainScreen() freqSliderPosition onValueChangeFinished = $freqSliderPosition"
-                    )
-
                     sharedViewModel.setFreq(freqSliderPosition)
 
-                    // if there is something in our list, we need to update it for new frequency
                     if (attenuatorCardList.size > 0)
                         sharedViewModel.setHasListChanged()
                 }
@@ -133,10 +126,8 @@ fun MainScreen(
                 valueRange = -40f..120f,
                 steps = 15,
                 onValueChangeFinished = {
-                    Log.d("DEBUG", "MainScreen() tempSliderPosition = $tempSliderPosition")
                     sharedViewModel.setTemp(tempSliderPosition)
 
-                    // if there is something in our list, we need to update it for new temperature
                     if (attenuatorCardList.size > 0)
                         sharedViewModel.setHasListChanged()
                 }
@@ -184,10 +175,8 @@ fun MainScreen(
             )
 
             // only allow input that is a positive or negative whole number
-            if (startLevel.isNotEmpty() && isNumeric(startLevel)) {
-                Log.d("DEBUG", "MainScreen: starting level = $startLevel")
+            if (startLevel.isNotEmpty() && isNumeric(startLevel))
                 sharedViewModel.setStartLevel(startLevel)
-            }
         }
 
 
@@ -203,8 +192,6 @@ fun MainScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            // if the list has changed after adding items (frequency or temperature
-            // slider changed, for example) then redraw the list with current attenuation
             if (sharedViewModel.hasListChanged) {
                 attenuatorCardList.forEach {
                     it.setLoss(
@@ -219,24 +206,16 @@ fun MainScreen(
                 }
             }
 
-            // IF there is an existing list, show it
             if (attenuatorCardList.isNotEmpty()) {
-                Log.d("DEBUG", "MainScreen() showing list...")
-
                 var total = 0.0
 
-                // iterate over list and create Card for each item
                 attenuatorCardList.forEach {
-                    // add attenuation of each item to total
                     total += it.getLoss()
-                    Log.d("DEBUG", "MainScreen() new total = $total")
 
-                    // create AttenuatorCard
                     AddAttenuatorCard(it,
                         onSwipeEdit = {
                             // save the card for editing outside the loop
                             editCard = it
-                            // show length dialog
                             editLengthDialog = true
                         },
                         onSwipeDelete = {
@@ -252,8 +231,6 @@ fun MainScreen(
                     )
                 }
 
-                Log.d("DEBUG", "MainScreen() - setting total attenuation to $total")
-                // set total attenuation
                 sharedViewModel.setTotalAtten(total)
             } else // if no attenuators, show a message
                 Text(text = "Tap to add an attenuator",
@@ -267,7 +244,6 @@ fun MainScreen(
 
         Divider()
 
-        // Show Total Attenuation, Ending Level, Clear Button, and Add Button
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -346,7 +322,6 @@ fun MainScreen(
                 //      click clears attenuator list
                 Button(
                     onClick = {
-                        Log.d("DEBUG", "MainScreen() clearing attenuator list")
                         attenuatorCardList.clear()
                         sharedViewModel.setTotalAtten(0.0)
                         startLevel = ""

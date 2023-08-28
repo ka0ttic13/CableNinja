@@ -1,6 +1,5 @@
 package com.aaron.cableninja.ui.dialogs
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,8 +51,6 @@ fun LengthDialog(
     var showLengthAlert by remember { mutableStateOf(false) }
 
     if (openDialog) {
-        Log.d("DEBUG", "LengthDialog() called")
-
         Dialog(
             onDismissRequest = {
                 openDialog = false
@@ -131,14 +128,10 @@ fun LengthDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (length.isEmpty() || !length.isDigitsOnly()) {
-                                    Log.d("DEBUG", "LengthDialog(): \"$length\" is not valid input")
+                                if (length.isEmpty() || !length.isDigitsOnly())
                                     showLengthAlert = true
-                                }
-                                else {
-                                    Log.d("DEBUG", "LengthDialog() entered length: $length")
+                                else
                                     onAdd(length)
-                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -207,8 +200,3 @@ private fun LengthAlertDialog() {
         )
     }
 }
-
-// Return true if string is numeric
-//fun isNumeric(toCheck: String): Boolean {
-//    return toCheck.all { char -> char.isDigit() }
-//}
