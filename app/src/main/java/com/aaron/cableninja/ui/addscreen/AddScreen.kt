@@ -34,9 +34,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
-import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorTags
 import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.SharedViewModel
 import com.aaron.cableninja.data.Attenuator
@@ -162,79 +159,95 @@ fun AddScreen(
 
             // show all possible tags
             if (sharedViewModel.filterList.isEmpty()) {
-                attenuatorTags.keys.forEach {
-                    AddFilter(filterEnabled = false,
-                        type = it,
-                        onClick = { type ->
-                            sharedViewModel.addFilter(type)
+                sharedViewModel.attenuatorTags.keys.forEach {
+                    sharedViewModel.attenuatorTags[it]?.let { color ->
+                        AddFilter(
+                            filterEnabled = false,
+                            filterColor = color,
+                            type = it,
+                            onClick = { type ->
+                                sharedViewModel.addFilter(type)
 
-                            when (type) {
-                                AttenuatorType.COAX -> coaxFilter = true
-                                AttenuatorType.PASSIVE -> passiveFilter = true
-                                AttenuatorType.DROP -> dropFilter = true
-                                AttenuatorType.PLANT -> plantFilter = true
+                                when (type) {
+                                    AttenuatorType.COAX -> coaxFilter = true
+                                    AttenuatorType.PASSIVE -> passiveFilter = true
+                                    AttenuatorType.DROP -> dropFilter = true
+                                    AttenuatorType.PLANT -> plantFilter = true
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
             // show filters
             else {
                 // coax tag
-                AddFilter(
-                    filterEnabled = coaxFilter,
-                    type = AttenuatorType.COAX,
-                    onClick = {
-                        if (coaxFilter)
-                            sharedViewModel.removeFilter(it)
-                        else
-                            sharedViewModel.addFilter(it)
+                sharedViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
+                    AddFilter(
+                        filterEnabled = coaxFilter,
+                        filterColor = it,
+                        type = AttenuatorType.COAX,
+                        onClick = {
+                            if (coaxFilter)
+                                sharedViewModel.removeFilter(it)
+                            else
+                                sharedViewModel.addFilter(it)
 
-                        coaxFilter = !coaxFilter
-                    }
-                )
+                            coaxFilter = !coaxFilter
+                        }
+                    )
+                }
 
                 // passive tag
-                AddFilter(
-                    filterEnabled = passiveFilter,
-                    type = AttenuatorType.PASSIVE,
-                    onClick = {
-                        if (passiveFilter)
-                            sharedViewModel.removeFilter(it)
-                        else
-                            sharedViewModel.addFilter(it)
+                sharedViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
+                    AddFilter(
+                        filterEnabled = passiveFilter,
+                        filterColor = it,
+                        type = AttenuatorType.PASSIVE,
+                        onClick = {
+                            if (passiveFilter)
+                                sharedViewModel.removeFilter(it)
+                            else
+                                sharedViewModel.addFilter(it)
 
-                        passiveFilter = !passiveFilter
-                    }
-                )
+                            passiveFilter = !passiveFilter
+                        }
+                    )
+                }
 
                 // drop tag
-                AddFilter(
-                    filterEnabled = dropFilter,
-                    type = AttenuatorType.DROP,
-                    onClick = {
-                        if (dropFilter)
-                            sharedViewModel.removeFilter(it)
-                        else
-                            sharedViewModel.addFilter(it)
+                sharedViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
+                    AddFilter(
+                        filterEnabled = dropFilter,
+                        filterColor = it,
+                        type = AttenuatorType.DROP,
+                        onClick = {
+                            if (dropFilter)
+                                sharedViewModel.removeFilter(it)
+                            else
+                                sharedViewModel.addFilter(it)
 
-                        dropFilter = !dropFilter
-                    }
-                )
+                            dropFilter = !dropFilter
+                        }
+                    )
+                }
 
                 // plant tag
-                AddFilter(
-                    filterEnabled = plantFilter,
-                    type = AttenuatorType.PLANT,
-                    onClick = {
-                        if (plantFilter)
-                            sharedViewModel.removeFilter(it)
-                        else
-                            sharedViewModel.addFilter(it)
+                sharedViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
+                    AddFilter(
+                        filterEnabled = plantFilter,
+                        filterColor = it,
+                        type = AttenuatorType.PLANT,
+                        onClick = {
+                            if (plantFilter)
+                                sharedViewModel.removeFilter(it)
+                            else
+                                sharedViewModel.addFilter(it)
 
-                        plantFilter = !plantFilter
-                    }
-                )
+                            plantFilter = !plantFilter
+                        }
+                    )
+                }
             }
         }
 
@@ -245,11 +258,11 @@ fun AddScreen(
 
         // if no tags and no search query, just copy the whole list
         if (dontFilter && dontSearch)
-            showList = attenuatorMap.values.toList().toList().toMutableList()
+            showList = sharedViewModel.attenuatorMap.values.toMutableList()
         else {
             // iterate over all possible attenuators and add to showList
             // the ones that match search filters
-            for (att in attenuatorMap.values) {
+            for (att in sharedViewModel.attenuatorMap.values) {
                 // search and no filters
                 if (doSearch && dontFilter) {
                     if (att.name().contains(search, ignoreCase = true)) {
@@ -310,7 +323,7 @@ fun AddScreen(
                             showLengthDialog = true
                         } else {
                             // Find loss
-                            for (data in attenuatorMap.values) {
+                            for (data in sharedViewModel.attenuatorMap.values) {
                                 if (data.name() == card.name()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
@@ -326,7 +339,7 @@ fun AddScreen(
                             }
 
                             // nav back to MainScreen
-                            attenuatorCardList.add(card)
+                            sharedViewModel.attenuatorCardList.add(card)
                             navController.navigate(Screen.Main.route)
                         }
                     }
@@ -346,7 +359,7 @@ fun AddScreen(
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
                 // Find loss
-                for (data in attenuatorMap.values) {
+                for (data in sharedViewModel.attenuatorMap.values) {
                     if (data.name() == sharedViewModel.card!!.name()) {
                         sharedViewModel.card!!.setLoss(
                             getCableLoss(
@@ -361,7 +374,7 @@ fun AddScreen(
                     }
                 }
 
-                attenuatorCardList.add(
+                sharedViewModel.attenuatorCardList.add(
                     AttenuatorCard(
                         sharedViewModel.card!!.name(),
                         sharedViewModel.card!!.tags(),
@@ -459,6 +472,7 @@ private fun AddAttenuatorTag(
 @Composable
 private fun AddFilter(
     filterEnabled: Boolean,
+    filterColor: Color,
     type: AttenuatorType,
     onClick: (AttenuatorType) -> Unit
 ) {
@@ -466,7 +480,7 @@ private fun AddFilter(
     val tagFontStyle = MaterialTheme.typography.titleMedium
 
     if (filterEnabled)
-        tagBackgroundColor = attenuatorTags[type]!!
+        tagBackgroundColor = filterColor
 
     Surface(
         shape = RoundedCornerShape(8.dp)

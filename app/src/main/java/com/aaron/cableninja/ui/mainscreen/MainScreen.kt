@@ -28,8 +28,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
-import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorCardList
-import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorMap
 import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.SharedViewModel
 import com.aaron.cableninja.data.getCableLoss
@@ -93,7 +91,7 @@ fun MainScreen(
                 onValueChangeFinished = {
                     sharedViewModel.setFreq(freqSliderPosition)
 
-                    if (attenuatorCardList.size > 0)
+                    if (sharedViewModel.attenuatorCardList.isNotEmpty())
                         sharedViewModel.setHasListChanged()
                 }
             )
@@ -128,7 +126,7 @@ fun MainScreen(
                 onValueChangeFinished = {
                     sharedViewModel.setTemp(tempSliderPosition)
 
-                    if (attenuatorCardList.size > 0)
+                    if (sharedViewModel.attenuatorCardList.isNotEmpty())
                         sharedViewModel.setHasListChanged()
                 }
 
@@ -193,10 +191,10 @@ fun MainScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             if (sharedViewModel.hasListChanged) {
-                attenuatorCardList.forEach {
+                sharedViewModel.attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            attenuatorMap[it.name()],
+                            sharedViewModel.attenuatorMap[it.name()],
                             sharedViewModel.currentFreq.toInt(),
                             it.length(),
                             sharedViewModel.currentTemp.toInt()
@@ -206,10 +204,10 @@ fun MainScreen(
                 }
             }
 
-            if (attenuatorCardList.isNotEmpty()) {
+            if (sharedViewModel.attenuatorCardList.isNotEmpty()) {
                 var total = 0.0
 
-                attenuatorCardList.forEach {
+                sharedViewModel.attenuatorCardList.forEach {
                     total += it.getLoss()
 
                     AddAttenuatorCard(it,
@@ -219,12 +217,12 @@ fun MainScreen(
                             editLengthDialog = true
                         },
                         onSwipeDelete = {
-                            if (attenuatorCardList.contains(it)) {
+                            if (sharedViewModel.attenuatorCardList.contains(it)) {
                                 sharedViewModel.setTotalAtten(
                                     sharedViewModel.totalAttenuation - it.getLoss()
                                 )
 
-                                attenuatorCardList.remove(it)
+                                sharedViewModel.attenuatorCardList.remove(it)
                                 sharedViewModel.setHasListChanged()
                             }
                         }
@@ -288,12 +286,12 @@ fun MainScreen(
 
                     // figure out if all the cards are plant cards
                     var allPlant = true
-                    for (card in attenuatorCardList.iterator()) {
+                    for (card in sharedViewModel.attenuatorCardList.iterator()) {
                         if (!card.tags().contains(AttenuatorType.PLANT) || card.name() == "RG11")
                             allPlant = false
                     }
 
-                    if (attenuatorCardList.isEmpty())
+                    if (sharedViewModel.attenuatorCardList.isEmpty())
                         allPlant = false
 
                     // if it is not all plant, use CPE specs for coloring end level
@@ -322,7 +320,7 @@ fun MainScreen(
                 //      click clears attenuator list
                 Button(
                     onClick = {
-                        attenuatorCardList.clear()
+                        sharedViewModel.attenuatorCardList.clear()
                         sharedViewModel.setTotalAtten(0.0)
                         startLevel = ""
                         sharedViewModel.setStartLevel("")
@@ -373,7 +371,7 @@ fun MainScreen(
                     sharedViewModel.addAttenuatorLength(it.toInt())
 
                     // find card and edit footage
-                    for (card in attenuatorCardList.iterator()) {
+                    for (card in sharedViewModel.attenuatorCardList.iterator()) {
                         if (card.name() == editCard.name())
                             card.setLength(it.toInt())
                     }
