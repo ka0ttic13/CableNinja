@@ -35,6 +35,7 @@ import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.SharedViewModel
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
+import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.isNumeric
 import com.aaron.cableninja.ui.dialogs.LengthDialog
 import com.aaron.cableninja.ui.navigation.Screen
@@ -312,7 +313,7 @@ fun MainScreen(
                     // figure out if all the cards are plant cards
                     var allPlant = true
                     for (card in attenuatorCardList.iterator()) {
-                        if (!card.tagsToStrings().contains("plant") || card.name() == "RG11")
+                        if (!card.tags().contains(AttenuatorType.PLANT) || card.name() == "RG11")
                             allPlant = false
                     }
 

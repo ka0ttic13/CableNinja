@@ -2,7 +2,7 @@ package com.aaron.cableninja.data
 
 data class AttenuatorData(
     val name: String,
-    val tags: List<AttenuatorTag>,
+    val tags: List<AttenuatorType>,
     val id: Int = 0
 )
 
@@ -21,7 +21,7 @@ enum class AttenuatorType {
  *          value = loss @ 100'
  ************************************************************/
 class Attenuator(name: String,
-                 tags: List<AttenuatorTag>,
+                 tags: List<AttenuatorType>,
                  iscoax: Boolean = false,
                  ispassive: Boolean = false,
                  isdrop: Boolean = false,
@@ -38,31 +38,15 @@ class Attenuator(name: String,
     //      value = attenuation in dB per 100'
     var specs = mutableMapOf<Int, Double>()
 
-    // Is this attenuator coax?
     fun isCoax() : Boolean { return _iscoax }
-    // Is this attenuator passive?
     fun isPassive(): Boolean { return _ispassive }
     fun isDrop(): Boolean { return _isdrop }
     fun isPlant(): Boolean { return _isplant }
 
-    // get ID
-//    fun id(): Int { return _data.id }
-
-    // get name
     fun name(): String { return _data.name }
 
-    // get tag list
-    fun tags(): List<AttenuatorTag> { return _data.tags }
-    // get tag list as strings
-    fun tagsToStrings(): List<String> {
-        val strings = mutableListOf<String>()
-        _data.tags.forEach {
-            strings.add(it.string)
-        }
-        return strings
-    }
+    fun tags(): List<AttenuatorType> { return _data.tags }
 
-    // get loss at frequency
     fun getLoss(freq: Int): Double? {
         return specs[freq]
     }

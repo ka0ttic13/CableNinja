@@ -16,7 +16,7 @@ class AttenuatorCard(atten: Attenuator) {
         // secondary constructor without using pre-existing Attenuator object
         constructor(
                 name: String,
-                tags: List<AttenuatorTag>,
+                tags: List<AttenuatorType>,
                 iscoax: Boolean,
                 length: Int = 0,
                 loss: Double = 0.0) : this(Attenuator(name, tags, iscoax)) {
@@ -25,8 +25,7 @@ class AttenuatorCard(atten: Attenuator) {
         }
 
         fun name(): String { return _name }
-        fun tags(): List<AttenuatorTag> { return _tags }
-        fun tagsToStrings(): List<String> { return _atten.tagsToStrings() }
+        fun tags(): List<AttenuatorType> { return _tags }
         fun length(): Int { return _length }
         fun setLength(length: Int) { _length = length }
         fun isCoax(): Boolean { return _iscoax }

@@ -1,6 +1,5 @@
 package com.aaron.cableninja.ui.addscreen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +40,6 @@ import com.aaron.cableninja.ui.MainActivity.Companion.attenuatorTags
 import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.SharedViewModel
 import com.aaron.cableninja.data.Attenuator
-import com.aaron.cableninja.data.AttenuatorTag
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
@@ -158,7 +156,7 @@ fun AddScreen(
                 .padding(top = 10.dp, bottom = 10.dp)
         ) {
             Text(
-                text = "Filter: ",
+                text = "Filter:",
                 modifier = Modifier.padding(start = 10.dp)
             )
 
@@ -182,11 +180,6 @@ fun AddScreen(
             }
             // show filters
             else {
-                Log.d("AddScreen","Adding filters:")
-                sharedViewModel.filterList.forEach {
-                    Log.d("AddScreen", "  -  ${it}")
-                }
-
                 // coax tag
                 AddTag(
                     filterEnabled = coaxFilter,
@@ -245,19 +238,19 @@ fun AddScreen(
 
 
                 // if any filters, show clear icon
-                if (sharedViewModel.filterList.isNotEmpty()) {
-                    Icon(
-                        painterResource(id = R.drawable.baseline_close_24),
-                        contentDescription = "Clear filter",
-                        modifier = Modifier.clickable {
-                            coaxFilter = false
-                            passiveFilter = false
-                            dropFilter = false
-                            plantFilter = false
-                            sharedViewModel.clearFilters()
-                        }
-                    )
-                }
+//                if (sharedViewModel.filterList.isNotEmpty()) {
+//                    Icon(
+//                        painterResource(id = R.drawable.baseline_close_24),
+//                        contentDescription = "Clear filter",
+//                        modifier = Modifier.clickable {
+//                            coaxFilter = false
+//                            passiveFilter = false
+//                            dropFilter = false
+//                            plantFilter = false
+//                            sharedViewModel.clearFilters()
+//                        }
+//                    )
+//                }
             }
         }
 
@@ -284,7 +277,7 @@ fun AddScreen(
                 // search and filters
                 else if (doSearch && doFilter) {
                     sharedViewModel.filterList.forEach {
-                        if (att.tagsToStrings().contains(AttenuatorTag(it).toString()) &&
+                        if (att.tags().contains(it) &&
                             att.name().contains(search, ignoreCase = true)) {
                             if (!showList.contains(att))
                                 showList.add(att)
@@ -297,7 +290,7 @@ fun AddScreen(
                     var matches = true
 
                     sharedViewModel.filterList.forEach {
-                        if (!att.tagsToStrings().contains(AttenuatorTag(it).toString()))
+                        if (!att.tags().contains(it))
                             matches = false
                     }
 
@@ -435,7 +428,7 @@ private fun AddAttenuatorCard(
                 // Tags
                 card.tags().forEach {
                     val color =
-                        when (it.tag) {
+                        when (it) {
                             AttenuatorType.COAX -> coaxColor
                             AttenuatorType.PASSIVE -> passiveColor
                             AttenuatorType.DROP -> dropColor
@@ -456,15 +449,15 @@ private fun AddAttenuatorCard(
  ************************************************/
 @Composable
 private fun AddAttenuatorTag(
-    tag: AttenuatorTag,
+    type: AttenuatorType,
     color: Color,
     style: TextStyle,
 ) {
     Surface(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(4.dp)
     ) {
         Text(
-            text = tag.toString(),
+            text = type.toString(),
             color = Color.White,
             style = style,
             modifier = Modifier
@@ -487,15 +480,15 @@ private fun AddTag(
         tagBackgroundColor = attenuatorTags[type]!!
 
     Surface(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(8.dp)
     ) {
         Text(
-            text = AttenuatorTag(type).toString(),
+            text = type.toString(),
             color = Color.White,
             style = tagFontStyle,
             modifier = Modifier
                 .background(tagBackgroundColor)
-                .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
+                .padding(horizontal = 6.dp, vertical = 3.dp)
                 .clickable {
                     onClick(type)
                 }

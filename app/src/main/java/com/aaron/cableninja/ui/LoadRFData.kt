@@ -1,14 +1,13 @@
 package com.aaron.cableninja.ui
 
 import com.aaron.cableninja.data.Attenuator
-import com.aaron.cableninja.data.AttenuatorTag
 import com.aaron.cableninja.data.AttenuatorType
 
 fun loadRFdata() {
-    val coax    = AttenuatorTag(AttenuatorType.COAX)
-    val passive = AttenuatorTag(AttenuatorType.PASSIVE)
-    val drop    = AttenuatorTag(AttenuatorType.DROP)
-    val plant   = AttenuatorTag(AttenuatorType.PLANT)
+    val coax    = AttenuatorType.COAX
+    val passive = AttenuatorType.PASSIVE
+    val drop    = AttenuatorType.DROP
+    val plant   = AttenuatorType.PLANT
 
     // CommScope RG-59
     val RG59 = Attenuator(name = "RG59", tags = listOf(coax, drop),

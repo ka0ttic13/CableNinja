@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.AttenuatorCard
-import com.aaron.cableninja.data.AttenuatorTag
 import com.aaron.cableninja.ui.navigation.SetupNavGraph
 import com.aaron.cableninja.ui.theme.CableNinjaTheme
 import com.aaron.cableninja.ui.theme.coaxColor
