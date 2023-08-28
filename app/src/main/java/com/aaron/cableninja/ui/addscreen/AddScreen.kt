@@ -163,7 +163,7 @@ fun AddScreen(
             // show all possible tags
             if (sharedViewModel.filterList.isEmpty()) {
                 attenuatorTags.keys.forEach {
-                    AddTag(filterEnabled = false,
+                    AddFilter(filterEnabled = false,
                         type = it,
                         onClick = { type ->
                             sharedViewModel.addFilter(type)
@@ -181,7 +181,7 @@ fun AddScreen(
             // show filters
             else {
                 // coax tag
-                AddTag(
+                AddFilter(
                     filterEnabled = coaxFilter,
                     type = AttenuatorType.COAX,
                     onClick = {
@@ -195,7 +195,7 @@ fun AddScreen(
                 )
 
                 // passive tag
-                AddTag(
+                AddFilter(
                     filterEnabled = passiveFilter,
                     type = AttenuatorType.PASSIVE,
                     onClick = {
@@ -209,7 +209,7 @@ fun AddScreen(
                 )
 
                 // drop tag
-                AddTag(
+                AddFilter(
                     filterEnabled = dropFilter,
                     type = AttenuatorType.DROP,
                     onClick = {
@@ -223,7 +223,7 @@ fun AddScreen(
                 )
 
                 // plant tag
-                AddTag(
+                AddFilter(
                     filterEnabled = plantFilter,
                     type = AttenuatorType.PLANT,
                     onClick = {
@@ -235,22 +235,6 @@ fun AddScreen(
                         plantFilter = !plantFilter
                     }
                 )
-
-
-                // if any filters, show clear icon
-//                if (sharedViewModel.filterList.isNotEmpty()) {
-//                    Icon(
-//                        painterResource(id = R.drawable.baseline_close_24),
-//                        contentDescription = "Clear filter",
-//                        modifier = Modifier.clickable {
-//                            coaxFilter = false
-//                            passiveFilter = false
-//                            dropFilter = false
-//                            plantFilter = false
-//                            sharedViewModel.clearFilters()
-//                        }
-//                    )
-//                }
             }
         }
 
@@ -441,12 +425,12 @@ private fun AddAttenuatorCard(
     }
 }
 
-/************************************************
+/**************************************************************************
  * AddAttenuatorTag()
- *      Create small tags to describe each
- *      attenuator type.  Used for filtering
- *      add list.
- ************************************************/
+ *      Create small tags to describe each attenuator type.  This
+ *      goes on each individual attenuator card (as opposed to the
+ *      filter cards)
+ **************************************************************************/
 @Composable
 private fun AddAttenuatorTag(
     type: AttenuatorType,
@@ -467,8 +451,13 @@ private fun AddAttenuatorTag(
     }
 }
 
+/**************************************************************************
+ * AddTag()
+ *      Add filter card.  Automatically colors card bgcolor to show
+ *      whether it has been enabled or disabled.
+ **************************************************************************/
 @Composable
-private fun AddTag(
+private fun AddFilter(
     filterEnabled: Boolean,
     type: AttenuatorType,
     onClick: (AttenuatorType) -> Unit
