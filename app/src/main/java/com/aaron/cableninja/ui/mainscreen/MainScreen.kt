@@ -253,14 +253,15 @@ fun MainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                // round loss to nearest 10th
                 Text(
                     text = "Total Attenuation: ",
                     modifier = Modifier.weight(2f)
                 )
+
                 if (sharedViewModel.totalAttenuation > 0)
                     Text(text = "-")
 
+                // round loss to nearest tenth
                 Text(
                     text = (round(sharedViewModel.totalAttenuation * 10) / 10).toString() + " dB"
                 )
@@ -281,18 +282,18 @@ fun MainScreen(
                 // if we set a start level, do the math and display end result
                 if (sharedViewModel.currentStartLevel.isNotEmpty()) {
                     val result =
-                        sharedViewModel.currentStartLevel.toDouble() - sharedViewModel.totalAttenuation
+                        (sharedViewModel.currentStartLevel.toDouble() - sharedViewModel.totalAttenuation)
                     var color: Color = MaterialTheme.colorScheme.primary
 
                     // figure out if all the cards are plant cards
                     var allPlant = true
-                    for (card in sharedViewModel.attenuatorCardList.iterator()) {
-                        if (!card.tags().contains(AttenuatorType.PLANT) || card.name() == "RG11")
-                            allPlant = false
-                    }
 
-                    if (sharedViewModel.attenuatorCardList.isEmpty())
-                        allPlant = false
+                    if (sharedViewModel.attenuatorCardList.isNotEmpty()) {
+                        for (card in sharedViewModel.attenuatorCardList.iterator()) {
+                            if (!card.tags().contains(AttenuatorType.PLANT))
+                                allPlant = false
+                        }
+                    }
 
                     // if it is not all plant, use CPE specs for coloring end level
                     if (!allPlant) {
@@ -303,6 +304,7 @@ fun MainScreen(
                             color = Color.Red
                     }
 
+                    // Round to nearest tenth
                     Text(
                         text = (round(result * 10) / 10).toString() + " dBmV",
                         color = color,
@@ -373,7 +375,6 @@ fun MainScreen(
                     // find card and edit footage
                     for (card in sharedViewModel.attenuatorCardList.iterator()) {
                         if (card.name() == editCard.name() &&
-                            card.tags() == editCard.tags() &&
                             card.length() == editCard.length()) {
 
                             card.setLength(it.toInt())
