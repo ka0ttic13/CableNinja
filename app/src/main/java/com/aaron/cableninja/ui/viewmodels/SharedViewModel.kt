@@ -19,12 +19,15 @@ import com.aaron.cableninja.ui.theme.plantColor
 class SharedViewModel : ViewModel() {
     // map of attenuator tags to colors
     var attenuatorTags = mutableMapOf<AttenuatorType, Color>()
+        private set
 
     // master map of ID strings to manufacturer data
     var attenuatorMap = mutableMapOf<String, Attenuator>()
+        private set
 
     // master list of RF data that has been added
     var attenuatorCardList = mutableListOf<AttenuatorCard>()
+        private set
 
     init {
         attenuatorTags[AttenuatorType.COAX] = coaxColor

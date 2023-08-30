@@ -1,5 +1,6 @@
 package com.aaron.cableninja.ui.addscreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,11 +49,13 @@ import com.aaron.cableninja.ui.theme.passiveColor
 import com.aaron.cableninja.ui.theme.plantColor
 
 
-/**************************************************************
+/*********************************************************************************
  * AddScreen()
  *      Show attenuators that can be added.
- **************************************************************/
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+ *********************************************************************************/
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun AddScreen(
     navController: NavController,
@@ -263,7 +266,7 @@ fun AddScreen(
             // iterate over all possible attenuators and add to showList
             // the ones that match search filters
             for (att in sharedViewModel.attenuatorMap.values) {
-                // search and no filters
+
                 if (doSearch && dontFilter) {
                     if (att.name().contains(search, ignoreCase = true)) {
                         if (!showList.contains(att))
@@ -271,7 +274,6 @@ fun AddScreen(
                     }
                 }
 
-                // search and filters
                 else if (doSearch && doFilter) {
                     sharedViewModel.filterList.forEach {
                         if (att.tags().contains(it) &&
@@ -342,7 +344,8 @@ fun AddScreen(
                             sharedViewModel.attenuatorCardList.add(card)
                             navController.navigate(Screen.Main.route)
                         }
-                    }
+                    },
+                    modifier = Modifier.animateItemPlacement()
                 )
             }
         }
@@ -391,18 +394,20 @@ fun AddScreen(
     }
 }
 
-/************************************************
+/**************************************************************************
  * AddAttenuatorCard()
  *      Create Card for attenuator type
- ************************************************/
+ **************************************************************************/
 @Composable
 private fun AddAttenuatorCard(
     card: AttenuatorCard,
-    onClick:() -> Unit
+    onClick:() -> Unit,
+    modifier: Modifier
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.clickable(onClick = { onClick() })
+        modifier = modifier
+            .clickable(onClick = { onClick() })
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
