@@ -374,8 +374,11 @@ fun MainScreen(
                     for (card in sharedViewModel.attenuatorCardList.iterator()) {
                         if (card.name() == editCard.name() &&
                             card.tags() == editCard.tags() &&
-                            card.length() == editCard.length())
+                            card.length() == editCard.length()) {
+
                             card.setLength(it.toInt())
+                            break
+                        }
                     }
 
                     // set state to re-draw main list
