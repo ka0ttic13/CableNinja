@@ -358,7 +358,6 @@ fun AddScreen(
             defaultValue = "",
             onCancel = { showLengthDialog = false },
             onAdd = {
-                // Save length to current AttenuatorCard to add to MainScreen list
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
                 // Find loss

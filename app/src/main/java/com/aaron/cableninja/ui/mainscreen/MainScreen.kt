@@ -372,7 +372,9 @@ fun MainScreen(
 
                     // find card and edit footage
                     for (card in sharedViewModel.attenuatorCardList.iterator()) {
-                        if (card.name() == editCard.name())
+                        if (card.name() == editCard.name() &&
+                            card.tags() == editCard.tags() &&
+                            card.length() == editCard.length())
                             card.setLength(it.toInt())
                     }
 
