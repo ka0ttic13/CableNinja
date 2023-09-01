@@ -1,6 +1,7 @@
 package com.aaron.cableninja.data
 
 import android.util.Log
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /*************************************************************
@@ -78,26 +79,22 @@ fun getCableLoss(
     // If we made it this far, the frequency set by the UI was not an exact match to one of
     // the frequencies in the manufacturer specs.  Get the approximate loss based on the closest
     // known frequency.
-    var closestFreq = 1200
     val maxFreq = data.specs.keys.max()
+    var closestFreq = maxFreq
+    var min = Integer.MAX_VALUE
 
     Log.d("DEBUG", "getCableLoss(): maxFreq for ${data.name()} = $maxFreq")
 
-    if (freq < maxFreq) {
-        // find closest frequency
-        for (key in data.specs.keys) {
-            Log.d("DEBUG", "getCableLoss() testing if $key > $freq")
-            if (key > freq) {
-                Log.d("DEBUG", "getCableLoss() found closest frequency $key")
-                closestFreq = key
-                break
-            } else
-                Log.d("DEBUG", "getCableLoss() $key <= $freq, continuing...")
+    for (key in data.specs.keys) {
+        val diff = abs(key - freq)
+
+        if (diff < min) {
+            min = diff
+            closestFreq = key
+
+            Log.d("DEBUG", "Found closest freq: $closestFreq")
         }
     }
-    else
-        closestFreq = maxFreq
-
 
     // re-calculate with distance and temp if this is coax
     if (data.isCoax()) {
@@ -114,11 +111,6 @@ fun getCableLoss(
         result = data.getLoss(closestFreq)!!
 
         Log.d("DEBUG", "getCableLoss() after passive Attenuator::getLoss($closestFreq), result = $result")
-
-        Log.d(
-            "DEBUG",
-            "getCableLoss() this is PASSIVE, skipping distance/temp adjustment, result = $result"
-        )
     }
 
     return result
