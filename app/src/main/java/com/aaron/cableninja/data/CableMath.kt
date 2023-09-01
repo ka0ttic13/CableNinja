@@ -4,22 +4,20 @@ import android.util.Log
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-/*************************************************************
+/***************************************************************************
  * Adjust attenuation for given temperature
  *   Manufacturer data sheets list attenuation data for 68F
  *   Given a temperature and the amount of attenuation at a
  *   given frequency, we can calculate attenuation at any
  *   temperature using the following formula:
  *
- *   Attenuation at F = Atten. at 68F * (1+0.0011(t-68))
- *************************************************************/
+ *   Attenuation at F = Atten. at 68F * (1 + 0.0011(t - 68))
+ **************************************************************************/
 fun adjustRFTemp(loss68: Double, temp: Int = 68) : Double {
     if (temp == 68)
         return loss68
 
-    val result = loss68 * (1.0 + (0.0011 * (temp - 68)))
-    Log.d("DEBUG", "adjustRFTemp(loss68 = $loss68, temp = $temp) = $result")
-    return result
+    return (loss68 * (1.0 + (0.0011 * (temp - 68))))
 }
 
 /***************************************************************************
@@ -35,14 +33,14 @@ fun getApproxLoss(
     knownFreq: Double,
     unknownFreq: Double
 ) : Double {
-    return knownLoss * sqrt((unknownFreq / knownFreq))
+    return (knownLoss * sqrt((unknownFreq / knownFreq)))
 }
 
-/*********************************************************************
+/***************************************************************************
  * getCableLoss()
- *      given frequency, distance, and temp, calculate attenuation
- *
- *********************************************************************/
+ *      given an attenuator, frequency, distance, and temp,
+ *      calculate attenuation
+ **************************************************************************/
 fun getCableLoss(
     data: Attenuator?,
     freq: Int,
@@ -79,20 +77,23 @@ fun getCableLoss(
     // If we made it this far, the frequency set by the UI was not an exact match to one of
     // the frequencies in the manufacturer specs.  Get the approximate loss based on the closest
     // known frequency.
+
     val maxFreq = data.specs.keys.max()
     var closestFreq = maxFreq
     var min = Integer.MAX_VALUE
 
     Log.d("DEBUG", "getCableLoss(): maxFreq for ${data.name()} = $maxFreq")
 
-    for (key in data.specs.keys) {
-        val diff = abs(key - freq)
+    if (freq < maxFreq) {
+        for (key in data.specs.keys) {
+            val diff = abs(key - freq)
 
-        if (diff < min) {
-            min = diff
-            closestFreq = key
+            if (diff < min) {
+                min = diff
+                closestFreq = key
 
-            Log.d("DEBUG", "Found closest freq: $closestFreq")
+                Log.d("DEBUG", "Found closest freq: $closestFreq")
+            }
         }
     }
 
