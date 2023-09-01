@@ -98,23 +98,28 @@ fun getCableLoss(
     else
         closestFreq = maxFreq
 
-    // get approximate loss
-    result = data.getLoss(closestFreq)?.let {
-        getApproxLoss(it, closestFreq.toDouble(), freq.toDouble())
-    }!!
-
-    Log.d("DEBUG", "getCableLoss() after getApproxLoss() result = $result")
 
     // re-calculate with distance and temp if this is coax
     if (data.isCoax()) {
+        // get approximate loss
+        result = data.getLoss(closestFreq)?.let {
+            getApproxLoss(it, closestFreq.toDouble(), freq.toDouble())
+        }!!
+        Log.d("DEBUG", "getCableLoss() after getApproxLoss() result = $result")
+
         result = (distance * adjustRFTemp(result, temp)) / 100
         Log.d("DEBUG", "getCableLoss() after distance/temp adjustment, result = $result")
     }
-    else
+    else {
+        result = data.getLoss(closestFreq)!!
+
+        Log.d("DEBUG", "getCableLoss() after passive Attenuator::getLoss($closestFreq), result = $result")
+
         Log.d(
             "DEBUG",
             "getCableLoss() this is PASSIVE, skipping distance/temp adjustment, result = $result"
         )
+    }
 
     return result
 }
