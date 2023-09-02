@@ -43,12 +43,11 @@ import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import kotlin.math.round
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
 ) {
     var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq) }
     var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp) }
@@ -298,10 +297,10 @@ fun MainScreen(
                     // if it is not all plant, use CPE specs for coloring end level
                     if (!allPlant) {
                         // if result is between -10 and +10, set color to green
-                        if ((result >= -10) && (result <= 10))
-                            color = LightGreen
+                        color = if ((result >= -10) && (result <= 10))
+                            LightGreen
                         else // otherwise, set color to red
-                            color = Color.Red
+                            Color.Red
                     }
 
                     // Round to nearest tenth

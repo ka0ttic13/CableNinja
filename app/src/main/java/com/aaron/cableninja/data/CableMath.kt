@@ -65,10 +65,10 @@ fun getCableLoss(
         if (it.key == freq) {
             Log.d("DEBUG", "getCableLoss() found key $freq")
             // if coax, re-calculate with distance and temperature
-            if (data.isCoax())
-                return (distance * adjustRFTemp(it.value, temp)) / 100
+            return if (data.isCoax())
+                (distance * adjustRFTemp(it.value, temp)) / 100
             else
-                return it.value
+                it.value
         }
     }
 
@@ -84,6 +84,7 @@ fun getCableLoss(
 
     Log.d("DEBUG", "getCableLoss(): maxFreq for ${data.name()} = $maxFreq")
 
+    // find closest known frequency
     if (freq < maxFreq) {
         for (key in data.specs.keys) {
             val diff = abs(key - freq)
@@ -117,7 +118,6 @@ fun getCableLoss(
     return result
 }
 
-// is given string a numeric?
 fun isNumeric(toCheck: String): Boolean {
     val regex = "-?[0-9]+(\\.[0-9]+)?".toRegex()
     return toCheck.matches(regex)

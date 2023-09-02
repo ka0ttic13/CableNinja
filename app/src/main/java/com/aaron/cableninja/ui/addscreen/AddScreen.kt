@@ -255,9 +255,9 @@ fun AddScreen(
         }
 
         doSearch = search.isNotEmpty()
-        dontSearch = !doSearch
+        dontSearch = search.isEmpty()
         dontFilter = sharedViewModel.filterList.isEmpty()
-        doFilter = !dontFilter
+        doFilter = sharedViewModel.filterList.isNotEmpty()
 
         // if no tags and no search query, just copy the whole list
         if (dontFilter && dontSearch)
@@ -275,12 +275,18 @@ fun AddScreen(
                 }
 
                 else if (doSearch && doFilter) {
+                    var matches = true
+
                     sharedViewModel.filterList.forEach {
-                        if (att.tags().contains(it) &&
-                            att.name().contains(search, ignoreCase = true)) {
-                            if (!showList.contains(att))
-                                showList.add(att)
-                        }
+                        if (!att.tags().contains(it))
+                            matches = false
+                    }
+
+                    if (matches && att.name().contains(search, ignoreCase = true) &&
+                        !showList.contains(att)) {
+
+                        showList.add(att)
+
                     }
                 }
 

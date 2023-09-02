@@ -11,7 +11,7 @@ import com.aaron.cableninja.ui.mainscreen.MainScreen
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     // ViewModel for sharing data between screens
     val sharedViewModel: SharedViewModel = viewModel()
