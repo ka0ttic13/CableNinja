@@ -56,16 +56,16 @@ class SharedViewModel : ViewModel() {
     var card by mutableStateOf<AttenuatorCard?>(null)
         private set
     fun setAttenuatorCard(newCard: AttenuatorCard) { card = newCard }
+    fun addCurrentCardToList() {
+        card?.let { attenuatorCardList.add(it) }
+    }
 
     /* Set attenuator length
      * this is separate from setAttenuatorCard because
      *      - not every attenuator has a length
      *      - we don't get length input at the same time the AttenuatorCard is created
      */
-    fun addAttenuatorLength(footage: Int) {
-        if (card != null)
-            card!!.setLength(footage)
-    }
+    fun addAttenuatorLength(length: Int) { card?.setLength(length) }
 
     fun getAttenuatorLength() : Int { return card!!.length() }
 

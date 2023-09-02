@@ -43,6 +43,12 @@ import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import kotlin.math.round
 
+/*********************************************************************************
+ * MainScreen()
+ *      Main screen interface that takes input for frequency, temp, and starting
+ *      level as well as shows the main attenuator list along with total
+ *      attenuation and ending level
+ *********************************************************************************/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -390,6 +396,11 @@ fun MainScreen(
     }
 }
 
+/*********************************************************************************
+ * AddAttenuatorCard()
+ *      Adds one swipeable card that represents one AttenuatorCard
+ *      This gets added to the main attenuator list.
+ *********************************************************************************/
 @Composable
 private fun AddAttenuatorCard(
     data: AttenuatorCard,

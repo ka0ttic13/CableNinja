@@ -382,15 +382,7 @@ fun AddScreen(
                     }
                 }
 
-                sharedViewModel.attenuatorCardList.add(
-                    AttenuatorCard(
-                        sharedViewModel.card!!.name(),
-                        sharedViewModel.card!!.tags(),
-                        sharedViewModel.card!!.isCoax(),
-                        sharedViewModel.card!!.length(),
-                        sharedViewModel.card!!.getLoss()
-                    )
-                )
+                sharedViewModel.addCurrentCardToList()
 
                 // Nav back to MainScreen
                 navController.navigate(Screen.Main.route)
