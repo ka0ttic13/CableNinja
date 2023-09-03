@@ -11,8 +11,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     val plant   = AttenuatorType.PLANT
 
     // CommScope RG-59
-    val RG59 = Attenuator(name = "RG59", tags = listOf(coax, drop),
-        iscoax = true, ispassive = false, isdrop = true, isplant = false)
+    val RG59 = Attenuator(name = "RG59", tags = listOf(coax, drop))
     RG59.specs[5] = 0.86
     RG59.specs[55] = 2.05
     RG59.specs[83] = 2.45
@@ -32,8 +31,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[RG59.name()] = RG59
 
     // Amphenol RG6
-    val RG6 = Attenuator(name = "RG6", tags = listOf(coax, drop),
-        iscoax = true, ispassive = false, isdrop = true, isplant = false)
+    val RG6 = Attenuator(name = "RG6", tags = listOf(coax, drop))
     RG6.specs[5] = 0.58
     RG6.specs[55] = 1.6
     RG6.specs[211] = 3.05
@@ -56,8 +54,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[RG6.name()] = RG6
 
     // Amphenol RG11
-    val RG11 = Attenuator(name = "RG11", tags = listOf(coax, drop, plant),
-        iscoax = true, ispassive = false, isdrop = true, isplant = true)
+    val RG11 = Attenuator(name = "RG11", tags = listOf(coax, drop, plant))
     RG11.specs[5] = .38
     RG11.specs[55] = 0.96
     RG11.specs[211] = 1.9
@@ -80,8 +77,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[RG11.name()] = RG11
 
     // Antronix 2-Way / 3-Way Low
-    val TwoWay = Attenuator(name = "2 Way / 3 Way Low Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val TwoWay = Attenuator(name = "2 Way / 3 Way Low Leg", tags = listOf(passive, drop))
     TwoWay.specs[5] = 3.5
     TwoWay.specs[55] = 3.5
     TwoWay.specs[211] = 3.7
@@ -96,8 +92,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[TwoWay.name()] = TwoWay
 
     // Antronix Balanced 3-Way
-    val ThreeWayBalanced = Attenuator(name = "3 Way Balanced", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val ThreeWayBalanced = Attenuator(name = "3 Way Balanced", tags = listOf(passive, drop))
     ThreeWayBalanced.specs[5] = 5.8
     ThreeWayBalanced.specs[55] = 5.8
     ThreeWayBalanced.specs[211] = 5.9
@@ -112,8 +107,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[ThreeWayBalanced.name()] = ThreeWayBalanced
 
     // Antronix 2-Way
-    val FourWay = Attenuator(name = "4 Way / 3 Way High Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val FourWay = Attenuator(name = "4 Way / 3 Way High Leg", tags = listOf(passive, drop))
     FourWay.specs[5] = 7.0
     FourWay.specs[55] = 7.2
     FourWay.specs[211] = 7.2
@@ -127,8 +121,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[FourWay.name()] = FourWay
 
     // Antronix 8-Way
-    val EightWay = Attenuator(name = "8 Way", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val EightWay = Attenuator(name = "8 Way", tags = listOf(passive, drop))
     EightWay.specs[5] = 11.2
     EightWay.specs[55] = 11.0
     EightWay.specs[211] = 11.2
@@ -142,8 +135,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[EightWay.name()] = EightWay
 
     // Antronix DC-6 tap leg
-    val DC6H = Attenuator(name = "DC-6 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC6H = Attenuator(name = "DC-6 Tap Leg", tags = listOf(passive, drop))
     DC6H.specs[5] = 6.0
     DC6H.specs[100] = 6.1
     DC6H.specs[450] = 6.3
@@ -154,8 +146,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC6H.name()] = DC6H
 
     // Antronix DC-6 thru leg
-    val DC6L = Attenuator(name = "DC-6 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC6L = Attenuator(name = "DC-6 Thru Leg", tags = listOf(passive, drop))
     DC6L.specs[5] = 2.6
     DC6L.specs[100] = 2.4
     DC6L.specs[450] = 2.4
@@ -166,8 +157,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC6L.name()] = DC6L
 
     // Antronix DC-9 tap leg
-    val DC9H = Attenuator(name = "DC-9 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC9H = Attenuator(name = "DC-9 Tap Leg", tags = listOf(passive, drop))
     DC9H.specs[5] = 9.0
     DC9H.specs[100] = 9.1
     DC9H.specs[450] = 9.3
@@ -178,8 +168,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC9H.name()] = DC9H
 
     // Antronix DC-9 thru leg
-    val DC9L = Attenuator(name = "DC-9 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC9L = Attenuator(name = "DC-9 Thru Leg", tags = listOf(passive, drop))
     DC9L.specs[5] = 1.4
     DC9L.specs[100] = 1.4
     DC9L.specs[450] = 1.5
@@ -190,8 +179,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC9L.name()] = DC9L
 
     // Antronix DC-12 tap leg
-    val DC12H = Attenuator(name = "DC-12 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC12H = Attenuator(name = "DC-12 Tap Leg", tags = listOf(passive, drop))
     DC12H.specs[5] = 12.0
     DC12H.specs[100] = 12.1
     DC12H.specs[450] = 12.3
@@ -202,8 +190,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC12H.name()] = DC12H
 
     // Antronix DC-12 thru leg
-    val DC12L = Attenuator(name = "DC-12 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC12L = Attenuator(name = "DC-12 Thru Leg", tags = listOf(passive, drop))
     DC12L.specs[5] = 1.0
     DC12L.specs[100] = 1.0
     DC12L.specs[450] = 1.0
@@ -214,8 +201,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC12L.name()] = DC12L
 
     // Antronix DC-16 tap leg
-    val DC16H = Attenuator(name = "DC-16 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC16H = Attenuator(name = "DC-16 Tap Leg", tags = listOf(passive, drop))
     DC16H.specs[5] = 16.0
     DC16H.specs[100] = 16.1
     DC16H.specs[450] = 16.3
@@ -226,8 +212,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC16H.name()] = DC16H
 
     // Antronix DC-16 thru leg
-    val DC16L = Attenuator(name = "DC-16 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC16L = Attenuator(name = "DC-16 Thru Leg", tags = listOf(passive, drop))
     DC16L.specs[5] = 0.8
     DC16L.specs[100] = 0.8
     DC16L.specs[450] = 0.6
@@ -238,8 +223,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC16L.name()] = DC16L
 
     // Antronix DC-20 tap leg
-    val DC20H = Attenuator(name = "DC-20 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC20H = Attenuator(name = "DC-20 Tap Leg", tags = listOf(passive, drop))
     DC20H.specs[5] = 20.0
     DC20H.specs[100] = 20.1
     DC20H.specs[450] = 20.3
@@ -250,8 +234,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC20H.name()] = DC20H
 
     // Antronix DC-20 thru leg
-    val DC20L = Attenuator(name = "DC-20 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC20L = Attenuator(name = "DC-20 Thru Leg", tags = listOf(passive, drop))
     DC20L.specs[5] = 0.8
     DC20L.specs[100] = 0.8
     DC20L.specs[450] = 0.6
@@ -262,8 +245,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC20L.name()] = DC20L
 
     // Antronix DC-24 tap leg
-    val DC24H = Attenuator(name = "DC-24 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC24H = Attenuator(name = "DC-24 Tap Leg", tags = listOf(passive, drop))
     DC24H.specs[5] = 24.0
     DC24H.specs[100] = 24.1
     DC24H.specs[450] = 24.3
@@ -274,14 +256,12 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC24H.name()] = DC24H
 
     // Antronix DC-24 thru leg
-    val DC24L = Attenuator(name = "DC-24 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC24L = Attenuator(name = "DC-24 Thru Leg", tags = listOf(passive, drop))
     DC24L.specs = DC20L.specs // DC24 is same as DC20
     sharedViewModel.attenuatorMap[DC24L.name()] = DC24L
 
     // Antronix DC-27 tap leg
-    val DC27H = Attenuator(name = "DC-27 Tap Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC27H = Attenuator(name = "DC-27 Tap Leg", tags = listOf(passive, drop))
     DC27H.specs[5] = 27.0
     DC27H.specs[100] = 27.1
     DC27H.specs[450] = 27.3
@@ -292,14 +272,12 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[DC27H.name()] = DC27H
 
     // Antronix DC-27 thru leg
-    val DC27L = Attenuator(name = "DC-27 Thru Leg", tags = listOf(passive, drop),
-        iscoax = false, ispassive = true, isdrop = true, isplant = false)
+    val DC27L = Attenuator(name = "DC-27 Thru Leg", tags = listOf(passive, drop))
     DC27L.specs = DC20L.specs // DC27 is same as DC20
     sharedViewModel.attenuatorMap[DC27L.name()] = DC27L
 
     // CommScope F5077TS "Flex 500"
-    val Flex500 = Attenuator(name = "Flex 500", tags = listOf(coax, drop, plant),
-        iscoax = true, ispassive = false, isdrop = true, isplant = true)
+    val Flex500 = Attenuator(name = "Flex 500", tags = listOf(coax, drop, plant))
     Flex500.specs[5] = 0.21
     Flex500.specs[55] = 0.6
     Flex500.specs[83] = 0.73
@@ -322,8 +300,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[Flex500.name()] = Flex500
 
     // CommScope P3 500
-    val P3500 = Attenuator(name = "0.500 P3", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val P3500 = Attenuator(name = "0.500 P3", tags = listOf(coax, plant))
     P3500.specs[5] = 0.16
     P3500.specs[55] = 0.54
     P3500.specs[85] = 0.68
@@ -344,8 +321,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[P3500.name()] = P3500
 
     // CommScope P3 625
-    val P3625 = Attenuator(name = "0.625 P3", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val P3625 = Attenuator(name = "0.625 P3", tags = listOf(coax, plant))
     P3625.specs[5] = 0.13
     P3625.specs[55] = 0.45
     P3625.specs[85] = 0.56
@@ -366,8 +342,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[P3625.name()] = P3625
 
     // CommScope P3 750
-    val P3750 = Attenuator(name = "0.750 P3", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val P3750 = Attenuator(name = "0.750 P3", tags = listOf(coax, plant))
     P3750.specs[5] = 0.11
     P3750.specs[55] = 0.37
     P3750.specs[85] = 0.46
@@ -388,8 +363,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[P3750.name()] = P3750
 
     // CommScope P3 875
-    val P3875 = Attenuator(name = "0.875 P3", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val P3875 = Attenuator(name = "0.875 P3", tags = listOf(coax, plant))
     P3875.specs[5] = 0.09
     P3875.specs[55] = 0.33
     P3875.specs[85] = 0.4
@@ -410,8 +384,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[P3875.name()] = P3875
 
     // CommScope 540QR
-    val QR540 = Attenuator(name = "0.540 QR", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val QR540 = Attenuator(name = "0.540 QR", tags = listOf(coax, plant))
     QR540.specs[5] = 0.14
     QR540.specs[55] = 0.47
     QR540.specs[85] = 0.59
@@ -432,8 +405,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[QR540.name()] = QR540
 
     // CommScope 715QR (my favorite to splice)
-    val QR715 = Attenuator(name = "0.715 QR", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val QR715 = Attenuator(name = "0.715 QR", tags = listOf(coax, plant))
     QR715.specs[5] = 0.11
     QR715.specs[55] = 0.37
     QR715.specs[85] = 0.46
@@ -454,8 +426,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[QR715.name()] = QR715
 
     // CommScope 860QR
-    val QR860 = Attenuator(name = "0.860 QR", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val QR860 = Attenuator(name = "0.860 QR", tags = listOf(coax, plant))
     QR860.specs[5] = 0.09
     QR860.specs[55] = 0.32
     QR860.specs[85] = 0.4
@@ -478,8 +449,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
 
     // Trilogy 500MC2
     // 1.2GHz not provided by specs, so used the average of 0.24 for last (2) 100MHz increments
-    val TC500MC2 = Attenuator(name = "0.500 MC2", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val TC500MC2 = Attenuator(name = "0.500 MC2", tags = listOf(coax, plant))
     TC500MC2.specs[5] = 0.14
     TC500MC2.specs[55] = 0.48
     TC500MC2.specs[350] = 1.23
@@ -496,8 +466,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
 
     // Trilogy 650 MC2
     // 1.2GHz not provided by specs, so used the average of 0.11 for last (2) 100MHz increments
-    val TC650MC2 = Attenuator(name = "0.650 MC2", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val TC650MC2 = Attenuator(name = "0.650 MC2", tags = listOf(coax, plant))
     TC650MC2.specs[5] = 0.11
     TC650MC2.specs[55] = 0.38
     TC650MC2.specs[350] = 0.99
@@ -514,8 +483,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
 
     // Trilogy 750 MC2
     // 1.2GHz not provided by specs, so used the average of 0.09 for last (2) 100MHz increments
-    val TC750MC2 = Attenuator(name = "0.750 MC2", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val TC750MC2 = Attenuator(name = "0.750 MC2", tags = listOf(coax, plant))
     TC750MC2.specs[5] = 0.1
     TC750MC2.specs[55] = 0.34
     TC750MC2.specs[350] = 0.86
@@ -532,8 +500,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
 
     // Trilogy 1.00 MC2
     // 1.2GHz not provided by specs, so used the average of 0.07 for last (2) 100MHz increments
-    val TC1000MC2 = Attenuator(name = "1.00 MC2", tags = listOf(coax, plant),
-        iscoax = true, ispassive = false, isdrop = false, isplant = true)
+    val TC1000MC2 = Attenuator(name = "1.00 MC2", tags = listOf(coax, plant))
     TC1000MC2.specs[5] = 0.07
     TC1000MC2.specs[55] = 0.24
     TC1000MC2.specs[350] = 0.65
@@ -549,8 +516,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[TC1000MC2.name()] = TC1000MC2
 
     // CommScope FFT 29Q 2 port tap
-    val CS29Q2 = Attenuator(name = "FFT 29Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS29Q2 = Attenuator(name = "FFT 29Q 2 port tap", tags = listOf(passive, plant))
     CS29Q2.specs[5] = 0.3
     CS29Q2.specs[10] = 0.2
     CS29Q2.specs[50] = 0.2
@@ -564,8 +530,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS29Q2.name()] = CS29Q2
 
     // CommScope FFT 29Q 4 port tap
-    val CS29Q4 = Attenuator(name = "FFT 29Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS29Q4 = Attenuator(name = "FFT 29Q 4 port tap", tags = listOf(passive, plant))
     CS29Q4.specs[5] = 0.4
     CS29Q4.specs[10] = 0.3
     CS29Q4.specs[50] = 0.3
@@ -579,8 +544,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS29Q4.name()] = CS29Q4
 
     // CommScope FFT 29Q 8 port tap
-    val CS29Q8 = Attenuator(name = "FFT 29Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS29Q8 = Attenuator(name = "FFT 29Q 8 port tap", tags = listOf(passive, plant))
     CS29Q8.specs[5] = 0.4
     CS29Q8.specs[10] = 0.3
     CS29Q8.specs[50] = 0.3
@@ -594,8 +558,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS29Q8.name()] = CS29Q8
 
     // CommScope FFT 26Q 2 port tap
-    val CS26Q2 = Attenuator(name = "FFT 26Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS26Q2 = Attenuator(name = "FFT 26Q 2 port tap", tags = listOf(passive, plant))
     CS26Q2.specs[5] = 0.4
     CS26Q2.specs[10] = 0.3
     CS26Q2.specs[50] = 0.3
@@ -609,8 +572,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS26Q2.name()] = CS26Q2
 
     // CommScope FFT 26Q 4 port tap
-    val CS26Q4 = Attenuator(name = "FFT 26Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS26Q4 = Attenuator(name = "FFT 26Q 4 port tap", tags = listOf(passive, plant))
     CS26Q4.specs[5] = 0.4
     CS26Q4.specs[10] = 0.3
     CS26Q4.specs[50] = 0.3
@@ -624,8 +586,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS26Q4.name()] = CS26Q4
 
     // CommScope FFT 26Q 8 port tap
-    val CS26Q8 = Attenuator(name = "FFT 26Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS26Q8 = Attenuator(name = "FFT 26Q 8 port tap", tags = listOf(passive, plant))
     CS26Q8.specs[5] = 0.6
     CS26Q8.specs[10] = 0.5
     CS26Q8.specs[50] = 0.5
@@ -639,8 +600,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS26Q8.name()] = CS26Q8
 
     // CommScope FFT 23Q 2 port tap
-    val CS23Q2 = Attenuator(name = "FFT 23Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS23Q2 = Attenuator(name = "FFT 23Q 2 port tap", tags = listOf(passive, plant))
     CS23Q2.specs[5] = 0.4
     CS23Q2.specs[10] = 0.3
     CS23Q2.specs[50] = 0.3
@@ -654,8 +614,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS23Q2.name()] = CS23Q2
 
     // CommScope FFT 23Q 4 port tap
-    val CS23Q4 = Attenuator(name = "FFT 23Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS23Q4 = Attenuator(name = "FFT 23Q 4 port tap", tags = listOf(passive, plant))
     CS23Q4.specs[5] = 0.5
     CS23Q4.specs[10] = 0.4
     CS23Q4.specs[50] = 0.4
@@ -669,8 +628,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS23Q4.name()] = CS23Q4
 
     // CommScope FFT 23Q 2 port tap
-    val CS23Q8 = Attenuator(name = "FFT 23Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS23Q8 = Attenuator(name = "FFT 23Q 8 port tap", tags = listOf(passive, plant))
     CS23Q8.specs[5] = 0.9
     CS23Q8.specs[10] = 0.8
     CS23Q8.specs[50] = 0.7
@@ -684,8 +642,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS23Q8.name()] = CS23Q8
 
     // CommScope FFT 20Q 2 port tap
-    val CS20Q2 = Attenuator(name = "FFT 20Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS20Q2 = Attenuator(name = "FFT 20Q 2 port tap", tags = listOf(passive, plant))
     CS20Q2.specs[5] = 0.5
     CS20Q2.specs[10] = 0.4
     CS20Q2.specs[50] = 0.4
@@ -699,8 +656,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS20Q2.name()] = CS20Q2
 
     // CommScope FFT 20Q 4 port tap
-    val CS20Q4 = Attenuator(name = "FFT 20Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS20Q4 = Attenuator(name = "FFT 20Q 4 port tap", tags = listOf(passive, plant))
     CS20Q4.specs[5] = 0.7
     CS20Q4.specs[10] = 0.6
     CS20Q4.specs[50] = 0.5
@@ -714,8 +670,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS20Q4.name()] = CS20Q4
 
     // CommScope FFT 20Q 8 port tap
-    val CS20Q8 = Attenuator(name = "FFT 20Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS20Q8 = Attenuator(name = "FFT 20Q 8 port tap", tags = listOf(passive, plant))
     CS20Q8.specs[5] = 1.1
     CS20Q8.specs[10] = 0.9
     CS20Q8.specs[50] = 0.9
@@ -729,8 +684,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS20Q8.name()] = CS20Q8
 
     // CommScope FFT 17Q 2 port tap
-    val CS17Q2 = Attenuator(name = "FFT 17Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS17Q2 = Attenuator(name = "FFT 17Q 2 port tap", tags = listOf(passive, plant))
     CS17Q2.specs[5] = 0.7
     CS17Q2.specs[10] = 0.6
     CS17Q2.specs[50] = 0.5
@@ -744,8 +698,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS17Q2.name()] = CS17Q2
 
     // CommScope FFT 17Q 4 port tap
-    val CS17Q4 = Attenuator(name = "FFT 17Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS17Q4 = Attenuator(name = "FFT 17Q 4 port tap", tags = listOf(passive, plant))
     CS17Q4.specs[5] = 0.9
     CS17Q4.specs[10] = 0.7
     CS17Q4.specs[50] = 0.7
@@ -759,8 +712,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS17Q4.name()] = CS17Q4
 
     // CommScope FFT 17Q 8 port tap
-    val CS17Q8 = Attenuator(name = "FFT 17Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS17Q8 = Attenuator(name = "FFT 17Q 8 port tap", tags = listOf(passive, plant))
     CS17Q8.specs[5] = 1.6
     CS17Q8.specs[10] = 1.3
     CS17Q8.specs[50] = 1.2
@@ -774,8 +726,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS17Q8.name()] = CS17Q8
 
     // CommScope FFT 14Q 2 port tap
-    val CS14Q2 = Attenuator(name = "FFT 14Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS14Q2 = Attenuator(name = "FFT 14Q 2 port tap", tags = listOf(passive, plant))
     CS14Q2.specs[5] = 0.9
     CS14Q2.specs[10] = 0.7
     CS14Q2.specs[50] = 0.6
@@ -789,8 +740,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS14Q2.name()] = CS14Q2
 
     // CommScope FFT 14Q 4 port tap
-    val CS14Q4 = Attenuator(name = "FFT 14Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS14Q4 = Attenuator(name = "FFT 14Q 4 port tap", tags = listOf(passive, plant))
     CS14Q4.specs[5] = 1.7
     CS14Q4.specs[10] = 1.3
     CS14Q4.specs[50] = 1.2
@@ -804,8 +754,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS14Q4.name()] = CS14Q4
 
     // CommScope FFT 14Q 8 port tap
-    val CS14Q8 = Attenuator(name = "FFT 14Q 8 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS14Q8 = Attenuator(name = "FFT 14Q 8 port tap", tags = listOf(passive, plant))
     CS14Q8.specs[5] = 3.7
     CS14Q8.specs[10] = 3.3
     CS14Q8.specs[50] = 3.2
@@ -819,8 +768,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS14Q8.name()] = CS14Q8
 
     // CommScope FFT 15.5Q 4 port tap
-    val CS155Q4 = Attenuator(name = "FFT 15.5Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS155Q4 = Attenuator(name = "FFT 15.5Q 4 port tap", tags = listOf(passive, plant))
     CS155Q4.specs[5] = 1.3
     CS155Q4.specs[10] = 1.0
     CS155Q4.specs[50] = 0.9
@@ -834,8 +782,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS155Q4.name()] = CS155Q4
 
     // CommScope FFT 12Q 2 port tap
-    val CS12Q2 = Attenuator(name = "FFT 12Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS12Q2 = Attenuator(name = "FFT 12Q 2 port tap", tags = listOf(passive, plant))
     CS12Q2.specs[5] = 1.4
     CS12Q2.specs[10] = 1.1
     CS12Q2.specs[50] = 1.0
@@ -849,8 +796,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS12Q2.name()] = CS12Q2
 
     // CommScope FFT 10Q 2 port tap
-    val CS10Q2 = Attenuator(name = "FFT 10Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS10Q2 = Attenuator(name = "FFT 10Q 2 port tap", tags = listOf(passive, plant))
     CS10Q2.specs[5] = 1.7
     CS10Q2.specs[10] = 1.4
     CS10Q2.specs[50] = 1.3
@@ -864,8 +810,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS10Q2.name()] = CS10Q2
 
     // CommScope FFT 10Q 4 port tap
-    val CS10Q4 = Attenuator(name = "FFT 10Q 4 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS10Q4 = Attenuator(name = "FFT 10Q 4 port tap", tags = listOf(passive, plant))
     CS10Q4.specs[5] = 3.8
     CS10Q4.specs[10] = 3.3
     CS10Q4.specs[50] = 3.2
@@ -879,8 +824,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS10Q4.name()] = CS10Q4
 
     // CommScope FFT 7Q 2 port tap
-    val CS7Q2 = Attenuator(name = "FFT 7Q 2 port tap", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CS7Q2 = Attenuator(name = "FFT 7Q 2 port tap", tags = listOf(passive, plant))
     CS7Q2.specs[5] = 3.2
     CS7Q2.specs[10] = 2.8
     CS7Q2.specs[50] = 2.7
@@ -894,8 +838,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CS7Q2.name()] = CS7Q2
 
     // CommScope SSP-PIQ power inserter
-    val CSSSPPIQ = Attenuator(name = "SSP-PIQ", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSPPIQ = Attenuator(name = "SSP-PIQ", tags = listOf(passive, plant))
     CSSSPPIQ.specs[5] = 0.3
     CSSSPPIQ.specs[50] = 0.3
     CSSSPPIQ.specs[100] = 0.3
@@ -908,8 +851,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSPPIQ.name()] = CSSSPPIQ
 
     // CommScope SSP 3Q two way splitter
-    val CSSSP3Q = Attenuator(name = "SSP-3Q", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP3Q = Attenuator(name = "SSP-3Q", tags = listOf(passive, plant))
     CSSSP3Q.specs[5] = 3.8
     CSSSP3Q.specs[50] = 3.8
     CSSSP3Q.specs[100] = 3.8
@@ -922,8 +864,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP3Q.name()] = CSSSP3Q
 
     // CommScope SSP 7Q thru leg
-    val CSSSP7QL = Attenuator(name = "SSP-7Q Thru Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP7QL = Attenuator(name = "SSP-7Q Thru Leg", tags = listOf(passive, plant))
     CSSSP7QL.specs[5] = 1.9
     CSSSP7QL.specs[50] = 1.9
     CSSSP7QL.specs[100] = 1.9
@@ -937,8 +878,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP7QL.name()] = CSSSP7QL
 
     // CommScope SSP 7Q tap leg
-    val CSSSP7QH = Attenuator(name = "SSP-7Q Tap Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP7QH = Attenuator(name = "SSP-7Q Tap Leg", tags = listOf(passive, plant))
     CSSSP7QH.specs[5] = 7.7
     CSSSP7QH.specs[50] = 7.7
     CSSSP7QH.specs[100] = 7.7
@@ -952,8 +892,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP7QH.name()] = CSSSP7QH
 
     // CommScope SSP 9Q thru leg
-    val CSSSP9QL = Attenuator(name = "SSP-9Q Thru Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP9QL = Attenuator(name = "SSP-9Q Thru Leg", tags = listOf(passive, plant))
     CSSSP9QL.specs[5] = 1.4
     CSSSP9QL.specs[50] = 1.4
     CSSSP9QL.specs[100] = 1.4
@@ -967,8 +906,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP9QL.name()] = CSSSP9QL
 
     // CommScope SSP 9Q tap leg
-    val CSSSP9QH = Attenuator(name = "SSP-9Q Tap Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP9QH = Attenuator(name = "SSP-9Q Tap Leg", tags = listOf(passive, plant))
     CSSSP9QH.specs[5] = 9.3
     CSSSP9QH.specs[50] = 9.3
     CSSSP9QH.specs[100] = 9.3
@@ -982,8 +920,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP9QH.name()] = CSSSP9QH
 
     // CommScope SSP 12Q thru leg
-    val CSSSP12QL = Attenuator(name = "SSP-12Q Thru Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP12QL = Attenuator(name = "SSP-12Q Thru Leg", tags = listOf(passive, plant))
     CSSSP12QL.specs[5] = 1.1
     CSSSP12QL.specs[50] = 1.1
     CSSSP12QL.specs[100] = 1.1
@@ -997,8 +934,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP12QL.name()] = CSSSP12QL
 
     // CommScope SSP 12Q tap leg
-    val CSSSP12QH = Attenuator(name = "SSP-12Q Tap Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP12QH = Attenuator(name = "SSP-12Q Tap Leg", tags = listOf(passive, plant))
     CSSSP12QH.specs[5] = 11.7
     CSSSP12QH.specs[50] = 11.7
     CSSSP12QH.specs[100] = 11.7
@@ -1012,8 +948,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP12QH.name()] = CSSSP12QH
 
     // CommScope SSP 16Q thru leg
-    val CSSSP16QL = Attenuator(name = "SSP-16Q Thru Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP16QL = Attenuator(name = "SSP-16Q Thru Leg", tags = listOf(passive, plant))
     CSSSP16QL.specs[5] = 0.9
     CSSSP16QL.specs[50] = 0.9
     CSSSP16QL.specs[100] = 0.9
@@ -1027,8 +962,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP16QL.name()] = CSSSP16QL
 
     // CommScope SSP 16Q tap leg
-    val CSSSP16QH = Attenuator(name = "SSP-16Q Tap Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP16QH = Attenuator(name = "SSP-16Q Tap Leg", tags = listOf(passive, plant))
     CSSSP16QH.specs[5] = 15.7
     CSSSP16QH.specs[50] = 15.7
     CSSSP16QH.specs[100] = 15.7
@@ -1042,8 +976,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP16QH.name()] = CSSSP16QH
 
     // CommScope SSP 636Q high leg
-    val CSSSP636H = Attenuator(name = "SSP-636Q High Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP636H = Attenuator(name = "SSP-636Q High Leg", tags = listOf(passive, plant))
     CSSSP636H.specs[5] = 7.2
     CSSSP636H.specs[50] = 7.2
     CSSSP636H.specs[100] = 7.2
@@ -1057,8 +990,7 @@ fun loadRFdata(sharedViewModel: SharedViewModel) {
     sharedViewModel.attenuatorMap[CSSSP636H.name()] = CSSSP636H
 
     // CommScope SSP 636Q low leg
-    val CSSSP636QL = Attenuator(name = "SSP-636Q Low Leg", tags = listOf(passive, plant),
-        iscoax = false, ispassive = true, isdrop = false, isplant = true)
+    val CSSSP636QL = Attenuator(name = "SSP-636Q Low Leg", tags = listOf(passive, plant))
     CSSSP636QL.specs[5] = 3.9
     CSSSP636QL.specs[50] = 3.9
     CSSSP636QL.specs[100] = 3.9

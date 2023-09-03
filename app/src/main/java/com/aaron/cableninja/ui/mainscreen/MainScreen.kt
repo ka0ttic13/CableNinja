@@ -61,7 +61,7 @@ fun MainScreen(
     var editLengthDialog by remember { mutableStateOf(false) }
 
     // temp card for editing current card
-    var editCard by remember { mutableStateOf(AttenuatorCard("", listOf(), false)) }
+    var editCard by remember { mutableStateOf(AttenuatorCard("", listOf())) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -268,7 +268,8 @@ fun MainScreen(
 
                 // round loss to nearest tenth
                 Text(
-                    text = (round(sharedViewModel.totalAttenuation * 10) / 10).toString() + " dB"
+                    text = (round(sharedViewModel.totalAttenuation * 10) / 10)
+                        .toString() + " dB"
                 )
             }
 

@@ -313,11 +313,7 @@ fun AddScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = showList) { attenuator ->
-                val card = AttenuatorCard(
-                    attenuator.name(),
-                    attenuator.tags(),
-                    attenuator.isCoax()
-                )
+                val card = AttenuatorCard(attenuator)
 
                 AddAttenuatorCard(
                     card,
@@ -350,8 +346,7 @@ fun AddScreen(
                             sharedViewModel.attenuatorCardList.add(card)
                             navController.navigate(Screen.Main.route)
                         }
-                    },
-                    modifier = Modifier.animateItemPlacement()
+                    }
                 )
             }
         }
@@ -399,11 +394,10 @@ fun AddScreen(
 private fun AddAttenuatorCard(
     card: AttenuatorCard,
     onClick:() -> Unit,
-    modifier: Modifier
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        modifier = modifier
+        modifier = Modifier
             .clickable(onClick = { onClick() })
     ) {
         Row(
