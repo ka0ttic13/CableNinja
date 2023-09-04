@@ -325,7 +325,6 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.spacedBy(30.dp),
             ) {
                 // Clear Button
-                //      click clears attenuator list
                 Button(
                     onClick = {
                         sharedViewModel.attenuatorCardList.clear()
@@ -347,7 +346,6 @@ fun MainScreen(
                 }
 
                 // Add Button
-                //      click calls AddScreen()
                 Button(
                     onClick = {
                         sharedViewModel.clearFilters()
