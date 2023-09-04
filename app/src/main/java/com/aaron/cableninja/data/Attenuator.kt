@@ -14,9 +14,10 @@ enum class AttenuatorType {
  *          key = frequency
  *          value = loss @ 100'
  ************************************************************/
-class Attenuator(name: String,
-                 tags: List<AttenuatorType>,
-    ) {
+class Attenuator(
+    name: String,
+    tags: List<AttenuatorType>
+) {
     private val _name = name
     private val _tags = tags
 

@@ -61,22 +61,22 @@ fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
+    var showList = mutableListOf<Attenuator>()
     var showLengthDialog by remember { mutableStateOf(false) }
 
+    // search/filter states
     var search by remember { mutableStateOf("") }
     var doSearch by remember { mutableStateOf(false) }
     var dontSearch by remember { mutableStateOf(false) }
     var doFilter by remember { mutableStateOf(false) }
     var dontFilter by remember { mutableStateOf(false) }
-
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
     var plantFilter by remember { mutableStateOf(false) }
 
+    // allows us to close keyboard when we want
     val kbController = LocalSoftwareKeyboardController.current
-
-    var showList = mutableListOf<Attenuator>()
 
     Column {
         // Add Header with Close Icon "X" on right side
@@ -113,7 +113,7 @@ fun AddScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(4.dp)
         ) {
             OutlinedTextField(
                 value = search,
@@ -143,113 +143,119 @@ fun AddScreen(
                 },
                 modifier = Modifier
                     .weight(.6f)
-                    .padding(start = 10.dp, end = 20.dp)
+                    .padding(start = 10.dp, end = 10.dp)
             )
         }
 
-        // Filter by tags
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp)
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Filter:",
-                modifier = Modifier.padding(start = 10.dp)
+                modifier = Modifier.padding(start = 12.dp, top=2.dp)
             )
 
-            // show all possible tags
-            if (sharedViewModel.filterList.isEmpty()) {
-                sharedViewModel.attenuatorTags.keys.forEach {
-                    sharedViewModel.attenuatorTags[it]?.let { color ->
-                        AddFilter(
-                            filterEnabled = false,
-                            filterColor = color,
-                            type = it,
-                            onClick = { type ->
-                                sharedViewModel.addFilter(type)
+            // Filter by tags
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, bottom = 6.dp, end = 40.dp)
+            ) {
 
-                                when (type) {
-                                    AttenuatorType.COAX -> coaxFilter = true
-                                    AttenuatorType.PASSIVE -> passiveFilter = true
-                                    AttenuatorType.DROP -> dropFilter = true
-                                    AttenuatorType.PLANT -> plantFilter = true
+
+                // show all possible tags
+                if (sharedViewModel.filterList.isEmpty()) {
+                    sharedViewModel.attenuatorTags.keys.forEach {
+                        sharedViewModel.attenuatorTags[it]?.let { color ->
+                            AddFilter(
+                                filterEnabled = false,
+                                filterColor = color,
+                                type = it,
+                                onClick = { type ->
+                                    sharedViewModel.addFilter(type)
+
+                                    when (type) {
+                                        AttenuatorType.COAX -> coaxFilter = true
+                                        AttenuatorType.PASSIVE -> passiveFilter = true
+                                        AttenuatorType.DROP -> dropFilter = true
+                                        AttenuatorType.PLANT -> plantFilter = true
+                                    }
                                 }
+                            )
+                        }
+                    }
+                }
+                // otherwise show filters
+                else {
+                    // coax tag
+                    sharedViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
+                        AddFilter(
+                            filterEnabled = coaxFilter,
+                            filterColor = it,
+                            type = AttenuatorType.COAX,
+                            onClick = {
+                                if (coaxFilter)
+                                    sharedViewModel.removeFilter(it)
+                                else
+                                    sharedViewModel.addFilter(it)
+
+                                coaxFilter = !coaxFilter
                             }
                         )
                     }
-                }
-            }
-            // show filters
-            else {
-                // coax tag
-                sharedViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
-                    AddFilter(
-                        filterEnabled = coaxFilter,
-                        filterColor = it,
-                        type = AttenuatorType.COAX,
-                        onClick = {
-                            if (coaxFilter)
-                                sharedViewModel.removeFilter(it)
-                            else
-                                sharedViewModel.addFilter(it)
 
-                            coaxFilter = !coaxFilter
-                        }
-                    )
-                }
+                    // passive tag
+                    sharedViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
+                        AddFilter(
+                            filterEnabled = passiveFilter,
+                            filterColor = it,
+                            type = AttenuatorType.PASSIVE,
+                            onClick = {
+                                if (passiveFilter)
+                                    sharedViewModel.removeFilter(it)
+                                else
+                                    sharedViewModel.addFilter(it)
 
-                // passive tag
-                sharedViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
-                    AddFilter(
-                        filterEnabled = passiveFilter,
-                        filterColor = it,
-                        type = AttenuatorType.PASSIVE,
-                        onClick = {
-                            if (passiveFilter)
-                                sharedViewModel.removeFilter(it)
-                            else
-                                sharedViewModel.addFilter(it)
+                                passiveFilter = !passiveFilter
+                            }
+                        )
+                    }
 
-                            passiveFilter = !passiveFilter
-                        }
-                    )
-                }
+                    // drop tag
+                    sharedViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
+                        AddFilter(
+                            filterEnabled = dropFilter,
+                            filterColor = it,
+                            type = AttenuatorType.DROP,
+                            onClick = {
+                                if (dropFilter)
+                                    sharedViewModel.removeFilter(it)
+                                else
+                                    sharedViewModel.addFilter(it)
 
-                // drop tag
-                sharedViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
-                    AddFilter(
-                        filterEnabled = dropFilter,
-                        filterColor = it,
-                        type = AttenuatorType.DROP,
-                        onClick = {
-                            if (dropFilter)
-                                sharedViewModel.removeFilter(it)
-                            else
-                                sharedViewModel.addFilter(it)
+                                dropFilter = !dropFilter
+                            }
+                        )
+                    }
 
-                            dropFilter = !dropFilter
-                        }
-                    )
-                }
+                    // plant tag
+                    sharedViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
+                        AddFilter(
+                            filterEnabled = plantFilter,
+                            filterColor = it,
+                            type = AttenuatorType.PLANT,
+                            onClick = {
+                                if (plantFilter)
+                                    sharedViewModel.removeFilter(it)
+                                else
+                                    sharedViewModel.addFilter(it)
 
-                // plant tag
-                sharedViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
-                    AddFilter(
-                        filterEnabled = plantFilter,
-                        filterColor = it,
-                        type = AttenuatorType.PLANT,
-                        onClick = {
-                            if (plantFilter)
-                                sharedViewModel.removeFilter(it)
-                            else
-                                sharedViewModel.addFilter(it)
-
-                            plantFilter = !plantFilter
-                        }
-                    )
+                                plantFilter = !plantFilter
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -479,7 +485,7 @@ private fun AddFilter(
         tagBackgroundColor = filterColor
 
     Surface(
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(4.dp)
     ) {
         Text(
             text = type.toString(),
@@ -487,7 +493,8 @@ private fun AddFilter(
             style = tagFontStyle,
             modifier = Modifier
                 .background(tagBackgroundColor)
-                .padding(horizontal = 6.dp, vertical = 3.dp)
+//                .padding(horizontal = 6.dp, vertical = 3.dp)
+                .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
                 .clickable {
                     onClick(type)
                 }
