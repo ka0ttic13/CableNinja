@@ -67,9 +67,6 @@ fun AddScreen(
     // search/filter states
     var search by remember { mutableStateOf("") }
     var doSearch by remember { mutableStateOf(false) }
-//    var dontSearch by remember { mutableStateOf(false) }
-//    var doFilter by remember { mutableStateOf(false) }
-//    var dontFilter by remember { mutableStateOf(false) }
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
@@ -262,7 +259,7 @@ fun AddScreen(
 
 
         // execute search and selected filters
-        showList = filterAndSearch(search, sharedViewModel)
+        showList = createShowListfromSearch(search, sharedViewModel)
 
 
         // display the list
@@ -345,27 +342,26 @@ fun AddScreen(
 }
 
 /**************************************************************************
- * filterAndSearch()
+ * createShowListfromSearch()
  *      Logic for search field and selected filters
  *      RETURNS list of Attenuators that match the search
  **************************************************************************/
-private fun filterAndSearch(
+private fun createShowListfromSearch(
     search: String,
     sharedViewModel: SharedViewModel)
     : MutableList<Attenuator>
 {
     val doSearch = search.isNotEmpty()
-    val dontSearch = !doSearch
+    val dontSearch = search.isEmpty()
     val dontFilter = sharedViewModel.filterList.isEmpty()
     val doFilter = sharedViewModel.filterList.isNotEmpty()
-    var resultsList = mutableListOf<Attenuator>()
+    val resultsList = mutableListOf<Attenuator>()
 
-    // if no tags and no search query, just copy the whole list
+    // if no search criteria, just return the whole list
     if (dontFilter && dontSearch)
-        resultsList = sharedViewModel.attenuatorMap.values.toMutableList()
+        return sharedViewModel.attenuatorMap.values.toMutableList()
+    // otherwise, find all attenuators that match search criteria
     else {
-        // iterate over all possible attenuators and add to showList
-        // the ones that match search filters
         for (att in sharedViewModel.attenuatorMap.values) {
 
             if (doSearch && dontFilter) {
@@ -511,7 +507,6 @@ private fun AddFilter(
             style = tagFontStyle,
             modifier = Modifier
                 .background(tagBackgroundColor)
-//                .padding(horizontal = 6.dp, vertical = 3.dp)
                 .padding(top = 0.dp, bottom = 2.dp, start = 5.dp, end = 5.dp)
                 .clickable {
                     onClick(type)
