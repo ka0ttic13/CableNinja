@@ -61,15 +61,15 @@ fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
-    var showList = mutableListOf<Attenuator>()
+    var showList: MutableList<Attenuator>
     var showLengthDialog by remember { mutableStateOf(false) }
 
     // search/filter states
     var search by remember { mutableStateOf("") }
     var doSearch by remember { mutableStateOf(false) }
-    var dontSearch by remember { mutableStateOf(false) }
-    var doFilter by remember { mutableStateOf(false) }
-    var dontFilter by remember { mutableStateOf(false) }
+//    var dontSearch by remember { mutableStateOf(false) }
+//    var doFilter by remember { mutableStateOf(false) }
+//    var dontFilter by remember { mutableStateOf(false) }
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
@@ -260,57 +260,9 @@ fun AddScreen(
             }
         }
 
-        doSearch = search.isNotEmpty()
-        dontSearch = search.isEmpty()
-        dontFilter = sharedViewModel.filterList.isEmpty()
-        doFilter = sharedViewModel.filterList.isNotEmpty()
 
-        // if no tags and no search query, just copy the whole list
-        if (dontFilter && dontSearch)
-            showList = sharedViewModel.attenuatorMap.values.toMutableList()
-        else {
-            // iterate over all possible attenuators and add to showList
-            // the ones that match search filters
-            for (att in sharedViewModel.attenuatorMap.values) {
-
-                if (doSearch && dontFilter) {
-                    if (att.name().contains(search, ignoreCase = true)) {
-                        if (!showList.contains(att))
-                            showList.add(att)
-                    }
-                }
-
-                else if (doSearch && doFilter) {
-                    var matches = true
-
-                    sharedViewModel.filterList.forEach {
-                        if (!att.tags().contains(it))
-                            matches = false
-                    }
-
-                    if (matches && att.name().contains(search, ignoreCase = true) &&
-                        !showList.contains(att)) {
-
-                        showList.add(att)
-
-                    }
-                }
-
-                // tag filters only
-                else {
-                    var matches = true
-
-                    sharedViewModel.filterList.forEach {
-                        if (!att.tags().contains(it))
-                            matches = false
-                    }
-
-                    if (matches && !showList.contains(att))
-                        showList.add(att)
-
-                }
-            }
-        }
+        // execute search and selected filters
+        showList = filterAndSearch(search, sharedViewModel)
 
 
         // display the list
@@ -390,6 +342,72 @@ fun AddScreen(
             }
         )
     }
+}
+
+/**************************************************************************
+ * filterAndSearch()
+ *      Logic for search field and selected filters
+ *      RETURNS list of Attenuators that match the search
+ **************************************************************************/
+private fun filterAndSearch(
+    search: String,
+    sharedViewModel: SharedViewModel)
+    : MutableList<Attenuator>
+{
+    val doSearch = search.isNotEmpty()
+    val dontSearch = !doSearch
+    val dontFilter = sharedViewModel.filterList.isEmpty()
+    val doFilter = sharedViewModel.filterList.isNotEmpty()
+    var resultsList = mutableListOf<Attenuator>()
+
+    // if no tags and no search query, just copy the whole list
+    if (dontFilter && dontSearch)
+        resultsList = sharedViewModel.attenuatorMap.values.toMutableList()
+    else {
+        // iterate over all possible attenuators and add to showList
+        // the ones that match search filters
+        for (att in sharedViewModel.attenuatorMap.values) {
+
+            if (doSearch && dontFilter) {
+                if (att.name().contains(search, ignoreCase = true)) {
+                    if (!resultsList.contains(att))
+                        resultsList.add(att)
+                }
+            }
+
+            else if (doSearch && doFilter) {
+                var matches = true
+
+                sharedViewModel.filterList.forEach {
+                    if (!att.tags().contains(it))
+                        matches = false
+                }
+
+                if (matches && att.name().contains(search, ignoreCase = true) &&
+                    !resultsList.contains(att)) {
+
+                    resultsList.add(att)
+
+                }
+            }
+
+            // tag filters only
+            else {
+                var matches = true
+
+                sharedViewModel.filterList.forEach {
+                    if (!att.tags().contains(it))
+                        matches = false
+                }
+
+                if (matches && !resultsList.contains(att))
+                    resultsList.add(att)
+
+            }
+        }
+    }
+
+    return resultsList
 }
 
 /**************************************************************************
