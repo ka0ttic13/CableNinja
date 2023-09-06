@@ -457,7 +457,7 @@ private fun AddAttenuatorCard(
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-                // show attenuator ID on left
+                // show attenuator name on left
                 Text(
                     text = data.name(),
                     fontWeight = FontWeight.Bold,

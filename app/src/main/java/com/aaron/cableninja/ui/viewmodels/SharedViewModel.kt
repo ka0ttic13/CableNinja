@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorCard
@@ -18,26 +17,20 @@ import com.aaron.cableninja.ui.theme.plantColor
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
     // map of attenuator tags to colors
-    var attenuatorTags = mutableMapOf<AttenuatorType, Color>()
-        private set
+    val attenuatorTags = mapOf(
+        AttenuatorType.COAX to coaxColor,
+        AttenuatorType.PASSIVE to passiveColor,
+        AttenuatorType.DROP to dropColor,
+        AttenuatorType.PLANT to plantColor
+    )
 
-    // master map of ID strings to manufacturer data
+    // master map of name strings to manufacturer data
     var attenuatorMap = mutableMapOf<String, Attenuator>()
         private set
 
     // master list of RF data that has been added
     var attenuatorCardList = mutableListOf<AttenuatorCard>()
         private set
-
-    init {
-        attenuatorTags[AttenuatorType.COAX] = coaxColor
-        attenuatorTags[AttenuatorType.PASSIVE] = passiveColor
-        attenuatorTags[AttenuatorType.DROP] = dropColor
-        attenuatorTags[AttenuatorType.PLANT] = plantColor
-
-        loadRFdata(this)
-    }
-
 
     var currentFreq by mutableStateOf(1218f)
         private set
@@ -78,4 +71,8 @@ class SharedViewModel : ViewModel() {
     fun addFilter(type: AttenuatorType) { _filterList.add(type) }
     fun removeFilter(type: AttenuatorType) { _filterList.remove(type) }
     fun clearFilters() { _filterList.clear() }
+
+    init {
+        loadRFdata(this)
+    }
 }
