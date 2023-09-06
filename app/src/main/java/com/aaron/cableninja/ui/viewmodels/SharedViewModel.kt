@@ -8,11 +8,12 @@ import androidx.lifecycle.ViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorCard
 import com.aaron.cableninja.data.AttenuatorType
-import com.aaron.cableninja.ui.loadRFdata
 import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
 import com.aaron.cableninja.ui.theme.passiveColor
 import com.aaron.cableninja.ui.theme.plantColor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
@@ -24,16 +25,23 @@ class SharedViewModel : ViewModel() {
         AttenuatorType.PLANT to plantColor
     )
 
+    private val _showList = MutableStateFlow(listOf<Attenuator>())
+
+    private val _search = MutableStateFlow("")
+    val search = _search.asStateFlow()
+
     // master map of name strings to manufacturer data
-    var attenuatorMap = mutableMapOf<String, Attenuator>()
+    var attenuatorList = mutableListOf<Attenuator>()
         private set
 
     // master list of RF data that has been added
     var attenuatorCardList = mutableListOf<AttenuatorCard>()
         private set
 
+//    private var _currentFreq = MutableStateFlow(1218f)
+//    val currentFreq = _currentFreq.asStateFlow()
     var currentFreq by mutableStateOf(1218f)
-        private set
+
     fun setFreq(freq: Float) { currentFreq = freq }
 
     var currentTemp by mutableStateOf(68f)

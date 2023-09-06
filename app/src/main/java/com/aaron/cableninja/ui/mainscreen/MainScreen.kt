@@ -199,7 +199,7 @@ fun MainScreen(
                 sharedViewModel.attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
-                            sharedViewModel.attenuatorMap[it.name()],
+                            it.getAttenuator(),
                             sharedViewModel.currentFreq.toInt(),
                             it.length(),
                             sharedViewModel.currentTemp.toInt()

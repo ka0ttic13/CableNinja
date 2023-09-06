@@ -20,6 +20,7 @@ class AttenuatorCard(atten: Attenuator) {
                 _loss = loss
         }
 
+        fun getAttenuator() : Attenuator { return _atten }
         fun name(): String { return _atten.name() }
         fun tags(): List<AttenuatorType> { return _atten.tags() }
         fun length(): Int { return _length }

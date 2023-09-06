@@ -35,5 +35,9 @@ class Attenuator(
     fun getLoss(frequency: Int): Double? {
         return specs[frequency]
     }
+
+    fun doesMatchSearch(search: String, filters: List<AttenuatorType>) : Boolean {
+        return search == _name && filters == _tags
+    }
 }
 

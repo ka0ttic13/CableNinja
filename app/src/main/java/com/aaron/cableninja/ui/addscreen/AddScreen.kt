@@ -66,7 +66,6 @@ fun AddScreen(
 
     // search/filter states
     var search by remember { mutableStateOf("") }
-    var doSearch by remember { mutableStateOf(false) }
     var coaxFilter by remember { mutableStateOf(false) }
     var passiveFilter by remember { mutableStateOf(false) }
     var dropFilter by remember { mutableStateOf(false) }
@@ -116,8 +115,6 @@ fun AddScreen(
                 value = search,
                 onValueChange = {
                     search = it.trim()
-                    if (search.isNotEmpty())
-                        doSearch = true
                 },
                 singleLine = true,
                 leadingIcon = {
@@ -259,7 +256,7 @@ fun AddScreen(
 
 
         // execute search and selected filters
-        showList = createShowListfromSearch(search, sharedViewModel)
+        showList = createShowListFromSearch(search, sharedViewModel)
 
 
         // display the list
@@ -282,7 +279,7 @@ fun AddScreen(
                             showLengthDialog = true
                         } else {
                             // Find loss
-                            for (data in sharedViewModel.attenuatorMap.values) {
+                            for (data in sharedViewModel.attenuatorList.iterator()) {
                                 if (data.name() == card.name()) {
                                     sharedViewModel.card!!.setLoss(
                                         getCableLoss(
@@ -317,7 +314,7 @@ fun AddScreen(
                 sharedViewModel.addAttenuatorLength(it.toInt())
 
                 // Find loss
-                for (data in sharedViewModel.attenuatorMap.values) {
+                for (data in sharedViewModel.attenuatorList.iterator()) {
                     if (data.name() == sharedViewModel.card!!.name()) {
                         sharedViewModel.card!!.setLoss(
                             getCableLoss(
@@ -342,36 +339,32 @@ fun AddScreen(
 }
 
 /**************************************************************************
- * createShowListfromSearch()
+ * createShowListFromSearch()
  *      Logic for search field and selected filters
  *      RETURNS list of Attenuators that match the search
  **************************************************************************/
-private fun createShowListfromSearch(
+private fun createShowListFromSearch(
     search: String,
     sharedViewModel: SharedViewModel)
     : MutableList<Attenuator>
 {
-    val doSearch = search.isNotEmpty()
-    val dontSearch = search.isEmpty()
-    val dontFilter = sharedViewModel.filterList.isEmpty()
-    val doFilter = sharedViewModel.filterList.isNotEmpty()
     val resultsList = mutableListOf<Attenuator>()
 
     // if no search criteria, just return the whole list
-    if (dontFilter && dontSearch)
-        return sharedViewModel.attenuatorMap.values.toMutableList()
+    if (search.isEmpty() && sharedViewModel.filterList.isEmpty())
+        return sharedViewModel.attenuatorList
     // otherwise, find all attenuators that match search criteria
     else {
-        for (att in sharedViewModel.attenuatorMap.values) {
-
-            if (doSearch && dontFilter) {
+        sharedViewModel.attenuatorList.forEach { att ->
+            // search and no filters
+            if (search.isNotEmpty() && sharedViewModel.filterList.isEmpty()) {
                 if (att.name().contains(search, ignoreCase = true)) {
                     if (!resultsList.contains(att))
                         resultsList.add(att)
                 }
             }
-
-            else if (doSearch && doFilter) {
+            // search and filters
+            else if (search.isNotEmpty() && sharedViewModel.filterList.isNotEmpty()) {
                 var matches = true
 
                 sharedViewModel.filterList.forEach {
@@ -386,8 +379,7 @@ private fun createShowListfromSearch(
 
                 }
             }
-
-            // tag filters only
+            // filters only
             else {
                 var matches = true
 
