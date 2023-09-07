@@ -49,27 +49,20 @@ class Attenuator(
         }
 
         // if all parameters are empty then it matches
-        if (search.isEmpty() && filters.isEmpty())
-            return true
+        return if (search.isEmpty() && filters.isEmpty())
+            true
 
         // search and no filters
-        if (search.isNotEmpty() && filters.isEmpty()) {
-            if (_name.contains(search, ignoreCase = true))
-                return true
-        }
+        else if (search.isNotEmpty() && filters.isEmpty())
+            _name.contains(search, ignoreCase = true)
 
         // search and filters
-        if (search.isNotEmpty() && filters.isNotEmpty()) {
-            return matchesFilters(filters) &&
+        else if (search.isNotEmpty() && filters.isNotEmpty())
+            matchesFilters(filters) &&
                     _name.contains(search, ignoreCase = true)
-        }
-        // only filters
+        // filters only
         else
-            return matchesFilters(filters)
+            matchesFilters(filters)
     }
-
-//    fun equals(att: Attenuator): Boolean {
-//        return att.name() == _name && att.tags() == _tags
-//    }
 }
 

@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -285,7 +286,7 @@ fun AddScreen(
                             // showLengthDialog conditional
                             showLengthDialog = true
                         } else {
-                            // Find loss
+                            // Find passive loss
                             for (data in sharedViewModel.attenuatorList.iterator()) {
                                 if (data.name() == card.name()) {
                                     sharedViewModel.card!!.setLoss(

@@ -12,6 +12,8 @@ import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
 import com.aaron.cableninja.ui.theme.passiveColor
 import com.aaron.cableninja.ui.theme.plantColor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 const val DEFAULT_FREQ = 1218f
 const val DEFAULT_TEMP = 68f
@@ -26,8 +28,6 @@ class SharedViewModel : ViewModel() {
         AttenuatorType.DROP to dropColor,
         AttenuatorType.PLANT to plantColor
     )
-
-
 
 //    private val _search = MutableStateFlow("")
 //    val search = _search.asStateFlow()
@@ -47,8 +47,9 @@ class SharedViewModel : ViewModel() {
     var attenuatorCardList = mutableListOf<AttenuatorCard>()
         private set
 
-//    private var _currentFreq = MutableStateFlow(1218f)
+//    private var _currentFreq = MutableStateFlow(DEFAULT_FREQ)
 //    val currentFreq = _currentFreq.asStateFlow()
+//    fun onFreqChange(newFreq: Float) { _currentFreq.value = newFreq }
     var currentFreq by mutableStateOf(DEFAULT_FREQ)
 
     fun setFreq(freq: Float) { currentFreq = freq }
@@ -56,12 +57,24 @@ class SharedViewModel : ViewModel() {
     var currentTemp by mutableStateOf(DEFAULT_TEMP)
     fun setTemp(temp: Float) { currentTemp = temp }
 
+//    private var _currentTemp = MutableStateFlow(DEFAULT_TEMP)
+//    val currentTemp = _currentTemp.asStateFlow()
+//    fun onTempChange(newTemp: Float) { _currentTemp.value = newTemp }
+//
+//    private var _currentStartLevel = MutableStateFlow("")
+//    val currentStartLevel = _currentStartLevel.asStateFlow()
+//    fun onStartLevelChange(newLevel: String) { _currentStartLevel.value = newLevel }
+
     var currentStartLevel by mutableStateOf("")
     fun setStartLevel(level: String) { currentStartLevel = level }
 
     var totalAttenuation by mutableStateOf(0.0)
         private set
     fun setTotalAtten(total: Double) { totalAttenuation = total }
+
+//    private var _totalAttenuation = MutableStateFlow(0f)
+//    val totalAttenuation = _totalAttenuation.asStateFlow()
+//    fun setTotalAttenuation(newTotal: Float) { _totalAttenuation.value = newTotal }
 
     var card by mutableStateOf<AttenuatorCard?>(null)
         private set
@@ -81,7 +94,11 @@ class SharedViewModel : ViewModel() {
 
     var hasListChanged by mutableStateOf(false)
         private set
-    fun setHasListChanged() { hasListChanged = true}
+    fun setHasListChanged() { hasListChanged = true }
+
+//    private var _hasListChanged = MutableStateFlow(false)
+//    var hasListChanged = _hasListChanged.asStateFlow()
+//    fun setHasListChanged() { _hasListChanged.value = true }
 
     private var _filterList = mutableStateListOf<AttenuatorType>()
     var filterList: List<AttenuatorType> = _filterList
