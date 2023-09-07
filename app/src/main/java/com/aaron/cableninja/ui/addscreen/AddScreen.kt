@@ -266,7 +266,7 @@ fun AddScreen(
                 showList.add(attenuator)
         }
 
-        // display the list
+        // display the filtered
         LazyColumn(
             contentPadding = PaddingValues(all = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)

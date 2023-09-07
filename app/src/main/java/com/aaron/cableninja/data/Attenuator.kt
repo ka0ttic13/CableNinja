@@ -68,8 +68,8 @@ class Attenuator(
             return matchesFilters(filters)
     }
 
-    fun equals(att: Attenuator): Boolean {
-        return att.name() == _name && att.tags() == _tags
-    }
+//    fun equals(att: Attenuator): Boolean {
+//        return att.name() == _name && att.tags() == _tags
+//    }
 }
 
