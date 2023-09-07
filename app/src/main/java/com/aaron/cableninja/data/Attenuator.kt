@@ -37,39 +37,39 @@ class Attenuator(
     }
 
     fun doesMatchSearch(search: String, filters: List<AttenuatorType>) : Boolean {
+        fun matchesFilters(f: List<AttenuatorType>): Boolean {
+            var matches = true
+
+            f.forEach {
+                if (!_tags.contains(it))
+                    matches = false
+            }
+
+            return matches
+        }
+
         // if all parameters are empty then it matches
         if (search.isEmpty() && filters.isEmpty())
             return true
 
+        // search and no filters
         if (search.isNotEmpty() && filters.isEmpty()) {
             if (_name.contains(search, ignoreCase = true))
                 return true
         }
 
+        // search and filters
         if (search.isNotEmpty() && filters.isNotEmpty()) {
-            var matches = true
-
-            filters.forEach {
-                if (!_tags.contains(it))
-                    matches = false
-            }
-
-            if (!_name.contains(search, ignoreCase = true))
-                matches = false
-
-            return matches
+            return matchesFilters(filters) &&
+                    _name.contains(search, ignoreCase = true)
         }
         // only filters
-        else {
-            var matches = true
+        else
+            return matchesFilters(filters)
+    }
 
-            filters.forEach {
-                if (!_tags.contains(it))
-                    matches = false
-            }
-
-            return matches
-        }
+    fun equals(att: Attenuator): Boolean {
+        return att.name() == _name && att.tags() == _tags
     }
 }
 

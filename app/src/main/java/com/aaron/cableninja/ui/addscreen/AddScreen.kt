@@ -1,5 +1,6 @@
 package com.aaron.cableninja.ui.addscreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,6 +55,7 @@ import com.aaron.cableninja.ui.theme.plantColor
  * AddScreen()
  *      Show attenuators that can be added.
  *********************************************************************************/
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
     ExperimentalFoundationApi::class
 )
@@ -61,7 +64,7 @@ fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
-    val showList = mutableListOf<Attenuator>()
+    val showList = mutableStateListOf<Attenuator>()
     var showLengthDialog by remember { mutableStateOf(false) }
 
     // search/filter states

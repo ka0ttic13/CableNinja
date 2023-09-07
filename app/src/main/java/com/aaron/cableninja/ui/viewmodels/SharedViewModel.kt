@@ -12,8 +12,6 @@ import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
 import com.aaron.cableninja.ui.theme.passiveColor
 import com.aaron.cableninja.ui.theme.plantColor
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 const val DEFAULT_FREQ = 1218f
 const val DEFAULT_TEMP = 68f
@@ -29,10 +27,17 @@ class SharedViewModel : ViewModel() {
         AttenuatorType.PLANT to plantColor
     )
 
-//    private val _showList = MutableStateFlow(listOf<Attenuator>())
-//
+
+
 //    private val _search = MutableStateFlow("")
 //    val search = _search.asStateFlow()
+//    fun onSearchChange(query: String) { _search.value = query }
+
+//    private val _showList = MutableStateFlow(listOf<Attenuator>())
+//    val showList = search
+//        .combine(_showList) { text, attenuator ->
+//
+//        }
 
     // master map of name strings to manufacturer data
     var attenuatorList = mutableListOf<Attenuator>()
