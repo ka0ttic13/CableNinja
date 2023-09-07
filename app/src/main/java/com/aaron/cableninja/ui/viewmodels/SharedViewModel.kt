@@ -15,6 +15,10 @@ import com.aaron.cableninja.ui.theme.plantColor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+const val DEFAULT_FREQ = 1218f
+const val DEFAULT_TEMP = 68f
+
+
 // ViewModel for sharing data between screens
 class SharedViewModel : ViewModel() {
     // map of attenuator tags to colors
@@ -25,10 +29,10 @@ class SharedViewModel : ViewModel() {
         AttenuatorType.PLANT to plantColor
     )
 
-    private val _showList = MutableStateFlow(listOf<Attenuator>())
-
-    private val _search = MutableStateFlow("")
-    val search = _search.asStateFlow()
+//    private val _showList = MutableStateFlow(listOf<Attenuator>())
+//
+//    private val _search = MutableStateFlow("")
+//    val search = _search.asStateFlow()
 
     // master map of name strings to manufacturer data
     var attenuatorList = mutableListOf<Attenuator>()
@@ -40,11 +44,11 @@ class SharedViewModel : ViewModel() {
 
 //    private var _currentFreq = MutableStateFlow(1218f)
 //    val currentFreq = _currentFreq.asStateFlow()
-    var currentFreq by mutableStateOf(1218f)
+    var currentFreq by mutableStateOf(DEFAULT_FREQ)
 
     fun setFreq(freq: Float) { currentFreq = freq }
 
-    var currentTemp by mutableStateOf(68f)
+    var currentTemp by mutableStateOf(DEFAULT_TEMP)
     fun setTemp(temp: Float) { currentTemp = temp }
 
     var currentStartLevel by mutableStateOf("")

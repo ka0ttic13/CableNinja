@@ -43,6 +43,11 @@ import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import kotlin.math.round
 
+const val MIN_FREQ = 12f
+const val MAX_FREQ = 1218f
+const val MIN_TEMP = -40f
+const val MAX_TEMP = 120f
+
 /*********************************************************************************
  * MainScreen()
  *      Main screen interface that takes input for frequency, temp, and starting
@@ -91,7 +96,7 @@ fun MainScreen(
                 onValueChange = {
                     freqSliderPosition = it
                 },
-                valueRange = 12f..1218f,
+                valueRange = MIN_FREQ..MAX_FREQ,
                 steps = 201,
                 onValueChangeFinished = {
                     sharedViewModel.setFreq(freqSliderPosition)
@@ -126,7 +131,7 @@ fun MainScreen(
                 onValueChange = {
                     tempSliderPosition = it
                 },
-                valueRange = -40f..120f,
+                valueRange = MIN_TEMP..MAX_TEMP,
                 steps = 15,
                 onValueChangeFinished = {
                     sharedViewModel.setTemp(tempSliderPosition)

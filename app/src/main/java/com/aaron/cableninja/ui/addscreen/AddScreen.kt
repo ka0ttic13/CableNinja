@@ -61,7 +61,7 @@ fun AddScreen(
     navController: NavController,
     sharedViewModel: SharedViewModel,
 ) {
-    var showList: MutableList<Attenuator>
+    val showList = mutableListOf<Attenuator>()
     var showLengthDialog by remember { mutableStateOf(false) }
 
     // search/filter states
@@ -254,10 +254,14 @@ fun AddScreen(
             }
         }
 
-
         // execute search and selected filters
-        showList = createShowListFromSearch(search, sharedViewModel)
+        for (attenuator in sharedViewModel.attenuatorList.iterator()) {
+            if (showList.contains(attenuator))
+                continue
 
+            if (attenuator.doesMatchSearch(search, sharedViewModel.filterList))
+                showList.add(attenuator)
+        }
 
         // display the list
         LazyColumn(
@@ -336,66 +340,6 @@ fun AddScreen(
             }
         )
     }
-}
-
-/**************************************************************************
- * createShowListFromSearch()
- *      Logic for search field and selected filters
- *      RETURNS list of Attenuators that match the search
- **************************************************************************/
-private fun createShowListFromSearch(
-    search: String,
-    sharedViewModel: SharedViewModel)
-    : MutableList<Attenuator>
-{
-    val resultsList = mutableListOf<Attenuator>()
-
-    // if no search criteria, just return the whole list
-    if (search.isEmpty() && sharedViewModel.filterList.isEmpty())
-        return sharedViewModel.attenuatorList
-    // otherwise, find all attenuators that match search criteria
-    else {
-        sharedViewModel.attenuatorList.forEach { att ->
-            // search and no filters
-            if (search.isNotEmpty() && sharedViewModel.filterList.isEmpty()) {
-                if (att.name().contains(search, ignoreCase = true)) {
-                    if (!resultsList.contains(att))
-                        resultsList.add(att)
-                }
-            }
-            // search and filters
-            else if (search.isNotEmpty() && sharedViewModel.filterList.isNotEmpty()) {
-                var matches = true
-
-                sharedViewModel.filterList.forEach {
-                    if (!att.tags().contains(it))
-                        matches = false
-                }
-
-                if (matches && att.name().contains(search, ignoreCase = true) &&
-                    !resultsList.contains(att)) {
-
-                    resultsList.add(att)
-
-                }
-            }
-            // filters only
-            else {
-                var matches = true
-
-                sharedViewModel.filterList.forEach {
-                    if (!att.tags().contains(it))
-                        matches = false
-                }
-
-                if (matches && !resultsList.contains(att))
-                    resultsList.add(att)
-
-            }
-        }
-    }
-
-    return resultsList
 }
 
 /**************************************************************************
