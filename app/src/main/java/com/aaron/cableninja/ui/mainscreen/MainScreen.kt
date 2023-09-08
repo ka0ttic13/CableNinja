@@ -378,9 +378,6 @@ fun MainScreen(
                 defaultValue = editCard.length().toString(),
                 onCancel = { editLengthDialog = false },
                 onAdd = {
-                    // TODO: is this still needed?
-                    sharedViewModel.addAttenuatorLength(it.toInt())
-
                     // find card and edit footage
                     for (card in sharedViewModel.attenuatorCardList.iterator()) {
                         if (card.name() == editCard.name() &&

@@ -12,8 +12,6 @@ import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
 import com.aaron.cableninja.ui.theme.passiveColor
 import com.aaron.cableninja.ui.theme.plantColor
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 const val DEFAULT_FREQ = 1218f
 const val DEFAULT_TEMP = 68f
@@ -58,12 +56,7 @@ class SharedViewModel : ViewModel() {
     fun setTemp(temp: Float) { currentTemp = temp }
 
 //    private var _currentTemp = MutableStateFlow(DEFAULT_TEMP)
-//    val currentTemp = _currentTemp.asStateFlow()
-//    fun onTempChange(newTemp: Float) { _currentTemp.value = newTemp }
-//
-//    private var _currentStartLevel = MutableStateFlow("")
-//    val currentStartLevel = _currentStartLevel.asStateFlow()
-//    fun onStartLevelChange(newLevel: String) { _currentStartLevel.value = newLevel }
+//    va currentTemp
 
     var currentStartLevel by mutableStateOf("")
     fun setStartLevel(level: String) { currentStartLevel = level }
@@ -72,10 +65,6 @@ class SharedViewModel : ViewModel() {
         private set
     fun setTotalAtten(total: Double) { totalAttenuation = total }
 
-//    private var _totalAttenuation = MutableStateFlow(0f)
-//    val totalAttenuation = _totalAttenuation.asStateFlow()
-//    fun setTotalAttenuation(newTotal: Float) { _totalAttenuation.value = newTotal }
-
     var card by mutableStateOf<AttenuatorCard?>(null)
         private set
     fun setAttenuatorCard(newCard: AttenuatorCard) { card = newCard }
@@ -83,22 +72,11 @@ class SharedViewModel : ViewModel() {
         card?.let { attenuatorCardList.add(it) }
     }
 
-    /* Set attenuator length
-     * this is separate from setAttenuatorCard because
-     *      - not every attenuator has a length
-     *      - we don't get length input at the same time the AttenuatorCard is created
-     */
-    fun addAttenuatorLength(length: Int) { card?.setLength(length) }
-
     fun getAttenuatorLength() : Int { return card!!.length() }
 
     var hasListChanged by mutableStateOf(false)
         private set
-    fun setHasListChanged() { hasListChanged = true }
-
-//    private var _hasListChanged = MutableStateFlow(false)
-//    var hasListChanged = _hasListChanged.asStateFlow()
-//    fun setHasListChanged() { _hasListChanged.value = true }
+    fun setHasListChanged() { hasListChanged = true}
 
     private var _filterList = mutableStateListOf<AttenuatorType>()
     var filterList: List<AttenuatorType> = _filterList

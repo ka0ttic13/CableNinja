@@ -22,7 +22,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -138,6 +137,12 @@ fun AddScreen(
                             }
                         )
                     }
+                },
+                placeholder = {
+                    Text(
+                        text = "Search",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 },
                 modifier = Modifier
                     .weight(.6f)
@@ -278,18 +283,18 @@ fun AddScreen(
                 AddAttenuatorCard(
                     card,
                     onClick = {
-                        sharedViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.isCoax()) {
                             // logic for coax is in this function below in
                             // showLengthDialog conditional
+//                            sharedViewModel.setAttenuatorCard(card)
                             showLengthDialog = true
                         } else {
                             // Find passive loss
                             for (data in sharedViewModel.attenuatorList.iterator()) {
                                 if (data.name() == card.name()) {
-                                    sharedViewModel.card!!.setLoss(
+                                    card.setLoss(
                                         getCableLoss(
                                             data,
                                             sharedViewModel.currentFreq.toInt(),
@@ -303,7 +308,7 @@ fun AddScreen(
                             }
 
                             // nav back to MainScreen
-                            sharedViewModel.attenuatorCardList.add(card)
+                            sharedViewModel.setAttenuatorCard(card)
                             navController.navigate(Screen.Main.route)
                         }
                     }
@@ -319,25 +324,29 @@ fun AddScreen(
             defaultValue = "",
             onCancel = { showLengthDialog = false },
             onAdd = {
-                sharedViewModel.addAttenuatorLength(it.toInt())
+                val card = sharedViewModel.card
 
-                // Find loss
-                for (data in sharedViewModel.attenuatorList.iterator()) {
-                    if (data.name() == sharedViewModel.card!!.name()) {
-                        sharedViewModel.card!!.setLoss(
-                            getCableLoss(
-                                data,
-                                sharedViewModel.currentFreq.toInt(),
-                                sharedViewModel.getAttenuatorLength(),
-                                sharedViewModel.currentTemp.toInt()
+                if (card != null) {
+                    card.setLength(it.toInt())
+
+                    // Find loss
+                    for (data in sharedViewModel.attenuatorList.iterator()) {
+                        if (data.name() == card.name()) {
+                            card.setLoss(
+                                getCableLoss(
+                                    data,
+                                    sharedViewModel.currentFreq.toInt(),
+                                    sharedViewModel.getAttenuatorLength(),
+                                    sharedViewModel.currentTemp.toInt()
+                                )
                             )
-                        )
 
-                        break
+                            break
+                        }
                     }
-                }
 
-                sharedViewModel.addCurrentCardToList()
+                    sharedViewModel.setAttenuatorCard(card)
+                }
 
                 // Nav back to MainScreen
                 navController.navigate(Screen.Main.route)
