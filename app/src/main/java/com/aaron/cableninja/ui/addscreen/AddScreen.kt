@@ -38,7 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aaron.cableninja.R
-import com.aaron.cableninja.ui.viewmodels.SharedViewModel
+import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.getCableLoss
@@ -62,7 +62,7 @@ import com.aaron.cableninja.ui.theme.plantColor
 @Composable
 fun AddScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel,
+    mainViewModel: mainViewModel,
 ) {
     val showList = mutableStateListOf<Attenuator>()
     var showLengthDialog by remember { mutableStateOf(false) }
@@ -169,15 +169,15 @@ fun AddScreen(
 
 
                 // show all possible tags
-                if (sharedViewModel.filterList.isEmpty()) {
-                    sharedViewModel.attenuatorTags.keys.forEach {
-                        sharedViewModel.attenuatorTags[it]?.let { color ->
+                if (mainViewModel.filterList.isEmpty()) {
+                    mainViewModel.attenuatorTags.keys.forEach {
+                        mainViewModel.attenuatorTags[it]?.let { color ->
                             AddFilter(
                                 filterEnabled = false,
                                 filterColor = color,
                                 type = it,
                                 onClick = { type ->
-                                    sharedViewModel.addFilter(type)
+                                    mainViewModel.addFilter(type)
 
                                     when (type) {
                                         AttenuatorType.COAX -> coaxFilter = true
@@ -193,16 +193,16 @@ fun AddScreen(
                 // otherwise show filters
                 else {
                     // coax tag
-                    sharedViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
+                    mainViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
                         AddFilter(
                             filterEnabled = coaxFilter,
                             filterColor = it,
                             type = AttenuatorType.COAX,
                             onClick = {
                                 if (coaxFilter)
-                                    sharedViewModel.removeFilter(it)
+                                    mainViewModel.removeFilter(it)
                                 else
-                                    sharedViewModel.addFilter(it)
+                                    mainViewModel.addFilter(it)
 
                                 coaxFilter = !coaxFilter
                             }
@@ -210,16 +210,16 @@ fun AddScreen(
                     }
 
                     // passive tag
-                    sharedViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
+                    mainViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
                         AddFilter(
                             filterEnabled = passiveFilter,
                             filterColor = it,
                             type = AttenuatorType.PASSIVE,
                             onClick = {
                                 if (passiveFilter)
-                                    sharedViewModel.removeFilter(it)
+                                    mainViewModel.removeFilter(it)
                                 else
-                                    sharedViewModel.addFilter(it)
+                                    mainViewModel.addFilter(it)
 
                                 passiveFilter = !passiveFilter
                             }
@@ -227,16 +227,16 @@ fun AddScreen(
                     }
 
                     // drop tag
-                    sharedViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
+                    mainViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
                         AddFilter(
                             filterEnabled = dropFilter,
                             filterColor = it,
                             type = AttenuatorType.DROP,
                             onClick = {
                                 if (dropFilter)
-                                    sharedViewModel.removeFilter(it)
+                                    mainViewModel.removeFilter(it)
                                 else
-                                    sharedViewModel.addFilter(it)
+                                    mainViewModel.addFilter(it)
 
                                 dropFilter = !dropFilter
                             }
@@ -244,16 +244,16 @@ fun AddScreen(
                     }
 
                     // plant tag
-                    sharedViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
+                    mainViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
                         AddFilter(
                             filterEnabled = plantFilter,
                             filterColor = it,
                             type = AttenuatorType.PLANT,
                             onClick = {
                                 if (plantFilter)
-                                    sharedViewModel.removeFilter(it)
+                                    mainViewModel.removeFilter(it)
                                 else
-                                    sharedViewModel.addFilter(it)
+                                    mainViewModel.addFilter(it)
 
                                 plantFilter = !plantFilter
                             }
@@ -264,11 +264,11 @@ fun AddScreen(
         }
 
         // build list of items to show based on search and filters
-        for (attenuator in sharedViewModel.attenuatorList.iterator()) {
+        for (attenuator in mainViewModel.attenuatorList.iterator()) {
             if (showList.contains(attenuator))
                 continue
 
-            if (attenuator.doesMatchSearch(search, sharedViewModel.filterList))
+            if (attenuator.doesMatchSearch(search, mainViewModel.filterList))
                 showList.add(attenuator)
         }
 
@@ -282,7 +282,7 @@ fun AddScreen(
                 AddAttenuatorCard(
                     card,
                     onClick = {
-                        sharedViewModel.setAttenuatorCard(card)
+                        mainViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.isCoax()) {
@@ -292,14 +292,14 @@ fun AddScreen(
                             showLengthDialog = true
                         } else {
                             // Find passive loss
-                            for (data in sharedViewModel.attenuatorList.iterator()) {
+                            for (data in mainViewModel.attenuatorList.iterator()) {
                                 if (data.name() == card.name()) {
-                                    sharedViewModel.card?.setLoss(
+                                    mainViewModel.card?.setLoss(
                                         getCableLoss(
                                             data,
-                                            sharedViewModel.currentFreq.toInt(),
+                                            mainViewModel.currentFreq.toInt(),
                                             0,
-                                            sharedViewModel.currentTemp.toInt()
+                                            mainViewModel.currentTemp.toInt()
                                         )
                                     )
 
@@ -308,7 +308,7 @@ fun AddScreen(
                             }
 
                             // nav back to MainScreen
-                            sharedViewModel.addCurrentCardToList()
+                            mainViewModel.addCurrentCardToList()
                             navController.navigate(Screen.Main.route)
                         }
                     }
@@ -324,17 +324,17 @@ fun AddScreen(
             defaultValue = "",
             onCancel = { showLengthDialog = false },
             onAdd = {
-                    sharedViewModel.addAttenuatorLength(it.toInt())
+                    mainViewModel.addAttenuatorLength(it.toInt())
 
                     // Find loss
-                    for (data in sharedViewModel.attenuatorList.iterator()) {
-                        if (data.name() == sharedViewModel.card?.name()) {
-                            sharedViewModel.card?.setLoss(
+                    for (data in mainViewModel.attenuatorList.iterator()) {
+                        if (data.name() == mainViewModel.card?.name()) {
+                            mainViewModel.card?.setLoss(
                                 getCableLoss(
                                     data,
-                                    sharedViewModel.currentFreq.toInt(),
-                                    sharedViewModel.getAttenuatorLength(),
-                                    sharedViewModel.currentTemp.toInt()
+                                    mainViewModel.currentFreq.toInt(),
+                                    mainViewModel.getAttenuatorLength(),
+                                    mainViewModel.currentTemp.toInt()
                                 )
                             )
 
@@ -342,7 +342,7 @@ fun AddScreen(
                         }
                     }
 
-                    sharedViewModel.addCurrentCardToList()
+                    mainViewModel.addCurrentCardToList()
 
                 // Nav back to MainScreen
                 navController.navigate(Screen.Main.route)

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.aaron.cableninja.R
-import com.aaron.cableninja.ui.viewmodels.SharedViewModel
+import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
 import com.aaron.cableninja.data.AttenuatorType
@@ -58,11 +58,11 @@ const val MAX_TEMP = 120f
 @Composable
 fun MainScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel,
+    mainViewModel: mainViewModel,
 ) {
-    var freqSliderPosition by remember { mutableStateOf(sharedViewModel.currentFreq) }
-    var tempSliderPosition by remember { mutableStateOf(sharedViewModel.currentTemp) }
-    var startLevel by remember { mutableStateOf(sharedViewModel.currentStartLevel) }
+    var freqSliderPosition by remember { mutableStateOf(mainViewModel.currentFreq) }
+    var tempSliderPosition by remember { mutableStateOf(mainViewModel.currentTemp) }
+    var startLevel by remember { mutableStateOf(mainViewModel.currentStartLevel) }
     var editLengthDialog by remember { mutableStateOf(false) }
 
     // temp card for editing current card
@@ -99,10 +99,10 @@ fun MainScreen(
                 valueRange = MIN_FREQ..MAX_FREQ,
                 steps = 201,
                 onValueChangeFinished = {
-                    sharedViewModel.setFreq(freqSliderPosition)
+                    mainViewModel.setFreq(freqSliderPosition)
 
-                    if (sharedViewModel.attenuatorCardList.isNotEmpty())
-                        sharedViewModel.setHasListChanged()
+                    if (mainViewModel.attenuatorCardList.isNotEmpty())
+                        mainViewModel.setHasListChanged()
                 }
             )
         }
@@ -134,10 +134,10 @@ fun MainScreen(
                 valueRange = MIN_TEMP..MAX_TEMP,
                 steps = 15,
                 onValueChangeFinished = {
-                    sharedViewModel.setTemp(tempSliderPosition)
+                    mainViewModel.setTemp(tempSliderPosition)
 
-                    if (sharedViewModel.attenuatorCardList.isNotEmpty())
-                        sharedViewModel.setHasListChanged()
+                    if (mainViewModel.attenuatorCardList.isNotEmpty())
+                        mainViewModel.setHasListChanged()
                 }
 
             )
@@ -156,7 +156,7 @@ fun MainScreen(
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "@ ${round(sharedViewModel.currentFreq).toInt()} MHz",
+                    text = "@ ${round(mainViewModel.currentFreq).toInt()} MHz",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -168,7 +168,7 @@ fun MainScreen(
 
                     // if we manually delete all characters, update start level state
                     if (str.isEmpty() || str.isDigitsOnly()) {
-                        sharedViewModel.setStartLevel(str)
+                        mainViewModel.setStartLevel(str)
                         startLevel = str
                     }
                     else if (str == "-" || isNumeric(str) || str.contains(char = '.'))
@@ -184,7 +184,7 @@ fun MainScreen(
 
             // only allow input that is a positive or negative whole number
             if (startLevel.isNotEmpty() && isNumeric(startLevel))
-                sharedViewModel.setStartLevel(startLevel)
+                mainViewModel.setStartLevel(startLevel)
         }
 
 
@@ -200,24 +200,24 @@ fun MainScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            if (sharedViewModel.hasListChanged) {
-                sharedViewModel.attenuatorCardList.forEach {
+            if (mainViewModel.hasListChanged) {
+                mainViewModel.attenuatorCardList.forEach {
                     it.setLoss(
                         getCableLoss(
                             it.getAttenuator(),
-                            sharedViewModel.currentFreq.toInt(),
+                            mainViewModel.currentFreq.toInt(),
                             it.length(),
-                            sharedViewModel.currentTemp.toInt()
+                            mainViewModel.currentTemp.toInt()
                         )
                     )
 
                 }
             }
 
-            if (sharedViewModel.attenuatorCardList.isNotEmpty()) {
+            if (mainViewModel.attenuatorCardList.isNotEmpty()) {
                 var total = 0.0
 
-                sharedViewModel.attenuatorCardList.forEach {
+                mainViewModel.attenuatorCardList.forEach {
                     total += it.getLoss()
 
                     AddAttenuatorCard(it,
@@ -227,19 +227,19 @@ fun MainScreen(
                             editLengthDialog = true
                         },
                         onSwipeDelete = {
-                            if (sharedViewModel.attenuatorCardList.contains(it)) {
-                                sharedViewModel.setTotalAtten(
-                                    sharedViewModel.totalAttenuation - it.getLoss()
+                            if (mainViewModel.attenuatorCardList.contains(it)) {
+                                mainViewModel.setTotalAtten(
+                                    mainViewModel.totalAttenuation - it.getLoss()
                                 )
 
-                                sharedViewModel.attenuatorCardList.remove(it)
-                                sharedViewModel.setHasListChanged()
+                                mainViewModel.attenuatorCardList.remove(it)
+                                mainViewModel.setHasListChanged()
                             }
                         }
                     )
                 }
 
-                sharedViewModel.setTotalAtten(total)
+                mainViewModel.setTotalAtten(total)
             } else // if no attenuators, show a message
                 Text(text = "Tap to add an attenuator",
                     modifier = Modifier
@@ -268,12 +268,12 @@ fun MainScreen(
                     modifier = Modifier.weight(2f)
                 )
 
-                if (sharedViewModel.totalAttenuation > 0)
+                if (mainViewModel.totalAttenuation > 0)
                     Text(text = "-")
 
                 // round loss to nearest tenth
                 Text(
-                    text = (round(sharedViewModel.totalAttenuation * 10) / 10)
+                    text = (round(mainViewModel.totalAttenuation * 10) / 10)
                         .toString() + " dB"
                 )
             }
@@ -291,16 +291,16 @@ fun MainScreen(
                 )
 
                 // if we set a start level, do the math and display end result
-                if (sharedViewModel.currentStartLevel.isNotEmpty()) {
+                if (mainViewModel.currentStartLevel.isNotEmpty()) {
                     val result =
-                        (sharedViewModel.currentStartLevel.toDouble() - sharedViewModel.totalAttenuation)
+                        (mainViewModel.currentStartLevel.toDouble() - mainViewModel.totalAttenuation)
                     var color: Color = MaterialTheme.colorScheme.primary
 
                     // figure out if all the cards are plant cards
                     var allPlant = true
 
-                    if (sharedViewModel.attenuatorCardList.isNotEmpty()) {
-                        for (card in sharedViewModel.attenuatorCardList.iterator()) {
+                    if (mainViewModel.attenuatorCardList.isNotEmpty()) {
+                        for (card in mainViewModel.attenuatorCardList.iterator()) {
                             if (!card.tags().contains(AttenuatorType.PLANT))
                                 allPlant = false
                         }
@@ -332,10 +332,10 @@ fun MainScreen(
                 // Clear Button
                 Button(
                     onClick = {
-                        sharedViewModel.attenuatorCardList.clear()
-                        sharedViewModel.setTotalAtten(0.0)
+                        mainViewModel.attenuatorCardList.clear()
+                        mainViewModel.setTotalAtten(0.0)
                         startLevel = ""
-                        sharedViewModel.setStartLevel("")
+                        mainViewModel.setStartLevel("")
                     },
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier.weight(2f)
@@ -353,7 +353,7 @@ fun MainScreen(
                 // Add Button
                 Button(
                     onClick = {
-                        sharedViewModel.clearFilters()
+                        mainViewModel.clearFilters()
                         navController.navigate(route = Screen.Add.route)
                     },
                     shape = MaterialTheme.shapes.large,
@@ -379,7 +379,7 @@ fun MainScreen(
                 onCancel = { editLengthDialog = false },
                 onAdd = {
                     // find card and edit footage
-                    for (card in sharedViewModel.attenuatorCardList.iterator()) {
+                    for (card in mainViewModel.attenuatorCardList.iterator()) {
                         if (card.name() == editCard.name() &&
                             card.length() == editCard.length()) {
 
@@ -389,7 +389,7 @@ fun MainScreen(
                     }
 
                     // set state to re-draw main list
-                    sharedViewModel.setHasListChanged()
+                    mainViewModel.setHasListChanged()
                     editLengthDialog = false
                 }
             )

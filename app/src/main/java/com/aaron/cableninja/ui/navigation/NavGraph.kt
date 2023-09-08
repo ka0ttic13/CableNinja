@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.aaron.cableninja.ui.viewmodels.SharedViewModel
+import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.ui.addscreen.AddScreen
 import com.aaron.cableninja.ui.mainscreen.MainScreen
 
@@ -14,17 +14,17 @@ fun SetupNavGraph(
     navController: NavHostController,
 ) {
     // ViewModel for sharing data between screens
-    val sharedViewModel: SharedViewModel = viewModel()
+    val mainViewModel: mainViewModel = viewModel()
 
     NavHost(
         navController = navController,
         startDestination = Screen.Main.route
     ) {
         composable(route = Screen.Main.route) {
-            MainScreen(navController, sharedViewModel)
+            MainScreen(navController, mainViewModel)
         }
         composable(route = Screen.Add.route) {
-            AddScreen(navController, sharedViewModel)
+            AddScreen(navController, mainViewModel)
         }
     }
 }

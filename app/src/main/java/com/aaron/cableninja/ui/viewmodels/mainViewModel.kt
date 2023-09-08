@@ -16,9 +16,7 @@ import com.aaron.cableninja.ui.theme.plantColor
 const val DEFAULT_FREQ = 1218f
 const val DEFAULT_TEMP = 68f
 
-
-// ViewModel for sharing data between screens
-class SharedViewModel : ViewModel() {
+class mainViewModel : ViewModel() {
     // map of attenuator tags to colors
     val attenuatorTags = mapOf(
         AttenuatorType.COAX to coaxColor,
