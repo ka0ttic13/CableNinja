@@ -10,7 +10,8 @@ class AttenuatorCard(atten: Attenuator) {
         private var _length = 0
         private var _loss = 0.0
 
-        // secondary constructor without using pre-existing Attenuator object
+        // secondary constructor for initializing when we do not have an
+        // Attenuator object but have the data
         constructor(
                 name: String,
                 tags: List<AttenuatorType>,

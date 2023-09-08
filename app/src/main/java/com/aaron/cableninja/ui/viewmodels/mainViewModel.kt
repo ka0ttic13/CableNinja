@@ -48,12 +48,15 @@ class mainViewModel : ViewModel() {
 //    fun onFreqChange(newFreq: Float) { _currentFreq.value = newFreq }
 
     var currentFreq by mutableStateOf(DEFAULT_FREQ)
+        private set
     fun setFreq(freq: Float) { currentFreq = freq }
 
     var currentTemp by mutableStateOf(DEFAULT_TEMP)
+        private set
     fun setTemp(temp: Float) { currentTemp = temp }
 
     var currentStartLevel by mutableStateOf("")
+        private set
     fun setStartLevel(level: String) { currentStartLevel = level }
 
     var totalAttenuation by mutableStateOf(0.0)

@@ -408,7 +408,6 @@ private fun AddAttenuatorCard(
     onSwipeEdit: () -> Unit,
     onSwipeDelete: () -> Unit
 ) {
-    // Edit swipe (left)
     val edit = SwipeAction(
         onSwipe = {
             onSwipeEdit()
@@ -424,7 +423,6 @@ private fun AddAttenuatorCard(
         background = LightBlue
     )
 
-    // Delete swipe (right)
     val delete = SwipeAction(
         onSwipe = {
             onSwipeDelete()
