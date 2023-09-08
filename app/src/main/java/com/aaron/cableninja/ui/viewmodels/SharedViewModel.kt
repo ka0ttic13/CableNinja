@@ -26,7 +26,7 @@ class SharedViewModel : ViewModel() {
         AttenuatorType.DROP to dropColor,
         AttenuatorType.PLANT to plantColor
     )
-
+//
 //    private val _search = MutableStateFlow("")
 //    val search = _search.asStateFlow()
 //    fun onSearchChange(query: String) { _search.value = query }
@@ -48,15 +48,12 @@ class SharedViewModel : ViewModel() {
 //    private var _currentFreq = MutableStateFlow(DEFAULT_FREQ)
 //    val currentFreq = _currentFreq.asStateFlow()
 //    fun onFreqChange(newFreq: Float) { _currentFreq.value = newFreq }
-    var currentFreq by mutableStateOf(DEFAULT_FREQ)
 
+    var currentFreq by mutableStateOf(DEFAULT_FREQ)
     fun setFreq(freq: Float) { currentFreq = freq }
 
     var currentTemp by mutableStateOf(DEFAULT_TEMP)
     fun setTemp(temp: Float) { currentTemp = temp }
-
-//    private var _currentTemp = MutableStateFlow(DEFAULT_TEMP)
-//    va currentTemp
 
     var currentStartLevel by mutableStateOf("")
     fun setStartLevel(level: String) { currentStartLevel = level }
@@ -71,6 +68,13 @@ class SharedViewModel : ViewModel() {
     fun addCurrentCardToList() {
         card?.let { attenuatorCardList.add(it) }
     }
+
+    /* Set attenuator length
+     * this is separate from setAttenuatorCard because
+     *      - not every attenuator has a length
+     *      - we don't get length input at the same time the AttenuatorCard is created
+     */
+    fun addAttenuatorLength(length: Int) { card?.setLength(length) }
 
     fun getAttenuatorLength() : Int { return card!!.length() }
 
