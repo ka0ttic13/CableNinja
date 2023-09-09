@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorCard
@@ -16,7 +17,9 @@ import com.aaron.cableninja.ui.theme.plantColor
 const val DEFAULT_FREQ = 1218f
 const val DEFAULT_TEMP = 68f
 
-class mainViewModel : ViewModel() {
+class mainViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
     // map of attenuator tags to colors
     val attenuatorTags = mapOf(
         AttenuatorType.COAX to coaxColor,
@@ -40,8 +43,21 @@ class mainViewModel : ViewModel() {
         private set
 
     // master list of RF data that has been added
-    var attenuatorCardList = mutableListOf<AttenuatorCard>()
-        private set
+    private var _attenuatorCardList =
+        mutableListOf<AttenuatorCard?>(savedStateHandle["attenuatorCardList"])
+    var attenuatorCardList: List<AttenuatorCard?> = _attenuatorCardList
+    fun addAttenuatorCard(card: AttenuatorCard) {
+        _attenuatorCardList.add(card)
+        savedStateHandle["attenuatorCardList"] = _attenuatorCardList
+    }
+    fun removeAttenuatorCard(card: AttenuatorCard) {
+        _attenuatorCardList.remove(card)
+        savedStateHandle["attenuatorCardList"] = _attenuatorCardList
+    }
+    fun clearAttenuatorList() {
+        _attenuatorCardList.clear()
+        savedStateHandle["attenuatorCardList"] = _attenuatorCardList
+    }
 
 //    private var _currentFreq = MutableStateFlow(DEFAULT_FREQ)
 //    val currentFreq = _currentFreq.asStateFlow()
@@ -66,7 +82,7 @@ class mainViewModel : ViewModel() {
     private var _card by mutableStateOf<AttenuatorCard?>(null)
     fun setAttenuatorCard(newCard: AttenuatorCard) { _card = newCard }
     fun getCurrentCard(): AttenuatorCard? { return _card }
-    fun addAttenuatorCard(card: AttenuatorCard) { attenuatorCardList.add(card) }
+
 
     var hasListChanged by mutableStateOf(false)
         private set

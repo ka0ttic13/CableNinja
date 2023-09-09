@@ -48,6 +48,13 @@ const val MAX_FREQ = 1218f
 const val MIN_TEMP = -40f
 const val MAX_TEMP = 120f
 
+const val DIPLEX_FILTER_START = 45 // TODO: should probably be configurable until we are 100% high split
+
+const val TX_LOW_THRESHOLD = 29
+const val TX_HIGH_THRESHOLD = 54
+const val RX_LOW_THRESHOLD = -11
+const val RX_HIGH_THRESHOLD = 10
+
 /*********************************************************************************
  * MainScreen()
  *      Main screen interface that takes input for frequency, temp, and starting
@@ -202,14 +209,16 @@ fun MainScreen(
         ) {
             if (mainViewModel.hasListChanged) {
                 mainViewModel.attenuatorCardList.forEach {
-                    it.setLoss(
-                        getCableLoss(
-                            it.getAttenuator(),
-                            mainViewModel.currentFreq.toInt(),
-                            it.length(),
-                            mainViewModel.currentTemp.toInt()
+                    if (it != null) {
+                        it.setLoss(
+                            getCableLoss(
+                                it.getAttenuator(),
+                                mainViewModel.currentFreq.toInt(),
+                                it.length(),
+                                mainViewModel.currentTemp.toInt()
+                            )
                         )
-                    )
+                    }
 
                 }
             }
@@ -218,25 +227,27 @@ fun MainScreen(
                 var total = 0.0
 
                 mainViewModel.attenuatorCardList.forEach {
-                    total += it.getLoss()
+                    if (it != null) {
+                        total += it.getLoss()
 
-                    AddAttenuatorCard(it,
-                        onSwipeEdit = {
-                            // save the card for editing outside the loop
-                            editCard = it
-                            editLengthDialog = true
-                        },
-                        onSwipeDelete = {
-                            if (mainViewModel.attenuatorCardList.contains(it)) {
-                                mainViewModel.setTotalAtten(
-                                    mainViewModel.totalAttenuation - it.getLoss()
-                                )
+                        AddAttenuatorCard(it,
+                            onSwipeEdit = {
+                                // save the card for editing outside the loop
+                                editCard = it
+                                editLengthDialog = true
+                            },
+                            onSwipeDelete = {
+                                if (mainViewModel.attenuatorCardList.contains(it)) {
+                                    mainViewModel.setTotalAtten(
+                                        mainViewModel.totalAttenuation - it.getLoss()
+                                    )
 
-                                mainViewModel.attenuatorCardList.remove(it)
-                                mainViewModel.setHasListChanged()
+                                    mainViewModel.removeAttenuatorCard(it)
+                                    mainViewModel.setHasListChanged()
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
 
                 mainViewModel.setTotalAtten(total)
@@ -292,27 +303,46 @@ fun MainScreen(
 
                 // if we set a start level, do the math and display end result
                 if (mainViewModel.currentStartLevel.isNotEmpty()) {
-                    val result =
-                        (mainViewModel.currentStartLevel.toDouble() - mainViewModel.totalAttenuation)
                     var color: Color = MaterialTheme.colorScheme.primary
+
+                    var transmit = false
+
+                    // reverse freqs we add, forward freqs we subtract
+                    val result: Double =
+                        if (mainViewModel.currentFreq <= DIPLEX_FILTER_START) {
+                            transmit = true
+                            mainViewModel.currentStartLevel.toDouble() + mainViewModel.totalAttenuation
+                        }
+                        else
+                            mainViewModel.currentStartLevel.toDouble() - mainViewModel.totalAttenuation
+
 
                     // figure out if all the cards are plant cards
                     var allPlant = true
 
                     if (mainViewModel.attenuatorCardList.isNotEmpty()) {
                         for (card in mainViewModel.attenuatorCardList.iterator()) {
-                            if (!card.tags().contains(AttenuatorType.PLANT))
+                            if (card != null && !card.tags().contains(AttenuatorType.PLANT))
                                 allPlant = false
                         }
                     }
 
                     // if it is not all plant, use CPE specs for coloring end level
                     if (!allPlant) {
-                        // if result is between -10 and +10, set color to green
-                        color = if ((result >= -10) && (result <= 10))
-                            LightGreen
-                        else // otherwise, set color to red
-                            Color.Red
+                        if (transmit) {
+                            color =
+                                if ((result > TX_LOW_THRESHOLD) && (result < TX_HIGH_THRESHOLD))
+                                    LightGreen
+                                else
+                                    Color.Red
+                        }
+                        else {
+                            color =
+                                if ((result > RX_LOW_THRESHOLD) && (result < RX_HIGH_THRESHOLD))
+                                    LightGreen
+                                else // otherwise, set color to red
+                                    Color.Red
+                        }
                     }
 
                     // Round to nearest tenth
@@ -332,7 +362,7 @@ fun MainScreen(
                 // Clear Button
                 Button(
                     onClick = {
-                        mainViewModel.attenuatorCardList.clear()
+                        mainViewModel.clearAttenuatorList()
                         mainViewModel.setTotalAtten(0.0)
                         startLevel = ""
                         mainViewModel.setStartLevel("")
@@ -380,11 +410,14 @@ fun MainScreen(
                 onAdd = {
                     // find card and edit footage
                     for (card in mainViewModel.attenuatorCardList.iterator()) {
-                        if (card.name() == editCard.name() &&
-                            card.length() == editCard.length()) {
+                        if (card != null) {
+                            if ((card.name() == editCard.name()) &&
+                                (card.length() == editCard.length())
+                            ) {
 
-                            card.setLength(it.toInt())
-                            break
+                                card.setLength(it.toInt())
+                                break
+                            }
                         }
                     }
 
@@ -481,7 +514,7 @@ private fun AddAttenuatorCard(
 
                 // show attenuation on right
                 Text(
-                    text = (round(data.getLoss() * 10) / 10).toString() + "dB",
+                    text = "-" + (round(data.getLoss() * 10) / 10).toString() + "dB",
                     modifier = Modifier.padding(
                         top = 5.dp,
                         bottom = 5.dp,
