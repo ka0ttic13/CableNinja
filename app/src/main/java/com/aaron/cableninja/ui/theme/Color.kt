@@ -14,7 +14,6 @@ val LightRed = Color(0xFF9e233b)
 val LightBlue = Color(0xFF275c91)
 val LightGreen = Color(0xFF46b864)
 
-
 val coaxColor = LightBlue
 val passiveColor = LightGreen
 val dropColor = Color(0xFF3268bf)

@@ -37,7 +37,6 @@ import com.aaron.cableninja.data.isNumeric
 import com.aaron.cableninja.ui.dialogs.LengthDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.LightBlue
-import com.aaron.cableninja.ui.theme.LightGreen
 import com.aaron.cableninja.ui.theme.LightRed
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -50,10 +49,6 @@ const val MAX_TEMP = 120f
 
 const val DIPLEX_FILTER_START = 45 // TODO: should probably be configurable until we are 100% high split
 
-const val TX_LOW_THRESHOLD = 29
-const val TX_HIGH_THRESHOLD = 54
-const val RX_LOW_THRESHOLD = -11
-const val RX_HIGH_THRESHOLD = 10
 
 /*********************************************************************************
  * MainScreen()
@@ -303,9 +298,8 @@ fun MainScreen(
 
                 // if we set a start level, do the math and display end result
                 if (mainViewModel.currentStartLevel.isNotEmpty()) {
-                    var color: Color = MaterialTheme.colorScheme.primary
-
                     var transmit = false
+                    var allPlant = true
 
                     // reverse freqs we add, forward freqs we subtract
                     val result: Double =
@@ -316,10 +310,7 @@ fun MainScreen(
                         else
                             mainViewModel.currentStartLevel.toDouble() - mainViewModel.totalAttenuation
 
-
-                    // figure out if all the cards are plant cards
-                    var allPlant = true
-
+                    // is it all plant items?
                     if (mainViewModel.attenuatorCardList.isNotEmpty()) {
                         for (card in mainViewModel.attenuatorCardList.iterator()) {
                             if (card != null && !card.tags().contains(AttenuatorType.PLANT))
@@ -327,28 +318,13 @@ fun MainScreen(
                         }
                     }
 
-                    // if it is not all plant, use CPE specs for coloring end level
-                    if (!allPlant) {
-                        if (transmit) {
-                            color =
-                                if ((result > TX_LOW_THRESHOLD) && (result < TX_HIGH_THRESHOLD))
-                                    LightGreen
-                                else
-                                    Color.Red
-                        }
-                        else {
-                            color =
-                                if ((result > RX_LOW_THRESHOLD) && (result < RX_HIGH_THRESHOLD))
-                                    LightGreen
-                                else // otherwise, set color to red
-                                    Color.Red
-                        }
-                    }
+                    // get the color we should use based on user input
+                    val thresholdColor = ThresholdColor(allPlant, transmit, result)
 
-                    // Round to nearest tenth
                     Text(
+                        // Round to nearest tenth
                         text = (round(result * 10) / 10).toString() + " dBmV",
-                        color = color,
+                        color = thresholdColor.getColor(),
                         fontWeight = FontWeight.ExtraBold
                     )
                 }
