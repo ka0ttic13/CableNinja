@@ -63,21 +63,10 @@ class mainViewModel : ViewModel() {
         private set
     fun setTotalAtten(total: Double) { totalAttenuation = total }
 
-    var card by mutableStateOf<AttenuatorCard?>(null)
-        private set
-    fun setAttenuatorCard(newCard: AttenuatorCard) { card = newCard }
-    fun addCurrentCardToList() {
-        card?.let { attenuatorCardList.add(it) }
-    }
-
-    /* Set attenuator length
-     * this is separate from setAttenuatorCard because
-     *      - not every attenuator has a length
-     *      - we don't get length input at the same time the AttenuatorCard is created
-     */
-    fun addAttenuatorLength(length: Int) { card?.setLength(length) }
-
-    fun getAttenuatorLength() : Int { return card!!.length() }
+    private var _card by mutableStateOf<AttenuatorCard?>(null)
+    fun setAttenuatorCard(newCard: AttenuatorCard) { _card = newCard }
+    fun getCurrentCard(): AttenuatorCard? { return _card }
+    fun addAttenuatorCard(card: AttenuatorCard) { attenuatorCardList.add(card) }
 
     var hasListChanged by mutableStateOf(false)
         private set

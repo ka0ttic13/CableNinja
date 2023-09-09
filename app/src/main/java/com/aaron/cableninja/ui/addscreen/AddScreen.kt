@@ -282,19 +282,18 @@ fun AddScreen(
                 AddAttenuatorCard(
                     card,
                     onClick = {
-                        mainViewModel.setAttenuatorCard(card)
 
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.isCoax()) {
                             // logic for coax is in this function below in
                             // showLengthDialog conditional
-//                            sharedViewModel.setAttenuatorCard(card)
+                            mainViewModel.setAttenuatorCard(card)
                             showLengthDialog = true
                         } else {
                             // Find passive loss
                             for (data in mainViewModel.attenuatorList.iterator()) {
                                 if (data.name() == card.name()) {
-                                    mainViewModel.card?.setLoss(
+                                    card.setLoss(
                                         getCableLoss(
                                             data,
                                             mainViewModel.currentFreq.toInt(),
@@ -308,7 +307,7 @@ fun AddScreen(
                             }
 
                             // nav back to MainScreen
-                            mainViewModel.addCurrentCardToList()
+                            mainViewModel.addAttenuatorCard(card)
                             navController.navigate(Screen.Main.route)
                         }
                     }
@@ -319,21 +318,24 @@ fun AddScreen(
 
     // Show footage dialog when adding coax attenuators
     if (showLengthDialog) {
+        val card = mainViewModel.getCurrentCard()
+
         LengthDialog(
             label = "Enter length",
             defaultValue = "",
             onCancel = { showLengthDialog = false },
             onAdd = {
-                    mainViewModel.addAttenuatorLength(it.toInt())
+                if (card != null) {
+                    card.setLength(it.toInt())
 
                     // Find loss
                     for (data in mainViewModel.attenuatorList.iterator()) {
-                        if (data.name() == mainViewModel.card?.name()) {
-                            mainViewModel.card?.setLoss(
+                        if (data.name() == card.name()) {
+                            card.setLoss(
                                 getCableLoss(
                                     data,
                                     mainViewModel.currentFreq.toInt(),
-                                    mainViewModel.getAttenuatorLength(),
+                                    card.length(),
                                     mainViewModel.currentTemp.toInt()
                                 )
                             )
@@ -342,10 +344,11 @@ fun AddScreen(
                         }
                     }
 
-                    mainViewModel.addCurrentCardToList()
+                    mainViewModel.addAttenuatorCard(card)
 
-                // Nav back to MainScreen
-                navController.navigate(Screen.Main.route)
+                    // Nav back to MainScreen
+                    navController.navigate(Screen.Main.route)
+                }
             }
         )
     }
