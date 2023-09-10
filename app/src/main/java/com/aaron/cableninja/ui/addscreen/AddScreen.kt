@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,18 +35,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
-import com.aaron.cableninja.ui.dialogs.LengthDialog
+import com.aaron.cableninja.ui.dialogs.NumericDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
@@ -95,7 +96,7 @@ fun AddScreen(
 
             // Close Icon - exits back to MainScreen
             Icon(
-                painterResource(id = R.drawable.baseline_close_24),
+                imageVector = Icons.Default.Clear,
                 contentDescription = "Close",
                 modifier = Modifier.clickable {
                     // on click, go back to MainScreen()
@@ -122,14 +123,14 @@ fun AddScreen(
                 singleLine = true,
                 leadingIcon = {
                     Icon(
-                        painterResource(id = R.drawable.baseline_search_24),
+                        imageVector = Icons.Default.Search,
                         contentDescription = "Perform search",
                     )
                 },
                 trailingIcon = {
                     if (search.isNotEmpty()) {
                         Icon(
-                            painterResource(id = R.drawable.baseline_close_24),
+                            imageVector = Icons.Default.Clear,
                             contentDescription = "Clear search",
                             modifier = Modifier.clickable {
                                 search = ""
@@ -320,7 +321,7 @@ fun AddScreen(
     if (showLengthDialog) {
         val card = mainViewModel.getCurrentCard()
 
-        LengthDialog(
+        NumericDialog(
             label = "Enter length",
             defaultValue = "",
             onCancel = { showLengthDialog = false },

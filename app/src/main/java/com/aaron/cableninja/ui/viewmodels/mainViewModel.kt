@@ -27,16 +27,6 @@ class mainViewModel(
         AttenuatorType.DROP to dropColor,
         AttenuatorType.PLANT to plantColor
     )
-//
-//    private val _search = MutableStateFlow("")
-//    val search = _search.asStateFlow()
-//    fun onSearchChange(query: String) { _search.value = query }
-
-//    private val _showList = MutableStateFlow(listOf<Attenuator>())
-//    val showList = search
-//        .combine(_showList) { text, attenuator ->
-//
-//        }
 
     // master map of name strings to manufacturer data
     var attenuatorList = mutableListOf<Attenuator>()
@@ -59,10 +49,6 @@ class mainViewModel(
         savedStateHandle["attenuatorCardList"] = _attenuatorCardList
     }
 
-//    private var _currentFreq = MutableStateFlow(DEFAULT_FREQ)
-//    val currentFreq = _currentFreq.asStateFlow()
-//    fun onFreqChange(newFreq: Float) { _currentFreq.value = newFreq }
-
     var currentFreq by mutableStateOf(DEFAULT_FREQ)
         private set
     fun setFreq(freq: Float) { currentFreq = freq }
@@ -82,7 +68,6 @@ class mainViewModel(
     private var _card by mutableStateOf<AttenuatorCard?>(null)
     fun setAttenuatorCard(newCard: AttenuatorCard) { _card = newCard }
     fun getCurrentCard(): AttenuatorCard? { return _card }
-
 
     var hasListChanged by mutableStateOf(false)
         private set

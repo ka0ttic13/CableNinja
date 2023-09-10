@@ -32,28 +32,25 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 
 
-/************************************************
- * LengthDialog()
- *      Create Dialog for user to enter
- *      attenuator length
- *      Note: not declared private as we use the
- *      same dialog to edit length in MainScreen()
- ************************************************/
+/*******************************************************************
+ * NumericDialog()
+ *      Create Dialog for user to enter numeric input
+ *******************************************************************/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LengthDialog(
+fun NumericDialog(
     label: String,
     defaultValue: String,
     onCancel: () -> Unit,
     onAdd: (String) -> Unit
 ) {
-    var openDialog by remember { mutableStateOf(true) }
-    var showLengthAlert by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(true) }
+    var showAlertDialog by remember { mutableStateOf(false) }
 
-    if (openDialog) {
+    if (showDialog) {
         Dialog(
             onDismissRequest = {
-                openDialog = false
+                showDialog = false
             },
             properties = DialogProperties(
                 usePlatformDefaultWidth = false
@@ -68,7 +65,7 @@ fun LengthDialog(
                         .fillMaxWidth()
                         .padding(15.dp)
                 ) {
-                    var length by remember { mutableStateOf(defaultValue) }
+                    var value by remember { mutableStateOf(defaultValue) }
 
                     Row(
                         modifier = Modifier
@@ -78,10 +75,11 @@ fun LengthDialog(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         OutlinedTextField(
-                            value = length,
+                            value = value,
                             onValueChange = {
-                                if (it.isDigitsOnly())
-                                    length = it
+                                val str = it.trim()
+                                if (str.isDigitsOnly())
+                                    value = str
                             },
                             label = {
                                 Text(
@@ -109,7 +107,7 @@ fun LengthDialog(
                         // Cancel Button
                         Button(
                             onClick = {
-                                openDialog = false
+                                showDialog = false
                                 onCancel()
                             },
                             modifier = Modifier
@@ -128,10 +126,10 @@ fun LengthDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (length.isEmpty() || !length.isDigitsOnly())
-                                    showLengthAlert = true
+                                if (value.isEmpty() || !value.isDigitsOnly())
+                                    showAlertDialog = true
                                 else
-                                    onAdd(length)
+                                    onAdd(value)
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -151,8 +149,8 @@ fun LengthDialog(
     }
 
     // Show AlertDialog if footage entered is not a number
-    if (showLengthAlert)
-        LengthAlertDialog()
+    if (showAlertDialog)
+        NumericAlertDialog()
 }
 
 /************************************************
@@ -161,10 +159,10 @@ fun LengthDialog(
  *      input from LengthDialog
  ************************************************/
 @Composable
-private fun LengthAlertDialog() {
-    var openDialog by remember { mutableStateOf(true) }
+private fun NumericAlertDialog() {
+    var showDialog by remember { mutableStateOf(true) }
 
-    if (openDialog) {
+    if (showDialog) {
         AlertDialog(
             onDismissRequest = {},
             properties = DialogProperties(
@@ -178,7 +176,7 @@ private fun LengthAlertDialog() {
 
                 ) {
                     TextButton(
-                        onClick = { openDialog = false }
+                        onClick = { showDialog = false }
                     ) {
                         Text(
                             text = "OK",
@@ -193,7 +191,7 @@ private fun LengthAlertDialog() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Footage must be a positive whole number"
+                        text = "Must be a positive whole number!"
                     )
                 }
             }

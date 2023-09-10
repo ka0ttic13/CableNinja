@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -22,19 +27,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
-import com.aaron.cableninja.R
 import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.isNumeric
-import com.aaron.cableninja.ui.dialogs.LengthDialog
+import com.aaron.cableninja.ui.dialogs.NumericDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.LightBlue
 import com.aaron.cableninja.ui.theme.LightRed
@@ -66,6 +69,8 @@ fun MainScreen(
     var tempSliderPosition by remember { mutableStateOf(mainViewModel.currentTemp) }
     var startLevel by remember { mutableStateOf(mainViewModel.currentStartLevel) }
     var editLengthDialog by remember { mutableStateOf(false) }
+    var editFreqDialog by remember { mutableStateOf(false) }
+    var editTempDialog by remember { mutableStateOf(false) }
 
     // temp card for editing current card
     var editCard by remember { mutableStateOf(AttenuatorCard("", listOf())) }
@@ -91,7 +96,18 @@ fun MainScreen(
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Text(text = "${round(freqSliderPosition).toInt()} MHz")
+
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(text = "${freqSliderPosition.toInt()} MHz")
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit frequency",
+                        modifier = Modifier.clickable { editFreqDialog = true }
+                    )
+                }
             }
             Slider(
                 value = freqSliderPosition,
@@ -124,9 +140,18 @@ fun MainScreen(
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Text(
-                    text = round(tempSliderPosition).toInt().toString() + " F"
-                )
+
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(text = "${tempSliderPosition.toInt()} F")
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit frequency",
+                        modifier = Modifier.clickable { editTempDialog = true }
+                    )
+                }
             }
             Slider(
                 value = tempSliderPosition,
@@ -189,8 +214,6 @@ fun MainScreen(
                 mainViewModel.setStartLevel(startLevel)
         }
 
-
-
         Divider(modifier = Modifier.padding(10.dp))
 
         // Main attenuation list
@@ -204,16 +227,14 @@ fun MainScreen(
         ) {
             if (mainViewModel.hasListChanged) {
                 mainViewModel.attenuatorCardList.forEach {
-                    if (it != null) {
-                        it.setLoss(
-                            getCableLoss(
-                                it.getAttenuator(),
-                                mainViewModel.currentFreq.toInt(),
-                                it.length(),
-                                mainViewModel.currentTemp.toInt()
-                            )
+                    it?.setLoss(
+                        getCableLoss(
+                            it.getAttenuator(),
+                            mainViewModel.currentFreq.toInt(),
+                            it.length(),
+                            mainViewModel.currentTemp.toInt()
                         )
-                    }
+                    )
 
                 }
             }
@@ -347,7 +368,7 @@ fun MainScreen(
                     modifier = Modifier.weight(2f)
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.baseline_delete_forever_24),
+                        imageVector = Icons.Default.Clear,
                         contentDescription = "Clear list",
                     )
                     Text(
@@ -366,7 +387,7 @@ fun MainScreen(
                     modifier = Modifier.weight(2f)
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.baseline_add_circle_24),
+                        imageVector = Icons.Default.AddCircle,
                         contentDescription = "Add attenuator",
                     )
                     Text(
@@ -377,10 +398,37 @@ fun MainScreen(
             }
         }
 
-        // edit length of current item in list
+        if (editFreqDialog) {
+            NumericDialog(
+                label = "Edit Frequency",
+                defaultValue = mainViewModel.currentFreq.toInt().toString(),
+                onCancel = { editFreqDialog = false },
+                onAdd = {
+                    freqSliderPosition = it.toFloat()
+                    mainViewModel.setFreq(freqSliderPosition)
+                    mainViewModel.setHasListChanged()
+                    editFreqDialog = false
+                }
+            )
+        }
+
+        if (editTempDialog) {
+            NumericDialog(
+                label = "Edit Temperature",
+                defaultValue = mainViewModel.currentTemp.toInt().toString(),
+                onCancel = { editTempDialog = false },
+                onAdd = {
+                    tempSliderPosition = it.toFloat()
+                    mainViewModel.setTemp(tempSliderPosition)
+                    mainViewModel.setHasListChanged()
+                    editTempDialog = false
+                }
+            )
+        }
+
         if (editLengthDialog && editCard.length() > 0) {
-            LengthDialog(
-                label = "Edit length",
+            NumericDialog(
+                label = "Edit Length",
                 defaultValue = editCard.length().toString(),
                 onCancel = { editLengthDialog = false },
                 onAdd = {
@@ -424,7 +472,7 @@ private fun AddAttenuatorCard(
         icon = {
             Icon(
                 modifier = Modifier.padding(16.dp),
-                painter = painterResource(id = R.drawable.baseline_edit_24),
+                imageVector = Icons.Default.Edit,
                 contentDescription = "Edit",
                 tint = Color.LightGray
             )
@@ -439,8 +487,8 @@ private fun AddAttenuatorCard(
         icon = {
             Icon(
                 modifier = Modifier.padding(16.dp),
-                painter = painterResource(id = R.drawable.baseline_delete_forever_24),
-                contentDescription = "Delete forever",
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete",
                 tint = Color.LightGray
             )
         },
