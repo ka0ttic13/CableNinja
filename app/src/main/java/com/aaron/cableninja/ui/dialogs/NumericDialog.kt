@@ -42,8 +42,9 @@ fun NumericDialog(
     label: String,
     defaultValue: String,
     onCancel: () -> Unit,
-    onAdd: (String) -> Unit
-) {
+    onAdd: (String) -> Unit,
+    range: ClosedFloatingPointRange<Float>? = null,
+    ) {
     var showDialog by remember { mutableStateOf(true) }
     var showAlertDialog by remember { mutableStateOf(false) }
 
@@ -128,6 +129,9 @@ fun NumericDialog(
                                 // validate input
                                 if (value.isEmpty() || !value.isDigitsOnly())
                                     showAlertDialog = true
+                                else if (range != null && value.toDouble() !in range) {
+                                    showAlertDialog = true
+                                }
                                 else
                                     onAdd(value)
                             },
@@ -150,16 +154,15 @@ fun NumericDialog(
 
     // Show AlertDialog if footage entered is not a number
     if (showAlertDialog)
-        NumericAlertDialog()
+        NumericAlertDialog(range)
 }
 
-/************************************************
- * LengthAlertDialog()
- *      Create AlertDialog for invalid user
- *      input from LengthDialog
- ************************************************/
+/************************************************************************
+ * NumericAlertDialog()
+ *      Create AlertDialog for invalid user input from NumericDialog
+ ************************************************************************/
 @Composable
-private fun NumericAlertDialog() {
+private fun NumericAlertDialog(range: ClosedFloatingPointRange<Float>?) {
     var showDialog by remember { mutableStateOf(true) }
 
     if (showDialog) {
@@ -190,8 +193,10 @@ private fun NumericAlertDialog() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "Must be a positive whole number!"
+                    if (range != null)
+                        Text(text = "Number is out of range!")
+                    else
+                        Text(text = "Must be a positive whole number!"
                     )
                 }
             }

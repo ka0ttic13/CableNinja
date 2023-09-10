@@ -65,6 +65,9 @@ fun MainScreen(
     navController: NavController,
     mainViewModel: mainViewModel,
 ) {
+    val freqRange = MIN_FREQ..MAX_FREQ
+    val tempRange = MIN_TEMP..MAX_TEMP
+
     var freqSliderPosition by remember { mutableStateOf(mainViewModel.currentFreq) }
     var tempSliderPosition by remember { mutableStateOf(mainViewModel.currentTemp) }
     var startLevel by remember { mutableStateOf(mainViewModel.currentStartLevel) }
@@ -114,7 +117,7 @@ fun MainScreen(
                 onValueChange = {
                     freqSliderPosition = it
                 },
-                valueRange = MIN_FREQ..MAX_FREQ,
+                valueRange = freqRange,
                 steps = 201,
                 onValueChangeFinished = {
                     mainViewModel.setFreq(freqSliderPosition)
@@ -158,7 +161,7 @@ fun MainScreen(
                 onValueChange = {
                     tempSliderPosition = it
                 },
-                valueRange = MIN_TEMP..MAX_TEMP,
+                valueRange = tempRange,
                 steps = 15,
                 onValueChangeFinished = {
                     mainViewModel.setTemp(tempSliderPosition)
@@ -401,6 +404,7 @@ fun MainScreen(
         if (editFreqDialog) {
             NumericDialog(
                 label = "Edit Frequency",
+                range = freqRange,
                 defaultValue = mainViewModel.currentFreq.toInt().toString(),
                 onCancel = { editFreqDialog = false },
                 onAdd = {
@@ -415,6 +419,7 @@ fun MainScreen(
         if (editTempDialog) {
             NumericDialog(
                 label = "Edit Temperature",
+                range = tempRange,
                 defaultValue = mainViewModel.currentTemp.toInt().toString(),
                 onCancel = { editTempDialog = false },
                 onAdd = {
