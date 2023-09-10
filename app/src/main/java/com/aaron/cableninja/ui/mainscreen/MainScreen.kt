@@ -420,6 +420,7 @@ fun MainScreen(
             NumericDialog(
                 label = "Edit Temperature",
                 range = tempRange,
+                allowNegative = true,
                 defaultValue = mainViewModel.currentTemp.toInt().toString(),
                 onCancel = { editTempDialog = false },
                 onAdd = {

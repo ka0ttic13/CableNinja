@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
+import com.aaron.cableninja.data.isNumeric
 
 
 /*******************************************************************
@@ -44,6 +45,8 @@ fun NumericDialog(
     onCancel: () -> Unit,
     onAdd: (String) -> Unit,
     range: ClosedFloatingPointRange<Float>? = null,
+    allowNegative: Boolean = false,
+    allowDecimal: Boolean = false
     ) {
     var showDialog by remember { mutableStateOf(true) }
     var showAlertDialog by remember { mutableStateOf(false) }
@@ -78,8 +81,17 @@ fun NumericDialog(
                         OutlinedTextField(
                             value = value,
                             onValueChange = {
+//                                val str = it.trim()
+//                                if (str.isDigitsOnly())
+//                                    value = str
+
                                 val str = it.trim()
+
                                 if (str.isDigitsOnly())
+                                    value = str
+                                else if (allowNegative && str.startsWith("-"))
+                                    value = str
+                                else if (allowDecimal && str.contains(char = '.'))
                                     value = str
                             },
                             label = {
@@ -127,11 +139,14 @@ fun NumericDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (value.isEmpty() || !value.isDigitsOnly())
+                                if (value.isEmpty() || !isNumeric(value))
                                     showAlertDialog = true
-                                else if (range != null && value.toDouble() !in range) {
+                                else if (!allowDecimal && value.contains('.'))
                                     showAlertDialog = true
-                                }
+                                else if (!allowNegative && value.startsWith("-"))
+                                    showAlertDialog = true
+                                else if (range != null && value.toDouble() !in range)
+                                    showAlertDialog = true
                                 else
                                     onAdd(value)
                             },
