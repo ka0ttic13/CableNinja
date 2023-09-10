@@ -1,7 +1,6 @@
 package com.aaron.cableninja.ui.addscreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,8 +56,7 @@ import com.aaron.cableninja.ui.theme.plantColor
  *      Show attenuators that can be added.
  *********************************************************************************/
 @SuppressLint("UnrememberedMutableState")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun AddScreen(
@@ -165,7 +163,7 @@ fun AddScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 6.dp, bottom = 6.dp, end = 40.dp)
+                    .padding(top = 6.dp, bottom = 6.dp, end = 20.dp)
             ) {
 
 
