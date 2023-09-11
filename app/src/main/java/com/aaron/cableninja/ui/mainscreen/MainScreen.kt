@@ -105,6 +105,7 @@ fun MainScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(text = "${freqSliderPosition.toInt()} MHz")
+                    // frequency edit
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit frequency",
@@ -149,6 +150,7 @@ fun MainScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(text = "${tempSliderPosition.toInt()} F")
+                    // temp edit
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit frequency",

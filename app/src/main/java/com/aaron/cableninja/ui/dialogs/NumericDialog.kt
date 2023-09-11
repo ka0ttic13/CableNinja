@@ -1,5 +1,6 @@
 package com.aaron.cableninja.ui.dialogs
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,8 +50,12 @@ fun NumericDialog(
     ) {
     var showDialog by remember { mutableStateOf(true) }
     var showAlertDialog by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf(defaultValue) }
+
+    Log.d("DEBUG", "NumericDialog: entering function...")
 
     if (showDialog) {
+        Log.d("DEBUG", "NumericDialog: showDialog = true")
         Dialog(
             onDismissRequest = {
                 showDialog = false
@@ -68,7 +73,7 @@ fun NumericDialog(
                         .fillMaxWidth()
                         .padding(15.dp)
                 ) {
-                    var value by remember { mutableStateOf(defaultValue) }
+                    Log.d("DEBUG", "NumericDialog: value = $value")
 
                     Row(
                         modifier = Modifier
@@ -134,16 +139,32 @@ fun NumericDialog(
                         Button(
                             onClick = {
                                 // validate input
-                                if (value.isEmpty() || !isNumeric(value))
+                                if (value.isEmpty() || !isNumeric(value)) {
+                                    Log.d("DEBUG", "NumericDialog: value.isEmpty and !isNumeric(value)")
+                                    value = ""
                                     showAlertDialog = true
-                                else if (!allowDecimal && value.contains('.'))
+                                }
+                                else if (!allowDecimal && value.contains('.')) {
+                                    Log.d("DEBUG", "NumericDialog: !allowDecimal && value.contains(.)")
+                                    value = ""
                                     showAlertDialog = true
-                                else if (!allowNegative && value.startsWith("-"))
+                                }
+                                else if (!allowNegative && value.startsWith("-")) {
+                                    Log.d("DEBUG", "NumericDialog: !allowNegative && value.startsWith(-)")
+                                    value = ""
                                     showAlertDialog = true
-                                else if (range != null && value.toDouble() !in range)
+                                }
+                                else if (range != null && value.toDouble() !in range) {
+                                    Log.d("DEBUG", "NumericDialog: range != null && value !in range")
+                                    value = ""
                                     showAlertDialog = true
-                                else
+                                    Log.d("DEBUG", "NumericDialog: range != null && showAlertDialog = $showAlertDialog")
+                                }
+                                else {
+                                    Log.d("DEBUG", "Adding value: $value")
                                     onAdd(value)
+                                    value = ""
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -163,8 +184,10 @@ fun NumericDialog(
     }
 
     // Show AlertDialog if footage entered is not a number
-    if (showAlertDialog)
+    if (showAlertDialog) {
+        Log.d("DEBUG", "NumericDialog: ALERT!!!!!")
         NumericAlertDialog(range)
+    }
 }
 
 /************************************************************************
@@ -176,8 +199,9 @@ private fun NumericAlertDialog(range: ClosedFloatingPointRange<Float>?) {
     var showDialog by remember { mutableStateOf(true) }
 
     if (showDialog) {
+        Log.d("DEBUG", "NumericAlertDialog: showDialog = true")
         AlertDialog(
-            onDismissRequest = {},
+            onDismissRequest = { showDialog = false },
             properties = DialogProperties(
                 usePlatformDefaultWidth = false
             ),
@@ -199,16 +223,10 @@ private fun NumericAlertDialog(range: ClosedFloatingPointRange<Float>?) {
                 }
             },
             text = {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    if (range != null)
-                        Text(text = "Number is out of range!")
-                    else
-                        Text(text = "Must be a positive whole number!"
-                    )
-                }
+                if (range != null)
+                    Text(text = "Number is out of range!")
+                else
+                    Text(text = "Must be a positive whole number!")
             }
         )
     }
