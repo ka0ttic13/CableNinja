@@ -32,7 +32,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 import com.aaron.cableninja.data.isNumeric
 
-
 /*******************************************************************
  * NumericDialog()
  *      Create Dialog for user to enter numeric input
@@ -81,10 +80,6 @@ fun NumericDialog(
                         OutlinedTextField(
                             value = value,
                             onValueChange = {
-//                                val str = it.trim()
-//                                if (str.isDigitsOnly())
-//                                    value = str
-
                                 val str = it.trim()
 
                                 if (str.isDigitsOnly())

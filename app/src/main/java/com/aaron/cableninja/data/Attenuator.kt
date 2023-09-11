@@ -21,9 +21,10 @@ class Attenuator(
     private val _name = name
     private val _tags = tags
 
-    // store manufacturer specs as k/v pairs
-    //      key = frequency
-    //      value = attenuation in dB per 100'
+    /* store manufacturer specs as k/v pairs
+     *      key = frequency
+     *      value = attenuation in dB per 100'
+     * */
     var specs = mutableMapOf<Int, Double>()
 
     fun isCoax() : Boolean { return _tags.contains(AttenuatorType.COAX) }

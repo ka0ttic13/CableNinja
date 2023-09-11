@@ -405,6 +405,7 @@ fun MainScreen(
             NumericDialog(
                 label = "Edit Frequency",
                 range = freqRange,
+                allowDecimal = true,
                 defaultValue = mainViewModel.currentFreq.toInt().toString(),
                 onCancel = { editFreqDialog = false },
                 onAdd = {

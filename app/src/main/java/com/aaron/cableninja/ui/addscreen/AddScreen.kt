@@ -56,8 +56,7 @@ import com.aaron.cableninja.ui.theme.plantColor
  *      Show attenuators that can be added.
  *********************************************************************************/
 @SuppressLint("UnrememberedMutableState")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddScreen(
     navController: NavController,
@@ -165,8 +164,6 @@ fun AddScreen(
                     .fillMaxWidth()
                     .padding(top = 6.dp, bottom = 6.dp, end = 20.dp)
             ) {
-
-
                 // show all possible tags
                 if (mainViewModel.filterList.isEmpty()) {
                     mainViewModel.attenuatorTags.keys.forEach {
@@ -191,7 +188,7 @@ fun AddScreen(
                 }
                 // otherwise show filters
                 else {
-                    // coax tag
+                    // coax filter
                     mainViewModel.attenuatorTags[AttenuatorType.COAX]?.let {
                         AddFilter(
                             filterEnabled = coaxFilter,
@@ -208,7 +205,7 @@ fun AddScreen(
                         )
                     }
 
-                    // passive tag
+                    // passive filter
                     mainViewModel.attenuatorTags[AttenuatorType.PASSIVE]?.let {
                         AddFilter(
                             filterEnabled = passiveFilter,
@@ -225,7 +222,7 @@ fun AddScreen(
                         )
                     }
 
-                    // drop tag
+                    // drop filter
                     mainViewModel.attenuatorTags[AttenuatorType.DROP]?.let {
                         AddFilter(
                             filterEnabled = dropFilter,
@@ -242,7 +239,7 @@ fun AddScreen(
                         )
                     }
 
-                    // plant tag
+                    // plant filter
                     mainViewModel.attenuatorTags[AttenuatorType.PLANT]?.let {
                         AddFilter(
                             filterEnabled = plantFilter,
@@ -281,7 +278,6 @@ fun AddScreen(
                 AddAttenuatorCard(
                     card,
                     onClick = {
-
                         // only show footage dialog if we are adding a coax attenuator
                         if (card.isCoax()) {
                             // logic for coax is in this function below in
