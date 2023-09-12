@@ -41,6 +41,7 @@ import com.aaron.cableninja.data.isNumeric
 import com.aaron.cableninja.ui.dialogs.NumericDialog
 import com.aaron.cableninja.ui.navigation.Screen
 import com.aaron.cableninja.ui.theme.LightBlue
+import com.aaron.cableninja.ui.theme.LightGreen
 import com.aaron.cableninja.ui.theme.LightRed
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -53,9 +54,13 @@ const val MAX_TEMP = 120f
 
 const val DIPLEX_FILTER_START = 45 // TODO: should probably be configurable until we are 100% high split
 
+const val TX_LOW_THRESHOLD = 30
+const val TX_HIGH_THRESHOLD = 54
+const val RX_LOW_THRESHOLD = -10
+const val RX_HIGH_THRESHOLD = 11
 
 /*********************************************************************************
- * MainScreen()
+ * HomeScreen()
  *      Main screen interface that takes input for frequency, temp, and starting
  *      level as well as shows the main attenuator list along with total
  *      attenuation and ending level
@@ -345,13 +350,10 @@ fun HomeScreen(
                         }
                     }
 
-                    // get the color we should use based on user input
-                    val thresholdColor = ThresholdColor(allPlant, transmit, result)
-
                     Text(
                         // Round to nearest tenth
                         text = (round(result * 10) / 10).toString() + " dBmV",
-                        color = thresholdColor.getColor(),
+                        color = thresholdColor(allPlant, transmit, result),
                         fontWeight = FontWeight.ExtraBold
                     )
                 }
@@ -557,5 +559,27 @@ private fun AddAttenuatorCard(
                 )
             }
         }
+    }
+}
+
+/*********************************************************************************
+ * ThresholdColor()
+ *      Return the text color that matches the threshold criteria
+ *********************************************************************************/
+@Composable
+private fun thresholdColor(allPlant: Boolean, transmit: Boolean, result: Double): Color {
+    if (allPlant)
+        return MaterialTheme.colorScheme.primary
+
+    return if (transmit) {
+        if ((result >= TX_LOW_THRESHOLD) && (result < TX_HIGH_THRESHOLD))
+            LightGreen
+        else
+            Color.Red
+    } else {
+        if ((result >= RX_LOW_THRESHOLD) && (result < RX_HIGH_THRESHOLD))
+            LightGreen
+        else
+            Color.Red
     }
 }
