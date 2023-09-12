@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui.mainscreen
+package com.aaron.cableninja.ui.homescreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +16,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -61,7 +62,7 @@ const val DIPLEX_FILTER_START = 45 // TODO: should probably be configurable unti
  *********************************************************************************/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+fun HomeScreen(
     navController: NavController,
     mainViewModel: mainViewModel,
 ) {
@@ -362,7 +363,7 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.spacedBy(30.dp),
             ) {
                 // Clear Button
-                Button(
+                OutlinedButton(
                     onClick = {
                         mainViewModel.clearAttenuatorList()
                         mainViewModel.setTotalAtten(0.0)

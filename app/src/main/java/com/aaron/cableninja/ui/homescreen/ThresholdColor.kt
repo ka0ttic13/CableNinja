@@ -1,4 +1,4 @@
-package com.aaron.cableninja.ui.mainscreen
+package com.aaron.cableninja.ui.homescreen
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

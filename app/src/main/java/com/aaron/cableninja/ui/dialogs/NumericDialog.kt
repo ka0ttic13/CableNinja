@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -75,6 +76,7 @@ fun NumericDialog(
                 ) {
                     Log.d("DEBUG", "NumericDialog: value = $value")
 
+                    // text field
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -109,7 +111,7 @@ fun NumericDialog(
                         )
                     }
 
-                    // Button Row
+                    // button row
                     Row(
                         modifier = Modifier
                             .padding(start = 30.dp, end = 30.dp, bottom = 10.dp)
@@ -118,7 +120,7 @@ fun NumericDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Cancel Button
-                        Button(
+                        OutlinedButton(
                             onClick = {
                                 showDialog = false
                                 onCancel()

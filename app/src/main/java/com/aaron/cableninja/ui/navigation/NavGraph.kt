@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.ui.addscreen.AddScreen
-import com.aaron.cableninja.ui.mainscreen.MainScreen
+import com.aaron.cableninja.ui.homescreen.HomeScreen
 
 @Composable
 fun SetupNavGraph(
@@ -21,7 +21,7 @@ fun SetupNavGraph(
         startDestination = Screen.Main.route
     ) {
         composable(route = Screen.Main.route) {
-            MainScreen(navController, mainViewModel)
+            HomeScreen(navController, mainViewModel)
         }
         composable(route = Screen.Add.route) {
             AddScreen(navController, mainViewModel)
