@@ -38,13 +38,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.Attenuator
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
 import com.aaron.cableninja.ui.dialogs.NumericDialog
-import com.aaron.cableninja.ui.navigation.Screen
+import com.aaron.cableninja.ui.navigation.BottomBarScreen
 import com.aaron.cableninja.ui.theme.coaxColor
 import com.aaron.cableninja.ui.theme.dropColor
 import com.aaron.cableninja.ui.theme.passiveColor
@@ -76,34 +77,6 @@ fun AddScreen(
     val kbController = LocalSoftwareKeyboardController.current
 
     Column {
-        // Add Header with Close Icon "X" on right side
-        //      cancels Add operation
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            // Add Label
-            Text(
-                text = "Add attenuator",
-                fontWeight = FontWeight.Bold
-            )
-
-            // Close Icon - exits back to MainScreen
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = "Close",
-                modifier = Modifier.clickable {
-                    // on click, go back to MainScreen()
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        Divider(modifier = Modifier.padding(bottom = 6.dp))
-
         // search box
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -148,6 +121,7 @@ fun AddScreen(
             )
         }
 
+        // filters
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -156,7 +130,6 @@ fun AddScreen(
                 modifier = Modifier.padding(start = 12.dp, top=2.dp)
             )
 
-            // Filter by tags
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -259,7 +232,7 @@ fun AddScreen(
             }
         }
 
-        // build list of items to show based on search and filters
+        // build list of items to show, based on search and filters
         for (attenuator in mainViewModel.attenuatorList.iterator()) {
             if (showList.contains(attenuator))
                 continue
@@ -303,7 +276,12 @@ fun AddScreen(
 
                             // nav back to MainScreen
                             mainViewModel.addAttenuatorCard(card)
-                            navController.navigate(Screen.Main.route)
+                            mainViewModel.SETBOTTOMINDEX(0)
+                            navController.navigate(BottomBarScreen.Home.route)
+                            {
+                                popUpTo(navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
                         }
                     }
                 )
@@ -342,7 +320,11 @@ fun AddScreen(
                     mainViewModel.addAttenuatorCard(card)
 
                     // Nav back to MainScreen
-                    navController.navigate(Screen.Main.route)
+                    navController.navigate(BottomBarScreen.Home.route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
+                    mainViewModel.SETBOTTOMINDEX(0)
                 }
             }
         )

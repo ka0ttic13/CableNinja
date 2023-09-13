@@ -33,13 +33,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.aaron.cableninja.ui.viewmodels.mainViewModel
 import com.aaron.cableninja.data.getCableLoss
 import com.aaron.cableninja.data.AttenuatorCard
 import com.aaron.cableninja.data.AttenuatorType
 import com.aaron.cableninja.data.isNumeric
 import com.aaron.cableninja.ui.dialogs.NumericDialog
-import com.aaron.cableninja.ui.navigation.Screen
+import com.aaron.cableninja.ui.navigation.BottomBarScreen
 import com.aaron.cableninja.ui.theme.LightBlue
 import com.aaron.cableninja.ui.theme.LightGreen
 import com.aaron.cableninja.ui.theme.LightRed
@@ -225,7 +226,7 @@ fun HomeScreen(
                 mainViewModel.setStartLevel(startLevel)
         }
 
-        Divider(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.padding(6.dp))
 
         // Main attenuation list
         Column(
@@ -250,7 +251,7 @@ fun HomeScreen(
                 }
             }
 
-            if (mainViewModel.attenuatorCardList.isNotEmpty()) {
+            if (!mainViewModel.attenuatorCardList.isNullOrEmpty()) {
                 var total = 0.0
 
                 mainViewModel.attenuatorCardList.forEach {
@@ -278,20 +279,48 @@ fun HomeScreen(
                 }
 
                 mainViewModel.setTotalAtten(total)
-            } else // if no attenuators, show a message
-                Text(text = "Tap to add an attenuator",
-                    modifier = Modifier
-                        .padding(top = 160.dp)
-                        .clickable {
-                            navController.navigate(route = Screen.Add.route)
+            }
+//            else // if no attenuators, show a message
+//                Text(text = "Tap to add an attenuator",
+//                    modifier = Modifier
+//                        .padding(bottom = 20.dp)
+//                        .clickable {
+//                            mainViewModel.SETBOTTOMINDEX(1)
+//                            navController.navigate(route = BottomBarScreen.Add.route) {
+//                                popUpTo(navController.graph.findStartDestination().id)
+//                                launchSingleTop = true
+//                            }
+//                        }
+//                )
+        }
+
+        if (!mainViewModel.attenuatorCardList.isNullOrEmpty()) {
+            Column(
+
+            ) {
+                // clear icon
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = "Clear",
+                        modifier = Modifier.clickable {
+                            mainViewModel.setStartLevel("")
+                            mainViewModel.setTotalAtten(0.0)
+                            mainViewModel.clearAttenuatorList()
+                            mainViewModel.setHasListChanged()
                         }
-                )
+                    )
+                }
+            }
         }
 
         Divider()
 
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
                 .padding(10.dp)
                 .weight(2.25f)
@@ -320,7 +349,7 @@ fun HomeScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.padding(top = 2.dp, bottom = 10.dp)
+                modifier = Modifier.padding(top = 2.dp)
             ) {
                 Text(
                     text = "Ending level: ",
@@ -358,53 +387,9 @@ fun HomeScreen(
                     )
                 }
             }
-
-            // Button row
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(30.dp),
-            ) {
-                // Clear Button
-                OutlinedButton(
-                    onClick = {
-                        mainViewModel.clearAttenuatorList()
-                        mainViewModel.setTotalAtten(0.0)
-                        startLevel = ""
-                        mainViewModel.setStartLevel("")
-                    },
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.weight(2f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = "Clear list",
-                    )
-                    Text(
-                        text = "Clear",
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-
-                // Add Button
-                Button(
-                    onClick = {
-                        mainViewModel.clearFilters()
-                        navController.navigate(route = Screen.Add.route)
-                    },
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.weight(2f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AddCircle,
-                        contentDescription = "Add attenuator",
-                    )
-                    Text(
-                        text = "Add",
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-            }
         }
+
+        // dialog states
 
         if (editFreqDialog) {
             NumericDialog(

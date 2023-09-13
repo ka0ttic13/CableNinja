@@ -79,7 +79,14 @@ class mainViewModel(
     fun removeFilter(type: AttenuatorType) { _filterList.remove(type) }
     fun clearFilters() { _filterList.clear() }
 
+    var BOTTOMINDEX by mutableStateOf(0)
+        private set
+    fun SETBOTTOMINDEX(value: Int) {
+        BOTTOMINDEX = value
+    }
+
     init {
         loadRFdata(this)
     }
+
 }
