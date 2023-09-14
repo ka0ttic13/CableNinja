@@ -1,5 +1,6 @@
 package com.aaron.cableninja.ui.homescreen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -295,6 +297,15 @@ fun HomeScreen(
         }
 
         if (!mainViewModel.attenuatorCardList.isNullOrEmpty()) {
+            Log.d("DEBUG", "HomeScreen(): attenuartorCardList.size() = ${mainViewModel.attenuatorCardList.size}")
+
+            mainViewModel.attenuatorCardList.forEach { card ->
+                if (card == null)
+                    Log.d("DEBUG", "card = null")
+                else
+                    Log.d("DEBUG", "card = ${card.name()}")
+            }
+
             Column(
 
             ) {
@@ -303,16 +314,19 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = "Clear",
-                        modifier = Modifier.clickable {
+                    FloatingActionButton(
+                        onClick = {
                             mainViewModel.setStartLevel("")
                             mainViewModel.setTotalAtten(0.0)
                             mainViewModel.clearAttenuatorList()
-                            mainViewModel.setHasListChanged()
+//                            mainViewModel.setHasListChanged()
                         }
-                    )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Clear",
+                        )
+                    }
                 }
             }
         }

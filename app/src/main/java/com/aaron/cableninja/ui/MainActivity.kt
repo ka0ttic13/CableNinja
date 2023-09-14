@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CableNinjaTheme {
                 val mainViewModel: mainViewModel = viewModel()
+                mainViewModel.clearAttenuatorList()
 
                 val bottomBarItems = listOf(
                     BottomBarScreen.Home,
