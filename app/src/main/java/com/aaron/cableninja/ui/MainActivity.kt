@@ -6,10 +6,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -18,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -40,12 +47,6 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel: mainViewModel = viewModel()
                 mainViewModel.clearAttenuatorList()
 
-                val bottomBarItems = listOf(
-                    BottomBarScreen.Home,
-                    BottomBarScreen.Add,
-                    BottomBarScreen.Settings
-                )
-
                 // Lock screen orientation to portrait
                 this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -54,60 +55,155 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(
-                        bottomBar = {
-                            NavigationBar {
-                                bottomBarItems.forEachIndexed { index, item ->
-                                    // Home
-                                    NavigationBarItem(
-                                        selected = mainViewModel.BOTTOMINDEX == index,
-                                        onClick = {
-                                            mainViewModel.SETBOTTOMINDEX(index)
-
-                                            if (mainViewModel.BOTTOMINDEX == 1)
-                                                mainViewModel.clearFilters()
-
-                                            navController.navigate(item.route) {
-                                                popUpTo(navController.graph.findStartDestination().id)
-                                                launchSingleTop = true
-                                            }
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        icon = {
-                                            BadgedBox(
-                                                badge = {
-                                                    if (item.badgeCount != null) {
-                                                        Badge {
-                                                            Text(text = item.badgeCount.toString())
-                                                        }
-                                                    } else if (item.hasNews) {
-                                                        Badge()
-                                                    }
-                                                }
-                                            ) {
-                                                Icon(
-                                                    imageVector =
-                                                    if (index ==
-                                                        mainViewModel.BOTTOMINDEX
-                                                    ) {
-                                                        item.selectedIcon
-                                                    } else item.unselectedIcon,
-                                                    contentDescription = item.title
-                                                )
-                                            }
-                                        }
+                        floatingActionButtonPosition = FabPosition.Center,
+                        floatingActionButton = {
+                                FloatingActionButton(
+                                    shape = RoundedCornerShape(50.dp),
+                                    onClick = {
+                                        mainViewModel.setStartLevel("")
+                                        mainViewModel.setTotalAtten(0.0)
+                                        mainViewModel.clearAttenuatorList()
+                                    },
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Clear",
                                     )
                                 }
+                        },
+                        bottomBar = {
+                            // Home
+                            NavigationBar {
+                                NavigationBarItem(
+                                    selected = mainViewModel.BOTTOMINDEX == 0,
+                                    onClick = {
+                                        mainViewModel.SETBOTTOMINDEX(0)
+
+                                        navController.navigate(BottomBarScreen.Home.route) {
+                                            popUpTo(navController.graph.findStartDestination().id)
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = BottomBarScreen.Home.title)
+                                    },
+                                    icon = {
+                                        BadgedBox(
+                                            badge = {
+                                                if (BottomBarScreen.Home.badgeCount != null) {
+                                                    Badge {
+                                                        Text(text = BottomBarScreen.Home.badgeCount.toString())
+                                                    }
+                                                } else if (BottomBarScreen.Home.hasNews) {
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = BottomBarScreen.Home.selectedIcon,
+                                                contentDescription = BottomBarScreen.Home.title
+                                            )
+                                        }
+                                    }
+                                )
+                                // Add!
+                                NavigationBarItem(
+                                    selected = mainViewModel.BOTTOMINDEX == 1,
+                                    onClick = {
+                                        mainViewModel.SETBOTTOMINDEX(1)
+
+                                        navController.navigate(BottomBarScreen.Add.route) {
+                                            popUpTo(navController.graph.findStartDestination().id)
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = BottomBarScreen.Add.title)
+                                    },
+                                    icon = {
+//                                        FloatingActionButton(
+//                                            shape = RoundedCornerShape(50.dp),
+//                                            onClick = {
+//                                                mainViewModel.SETBOTTOMINDEX(1)
+//
+//                                                navController.navigate(BottomBarScreen.Add.route) {
+//                                                    popUpTo(navController.graph.findStartDestination().id)
+//                                                    launchSingleTop = true
+//                                                }
+//                                            },
+//                                            modifier = Modifier.padding(bottom = 10.dp)
+//                                        ) {
+//                                            Icon(
+//                                                imageVector = Icons.Filled.Add,
+//                                                contentDescription = BottomBarScreen.Add.title,
+//                                            )
+//                                        }
+
+
+                                        BadgedBox(
+                                            badge = {
+                                                if (BottomBarScreen.Home.badgeCount != null) {
+                                                    Badge {
+                                                        Text(text = BottomBarScreen.Home.badgeCount.toString())
+                                                    }
+                                                } else if (BottomBarScreen.Home.hasNews) {
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Add,
+                                                contentDescription = BottomBarScreen.Add.title
+                                            )
+                                        }
+                                    }
+                                )
+                                // Settings
+                                NavigationBarItem(
+                                    selected = mainViewModel.BOTTOMINDEX == 2,
+                                    onClick = {
+                                        mainViewModel.SETBOTTOMINDEX(2)
+
+                                        navController.navigate(BottomBarScreen.Settings.route) {
+                                            popUpTo(navController.graph.findStartDestination().id)
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = BottomBarScreen.Settings.title)
+                                    },
+                                    icon = {
+                                        BadgedBox(
+                                            badge = {
+                                                if (BottomBarScreen.Settings.badgeCount != null) {
+                                                    Badge {
+                                                        Text(text = BottomBarScreen.Settings.badgeCount.toString())
+                                                    }
+                                                } else if (BottomBarScreen.Settings.hasNews) {
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = BottomBarScreen.Settings.selectedIcon,
+                                                contentDescription = BottomBarScreen.Settings.title
+                                            )
+                                        }
+                                    }
+                                )
                             }
                         }
                     ) {
                         navController = rememberNavController()
-                        BottomNavGraph(navController = navController, mainViewModel = mainViewModel)
+                        BottomNavGraph(
+                            navController = navController,
+                            mainViewModel = mainViewModel
+                        )
                     }
                 }
             }
         }
     }
 }
-

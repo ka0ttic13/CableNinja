@@ -1,24 +1,18 @@
 package com.aaron.cableninja.ui.homescreen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -229,11 +223,35 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.padding(6.dp))
+//        if (mainViewModel.attenuatorCardList.isNotEmpty()) {
+//            // clear icon
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                horizontalArrangement = Arrangement.Center,
+//                modifier = Modifier.background(Color.Transparent)
+//            ) {
+//                FloatingActionButton(
+//                    shape = RoundedCornerShape(50.dp),
+//                    onClick = {
+//                        mainViewModel.setStartLevel("")
+//                        mainViewModel.setTotalAtten(0.0)
+//                        mainViewModel.clearAttenuatorList()
+//                    },
+//                    modifier = Modifier.size(40.dp)
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.Clear,
+//                        contentDescription = "Clear",
+//                    )
+//                }
+//            }
+//        }
+
 
         // Main attenuation list
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(5.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier
                 .weight(5f)
                 .fillMaxWidth()
@@ -282,53 +300,18 @@ fun HomeScreen(
 
                 mainViewModel.setTotalAtten(total)
             }
-//            else // if no attenuators, show a message
-//                Text(text = "Tap to add an attenuator",
-//                    modifier = Modifier
-//                        .padding(bottom = 20.dp)
-//                        .clickable {
-//                            mainViewModel.SETBOTTOMINDEX(1)
-//                            navController.navigate(route = BottomBarScreen.Add.route) {
-//                                popUpTo(navController.graph.findStartDestination().id)
-//                                launchSingleTop = true
-//                            }
-//                        }
-//                )
-        }
-
-        if (!mainViewModel.attenuatorCardList.isNullOrEmpty()) {
-            Log.d("DEBUG", "HomeScreen(): attenuartorCardList.size() = ${mainViewModel.attenuatorCardList.size}")
-
-            mainViewModel.attenuatorCardList.forEach { card ->
-                if (card == null)
-                    Log.d("DEBUG", "card = null")
-                else
-                    Log.d("DEBUG", "card = ${card.name()}")
-            }
-
-            Column(
-
-            ) {
-                // clear icon
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    FloatingActionButton(
-                        onClick = {
-                            mainViewModel.setStartLevel("")
-                            mainViewModel.setTotalAtten(0.0)
-                            mainViewModel.clearAttenuatorList()
-//                            mainViewModel.setHasListChanged()
+            else // if no attenuators, show a message
+                Text(text = "Tap to add an attenuator",
+                    modifier = Modifier
+                        .padding(top = 150.dp)
+                        .clickable {
+                            mainViewModel.SETBOTTOMINDEX(1)
+                            navController.navigate(route = BottomBarScreen.Add.route) {
+                                popUpTo(navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            contentDescription = "Clear",
-                        )
-                    }
-                }
-            }
+                )
         }
 
         Divider()
@@ -523,7 +506,7 @@ private fun AddAttenuatorCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(vertical = 10.dp)
             ) {
                 // show attenuator name on left
                 Text(
