@@ -123,25 +123,6 @@ class MainActivity : ComponentActivity() {
                                         Text(text = BottomBarScreen.Add.title)
                                     },
                                     icon = {
-//                                        FloatingActionButton(
-//                                            shape = RoundedCornerShape(50.dp),
-//                                            onClick = {
-//                                                mainViewModel.SETBOTTOMINDEX(1)
-//
-//                                                navController.navigate(BottomBarScreen.Add.route) {
-//                                                    popUpTo(navController.graph.findStartDestination().id)
-//                                                    launchSingleTop = true
-//                                                }
-//                                            },
-//                                            modifier = Modifier.padding(bottom = 10.dp)
-//                                        ) {
-//                                            Icon(
-//                                                imageVector = Icons.Filled.Add,
-//                                                contentDescription = BottomBarScreen.Add.title,
-//                                            )
-//                                        }
-
-
                                         BadgedBox(
                                             badge = {
                                                 if (BottomBarScreen.Home.badgeCount != null) {
