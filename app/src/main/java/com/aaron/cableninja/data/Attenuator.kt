@@ -7,13 +7,13 @@ enum class AttenuatorType {
     PLANT
 }
 
-/************************************************************
+/*********************************************************************************
  * class Attenuator
  *      encapsulates all attenuator data
  *      including a map of manufacturer specs
  *          key = frequency
  *          value = loss @ 100'
- ************************************************************/
+ *********************************************************************************/
 class Attenuator(
     name: String,
     tags: List<AttenuatorType>

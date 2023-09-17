@@ -1,10 +1,9 @@
 package com.aaron.cableninja.data
 
-/********************************************
+/*********************************************************************************
  * class AttenuatorCard
- *      encapsulates all attenuator data
- *      for the UI to use
- ********************************************/
+ *      encapsulates all attenuator data for the UI to use
+ *********************************************************************************/
 class AttenuatorCard(atten: Attenuator) {
         private var _atten = atten
         private var _length = 0
