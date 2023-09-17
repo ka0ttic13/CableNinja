@@ -223,30 +223,6 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.padding(6.dp))
-//        if (mainViewModel.attenuatorCardList.isNotEmpty()) {
-//            // clear icon
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center,
-//                modifier = Modifier.background(Color.Transparent)
-//            ) {
-//                FloatingActionButton(
-//                    shape = RoundedCornerShape(50.dp),
-//                    onClick = {
-//                        mainViewModel.setStartLevel("")
-//                        mainViewModel.setTotalAtten(0.0)
-//                        mainViewModel.clearAttenuatorList()
-//                    },
-//                    modifier = Modifier.size(40.dp)
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Default.Clear,
-//                        contentDescription = "Clear",
-//                    )
-//                }
-//            }
-//        }
-
 
         // Main attenuation list
         Column(
@@ -271,8 +247,37 @@ fun HomeScreen(
                 }
             }
 
-            if (!mainViewModel.attenuatorCardList.isNullOrEmpty()) {
+            if (mainViewModel.attenuatorCardList.isNotEmpty()) {
                 var total = 0.0
+
+                // Clear Card
+                Card(
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            mainViewModel.setStartLevel("")
+                            mainViewModel.setTotalAtten(0.0)
+                            mainViewModel.clearAttenuatorList()
+                        }
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = "Clear",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(
+                                top = 5.dp,
+                                bottom = 5.dp
+                            )
+                        )
+                    }
+                }
 
                 mainViewModel.attenuatorCardList.forEach {
                     if (it != null) {

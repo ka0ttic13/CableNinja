@@ -6,16 +6,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -24,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -55,24 +49,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(
-                        floatingActionButtonPosition = FabPosition.Center,
-                        floatingActionButton = {
-                                FloatingActionButton(
-                                    shape = RoundedCornerShape(50.dp),
-                                    onClick = {
-                                        mainViewModel.setStartLevel("")
-                                        mainViewModel.setTotalAtten(0.0)
-                                        mainViewModel.clearAttenuatorList()
-                                    },
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear",
-                                    )
-                                }
-                        },
                         bottomBar = {
                             // Home
                             NavigationBar {
@@ -170,12 +146,30 @@ class MainActivity : ComponentActivity() {
                                             Icon(
                                                 imageVector = BottomBarScreen.Settings.selectedIcon,
                                                 contentDescription = BottomBarScreen.Settings.title
-                                            )
+                                              )
                                         }
                                     }
                                 )
                             }
-                        }
+                        },
+//                        floatingActionButtonPosition = FabPosition.Center,
+//                        floatingActionButton = {
+//                            FloatingActionButton(
+//                                shape = RoundedCornerShape(50.dp),
+//                                onClick = {
+//                                    mainViewModel.setStartLevel("")
+//                                    mainViewModel.setTotalAtten(0.0)
+//                                    mainViewModel.clearAttenuatorList()
+//                                },
+//                                modifier = Modifier
+//                                    .size(40.dp)
+//                            ) {
+//                                Icon(
+//                                    imageVector = Icons.Default.Clear,
+//                                    contentDescription = "Clear",
+//                                )
+//                            }
+//                        },
                     ) {
                         navController = rememberNavController()
                         BottomNavGraph(
