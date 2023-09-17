@@ -77,10 +77,16 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
                                         ) {
-                                            Icon(
-                                                imageVector = BottomBarScreen.Home.selectedIcon,
-                                                contentDescription = BottomBarScreen.Home.title
-                                            )
+                                            if (mainViewModel.BOTTOMINDEX == 0)
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Home.selectedIcon,
+                                                    contentDescription = BottomBarScreen.Home.title
+                                                )
+                                            else
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Home.unselectedIcon,
+                                                    contentDescription = BottomBarScreen.Home.title
+                                                )
                                         }
                                     }
                                 )
@@ -110,10 +116,16 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
                                         ) {
-                                            Icon(
-                                                imageVector = Icons.Filled.Add,
-                                                contentDescription = BottomBarScreen.Add.title
-                                            )
+                                            if (mainViewModel.BOTTOMINDEX == 1)
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Add.selectedIcon,
+                                                    contentDescription = BottomBarScreen.Add.title
+                                                )
+                                            else
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Add.unselectedIcon,
+                                                    contentDescription = BottomBarScreen.Add.title
+                                                )
                                         }
                                     }
                                 )
@@ -143,33 +155,21 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
                                         ) {
-                                            Icon(
-                                                imageVector = BottomBarScreen.Settings.selectedIcon,
-                                                contentDescription = BottomBarScreen.Settings.title
-                                              )
+                                            if (mainViewModel.BOTTOMINDEX == 2)
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Settings.selectedIcon,
+                                                    contentDescription = BottomBarScreen.Settings.title
+                                                )
+                                            else
+                                                Icon(
+                                                    imageVector = BottomBarScreen.Settings.unselectedIcon,
+                                                    contentDescription = BottomBarScreen.Settings.title
+                                                )
                                         }
                                     }
                                 )
                             }
                         },
-//                        floatingActionButtonPosition = FabPosition.Center,
-//                        floatingActionButton = {
-//                            FloatingActionButton(
-//                                shape = RoundedCornerShape(50.dp),
-//                                onClick = {
-//                                    mainViewModel.setStartLevel("")
-//                                    mainViewModel.setTotalAtten(0.0)
-//                                    mainViewModel.clearAttenuatorList()
-//                                },
-//                                modifier = Modifier
-//                                    .size(40.dp)
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Default.Clear,
-//                                    contentDescription = "Clear",
-//                                )
-//                            }
-//                        },
                     ) {
                         navController = rememberNavController()
                         BottomNavGraph(
